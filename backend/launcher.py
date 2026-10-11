@@ -5,8 +5,10 @@ import os
 import subprocess
 import threading
 from pathlib import Path
+from typing import Any
 
 from .constants import WH3_EXECUTABLE, WH3_PROCESS_NAME
+from .game_environment import prepare_game_environment
 
 _LAUNCHED_PROCESSES: dict[int, subprocess.Popen] = {}
 _LAUNCH_LOCK = threading.Lock()
@@ -261,7 +263,7 @@ def launch_game(
     app_id: str = "",
     launch_executable_name: str = "",
     uses_mod_list: bool = True,
-) -> dict[str, int | str | list[str]]:
+) -> dict[str, Any]:
     game_root = Path(game_path)
     executable = game_root / str(executable_name or WH3_EXECUTABLE)
     if not executable.is_file():
@@ -300,7 +302,8 @@ def launch_game(
             getattr(subprocess, "DETACHED_PROCESS", 0)
             | getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
         )
-    environment = os.environ.copy()
+    prepared = prepare_game_environment(os.environ, game_root, executable.name)
+    environment = prepared.environment
     normalized_app_id = str(app_id or "").strip()
     if normalized_app_id.isdigit():
         environment["SteamAppId"] = normalized_app_id
@@ -322,4 +325,5 @@ def launch_game(
         "argument": argument,
         "arguments": arguments,
         "executable": str(launch_executable),
+        "profile_compatibility": prepared.compatibility,
     }

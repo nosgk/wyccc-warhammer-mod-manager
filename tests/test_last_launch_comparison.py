@@ -46,6 +46,25 @@ def test_empty_baseline_is_distinct_from_no_launch(manager, tmp_path):
     assert snapshot["started_at"] > 0
 
 
+def test_profile_metadata_is_persisted_and_prepare_failure_preserves_actual_launch(manager, tmp_path):
+    select_game(manager, tmp_path)
+    compatibility = {"enabled": True, "effective_paths": {"USERPROFILE": "C:\\ascii\\P"},
+                     "targets": {"USERPROFILE": "C:\\Users\\中文用户"}}
+    with patch("backend.api.launch_game", return_value={"pid": 123, "profile_compatibility": compatibility}):
+        assert manager.call("launch_game", [[]])["ok"]
+    record = manager.diagnostics.launches.load()["games"]["warhammer3"]
+    assert record["profile_compatibility"] == compatibility
+    baseline = manager.call("get_last_launch_mods")["data"]
+    history = manager.call("list_launch_history")["data"]
+    with patch("backend.api.launch_game", side_effect=ValueError("launchProfile.prepareFailed")):
+        response = manager.call("launch_game", [[]])
+    assert not response["ok"]
+    assert response["error"]["message"] == "launchProfile.prepareFailed"
+    assert manager.call("get_last_launch_mods")["data"] == baseline
+    assert manager.call("list_launch_history")["data"] == history
+    assert manager.diagnostics.launches.load()["games"]["warhammer3"]["profile_compatibility"] == compatibility
+
+
 def test_real_launch_order_persists_across_saves_failure_and_restart(manager, tmp_path):
     game = select_game(manager, tmp_path)
     assets = [make_asset(write_pack(game / "data" / f"{name}.pack"), name, "data") for name in ("a", "b")]

@@ -1,4 +1,14 @@
 // Folder layout changes list organization independently of the MOD load order.
+export const UNGROUPED_FOLDER = '__ungrouped__'
+
+export const filterModsByFolder = (mods, folders, folderId) => {
+  if (!folderId) return mods
+  const ids = new Set(folders
+    .filter(folder => folderId === UNGROUPED_FOLDER || folder.id === folderId)
+    .flatMap(folder => folder.mod_ids || []))
+  return mods.filter(mod => folderId === UNGROUPED_FOLDER ? !ids.has(mod.id) : ids.has(mod.id))
+}
+
 export const buildFolderGroups = (mods, folders, layout = [], filtered = false) => {
   const membership = new Map()
   for (const folder of folders) {

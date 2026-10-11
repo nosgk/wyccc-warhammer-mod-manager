@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { compareModLists } from './modListComparison'
-import { buildFolderGroups, moveFolderLayout } from './modFolderLayout'
+import { buildFolderGroups, filterModsByFolder, moveFolderLayout, UNGROUPED_FOLDER } from './modFolderLayout'
 import { gameLabelKey } from './games'
 import { invoke } from './bridge'
 import {
@@ -83,7 +83,7 @@ const sameListState = (left, right) => (
 export const useAppStore = defineStore('app', {
   state: () => ({
     appName: "Wyccc's Mod Manager",
-    appVersion: '1.2.4',
+    appVersion: '1.2.5',
     settings: {},
     paths: {},
     gameContextRevision: 0,
@@ -92,6 +92,7 @@ export const useAppStore = defineStore('app', {
     modTypes: [],
     modFolders: [],
     modFolderLayouts: { active: [], inactive: [] },
+    modFolderFilters: { active: '', inactive: '' },
     modFolderRevision: 0,
     activeIds: [],
     inactiveOrderIds: [],
@@ -249,20 +250,39 @@ export const useAppStore = defineStore('app', {
         - (rank.get(right.id) ?? Number.MAX_SAFE_INTEGER)
       ))
     },
+    modFolderFilter: state => listName => {
+      const id = state.modFolderFilters[listName] || ''
+      return id === UNGROUPED_FOLDER || state.modFolders.some(folder => folder.id === id) ? id : ''
+    },
+    modFolderCounts() {
+      const active = new Set(this.activeIds)
+      const installed = this.modMap
+      return Object.fromEntries(this.modFolders.map(folder => {
+        const ids = [...new Set(folder.mod_ids || [])].filter(id => installed.has(id))
+        const enabled = ids.filter(id => active.has(id)).length
+        return [folder.id, { active: enabled, inactive: ids.length - enabled }]
+      }))
+    },
+    activeFolderMods() {
+      return filterModsByFolder(this.activeDisplayMods, this.modFolders, this.modFolderFilter('active'))
+    },
+    inactiveFolderMods() {
+      return filterModsByFolder(this.inactiveDisplayMods, this.modFolders, this.modFolderFilter('inactive'))
+    },
     activeSearchMatchIds() {
       if (!this.activeSearchActive) return []
-      return this.activeDisplayMods
+      return this.activeFolderMods
         .filter(mod => matchesSearchTokens(mod, this.activeSearchTokens, this.activeSearchLogic, this.modTypeMap))
         .map(mod => mod.id)
     },
     inactiveSearchMatchIds() {
       if (!this.inactiveSearchActive) return []
-      return this.inactiveDisplayMods
+      return this.inactiveFolderMods
         .filter(mod => matchesSearchTokens(mod, this.inactiveSearchTokens, this.inactiveSearchLogic, this.modTypeMap))
         .map(mod => mod.id)
     },
     activeMods() {
-      let mods = this.activeDisplayMods
+      let mods = this.activeFolderMods
       if (this.activeSearchHighlightActive) return mods
       mods = mods.filter(mod => (
         matchesSearchTokens(mod, this.activeSearchTokens, this.activeSearchLogic, this.modTypeMap)
@@ -273,7 +293,7 @@ export const useAppStore = defineStore('app', {
       return mods
     },
     inactiveMods() {
-      let mods = this.inactiveDisplayMods
+      let mods = this.inactiveFolderMods
       if (this.inactiveSearchHighlightActive) return mods
       mods = mods.filter(mod => (
         matchesSearchTokens(mod, this.inactiveSearchTokens, this.inactiveSearchLogic, this.modTypeMap)
@@ -438,6 +458,7 @@ export const useAppStore = defineStore('app', {
       this.mods = []
       this.modFolders = []
       this.modFolderLayouts = { active: [], inactive: [] }
+      this.modFolderFilters = { active: '', inactive: '' }
       this.thumbnails = {}
       this.replaceActiveIds([])
       this.inactiveOrderIds = []
@@ -714,7 +735,8 @@ export const useAppStore = defineStore('app', {
       const listName = move.listName
       if (!['active', 'inactive'].includes(listName)) return Promise.resolve(null)
       const active = listName === 'active'
-      const filtered = this.warningsOnly || (active ? this.activeSearchTokens.length : this.inactiveSearchTokens.length) > 0
+      const filtered = this.warningsOnly || Boolean(this.modFolderFilter(listName))
+        || (active ? this.activeSearchTokens.length : this.inactiveSearchTokens.length) > 0
       const previous = this.modFolderLayouts[listName] || []
       const groups = buildFolderGroups(active ? this.activeMods : this.inactiveMods, this.modFolders, previous, filtered)
       const keys = moveFolderLayout(groups, previous, move)
@@ -723,6 +745,28 @@ export const useAppStore = defineStore('app', {
     },
     assignModFolder(modIds, folderId = '') {
       return this.updateModFolders('assign_mod_folder', [...modIds], folderId)
+    },
+    setModFolderFilter(listName, folderId) {
+      if (!['active', 'inactive'].includes(listName)) return
+      if (folderId && folderId !== UNGROUPED_FOLDER && !this.modFolders.some(folder => folder.id === folderId)) return
+      this.modFolderFilters[listName] = folderId || ''
+    },
+    setModFolderEnabled(folderId, enabled) {
+      if (this.busy) return
+      const folder = this.modFolders.find(item => item.id === folderId)
+      if (!folder) return
+      if (enabled) this.enableMany(folder.mod_ids || [])
+      else this.disableMany(folder.mod_ids || [])
+    },
+    dropModsIntoFolder(payload) {
+      const folderId = payload?.folderId
+      const folder = this.modFolders.find(item => item.id === folderId)
+      if (this.busy || (folderId !== '' && !folder) || !Array.isArray(payload?.ids)) return Promise.resolve(null)
+      const members = new Set(folder ? folder.mod_ids || [] : this.modFolders.flatMap(item => item.mod_ids || []))
+      const installed = this.modMap
+      const ids = [...new Set(payload.ids)].filter(id => installed.has(id) && (folder ? !members.has(id) : members.has(id)))
+      if (!ids.length) return Promise.resolve(null)
+      return this.assignModFolder(ids, folderId)
     },
     renameModFolder(folderId, name) {
       return this.updateModFolders('rename_mod_folder', folderId, name)
@@ -1068,6 +1112,15 @@ export const useAppStore = defineStore('app', {
     },
     async getModDiagnostics() {
       return invoke('get_mod_diagnostics')
+    },
+    async startModAIAnalysis() {
+      return invoke('start_mod_ai_analysis', [...this.activeIds])
+    },
+    async getModAIAnalysis(sessionId = '') {
+      return invoke('get_mod_ai_analysis', sessionId)
+    },
+    async cancelModAIAnalysis(sessionId) {
+      return invoke('cancel_mod_ai_analysis', sessionId)
     },
     async getCrashDiagnosis() {
       return invoke('get_crash_diagnosis')

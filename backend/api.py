@@ -28,6 +28,7 @@ from .app_settings import (
     default_data_dir,
 )
 from .ai_service import generate_mod_user_data, recognize_mod_types, validate_ai_settings
+from .mod_ai_analysis import ModAIAnalysisService
 from .battle_probe import MEMREADER_PLUS_WORKSHOP_ID, memreader_plus_enabled
 from .changelog import get_all_changelogs
 from .constants import (
@@ -226,9 +227,13 @@ class API:
         self._exit_low_consumption_callback: Callable[[], bool] | None = None
         self._last_order_token = "missing"
         self.diagnostics = ModDiagnosticsService(self)
+        self.mod_ai_analysis = ModAIAnalysisService(self.data_dir / "mod_ai_analysis_cache")
         self.launch_history = LaunchHistoryService(self)
         self._rpc: dict[str, Callable[..., Any]] = {
             "get_crash_diagnosis": self.diagnostics.diagnosis,
+            "start_mod_ai_analysis": self._start_mod_ai_analysis,
+            "get_mod_ai_analysis": self.mod_ai_analysis.status,
+            "cancel_mod_ai_analysis": self.mod_ai_analysis.cancel,
             "dismiss_crash_diagnosis": self.diagnostics.dismiss,
             "start_mod_diagnostics": self.diagnostics.start,
             "get_mod_diagnostics": self.diagnostics.status,
@@ -370,6 +375,7 @@ class API:
             raise ValueError(f"{feature} 不支持 Rome Remastered 目录式 MOD")
 
     def close(self) -> None:
+        self.mod_ai_analysis.close()
         self.diagnostics.session.close()
         self.mod_monitor.stop()
         self._exit_low_consumption_callback = None
@@ -1312,6 +1318,15 @@ class API:
             if revision != self._game_context_revision:
                 raise ValueError("游戏已切换，未应用 AI 识别结果")
             return self._set_mod_types(asset.id, selected)
+
+    def _start_mod_ai_analysis(self, mod_ids: list[str]) -> dict[str, Any]:
+        if not isinstance(mod_ids, list) or any(not isinstance(value, str) for value in mod_ids):
+            raise ValueError("aiAnalysis.invalidSelection")
+        with self._context_lock:
+            canonical_ids = self._canonicalize_mod_ids(mod_ids)
+            assets = [self._require_asset(value) for value in dict.fromkeys(canonical_ids)]
+            game = self._active_game()
+            return self.mod_ai_analysis.start(assets, self.settings_service.get(), game.id, int(game.app_id))
 
     def _reorder_mod_types(self, type_ids: list[str]) -> dict[str, Any]:
         return {"items": self.state_repository.reorder_mod_types(type_ids)}

@@ -1213,7 +1213,7 @@ textarea {
 
 .list-panel {
   display: grid;
-  grid-template-rows: 104px minmax(0, 1fr);
+  grid-template-rows: minmax(104px, max-content) minmax(0, 1fr);
 }
 
 .list-panel.active-panel {
@@ -1258,6 +1258,28 @@ textarea {
   min-width: 0;
   align-items: center;
   gap: 6px;
+}
+
+.panel-folder-filter {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.panel-folder-filter > span {
+  flex-shrink: 0;
+}
+
+.panel-folder-filter .themed-select {
+  flex: 1;
+}
+
+.panel-folder-filter .themed-select-trigger {
+  min-height: 30px;
+  font-size: 11px;
 }
 
 .panel-heading h2 {
@@ -1400,6 +1422,22 @@ textarea {
 .mod-folder-name {
   flex: 1;
   font-weight: 700;
+}
+
+.mod-folder-row .mod-folder-enable {
+  color: #9ccaa0;
+}
+
+.mod-folder-row .mod-folder-disable {
+  color: #e59683;
+}
+
+.mod-folder-row.drop-inside,
+.mod-list .mod-row.drop-inside,
+.mod-list.drop-inside {
+  border-color: var(--gold-bright);
+  background: #3b3020;
+  box-shadow: inset 0 0 0 1px var(--gold-bright);
 }
 
 .folder-name-modal {
@@ -1932,6 +1970,11 @@ textarea {
 
 .footer-left .secondary-button {
   flex-shrink: 0;
+}
+
+.footer-analysis-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .footer-actions {
@@ -3576,8 +3619,8 @@ button.context-menu-item {
   font-weight: 800;
 }
 
-.sync-data-button.footer-sync-button {
-  color: #ff7777;
+.sync-data-button.footer-ai-analysis-button {
+  color: #d2a0ff;
 }
 
 .sync-data-button.footer-diagnostics-button {

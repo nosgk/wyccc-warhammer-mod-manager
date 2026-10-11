@@ -5,6 +5,7 @@ import { folderEntries } from './folderLanguages'
 import { schemaEntries } from './schemaLanguages'
 import { launchComparisonEntries } from './launchComparisonLanguages'
 import { exceptionProbeEntries } from './exceptionProbeLanguages'
+import { aiAnalysisEntries } from './aiAnalysisLanguages'
 
 export const DEFAULT_LANGUAGE = 'en-US'
 
@@ -1822,7 +1823,7 @@ for (const [key, variants] of Object.entries(diagnosticsEntries)) {
   spanishEntries[key] = variants[5]
 }
 
-for (const [key, variants] of Object.entries({ ...folderEntries, ...schemaEntries, ...launchComparisonEntries, ...exceptionProbeEntries })) {
+for (const [key, variants] of Object.entries({ ...folderEntries, ...schemaEntries, ...launchComparisonEntries, ...exceptionProbeEntries, ...aiAnalysisEntries })) {
   entries[key] = variants.slice(0, 5)
   spanishEntries[key] = variants[5]
 }
@@ -1907,6 +1908,7 @@ const scanNoticeEnglish = value => {
 
 export const localizeBackendMessage = (message, fallbackKey = 'common.backendFailure') => {
   const value = String(message || '').trim()
+  if (Object.prototype.hasOwnProperty.call(aiAnalysisEntries, value)) return t(value)
   if (Object.prototype.hasOwnProperty.call(diagnosticsEntries, value)) return t(value)
   if (Object.prototype.hasOwnProperty.call(folderEntries, value)) return t(value)
   if (Object.prototype.hasOwnProperty.call(schemaEntries, value)) return t(value)

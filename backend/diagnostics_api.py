@@ -42,6 +42,7 @@ class ModDiagnosticsService:
     def rpc_scope(self, method: str):
         reads = {
             "get_mod_diagnostics", "confirm_diagnostic_trial", "cancel_mod_diagnostics",
+            "get_mod_ai_analysis", "cancel_mod_ai_analysis",
             "get_crash_diagnosis", "dismiss_crash_diagnosis", "get_diagnostics_history",
             "get_runtime_status", "get_mod_thumbnails", "get_mod_preview", "exit_app",
             "get_last_launch_mods",
@@ -84,6 +85,9 @@ class ModDiagnosticsService:
         pid = result.get("process", {}).get("pid")
         if pid:
             record["process_ids"] = [int(pid)]
+        compatibility = result.get("process", {}).get("profile_compatibility")
+        if isinstance(compatibility, dict):
+            record["profile_compatibility"] = deepcopy(compatibility)
         with self.operation_lock:
             payload = self.launches.load()
             payload.setdefault("games", {})[paths.game_id] = record

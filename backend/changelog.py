@@ -9,6 +9,14 @@ SUPPORTED_CHANGELOG_LANGUAGES = frozenset({"zh-CN", "en-US", "ko-KR", "ru-RU", "
 
 CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
     {
+        "version": "1.2.5",
+        "date": "2026-10-11",
+        "entries": (
+            ("v125_added_title", (("feature", "v125_chinese_profile"), ("feature", "v125_ai_analysis"))),
+            ("v125_adjusted_title", (("improvement", "v125_folder_actions"),)),
+        ),
+    },
+    {
         "version": "1.2.4",
         "date": "2026-10-09",
         "entries": (
@@ -712,6 +720,11 @@ CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
 
 CHANGELOG_TEXT: dict[str, dict[str, str]] = {
     "zh-CN": {
+        "v125_added_title": "新增",
+        "v125_adjusted_title": "调整",
+        "v125_chinese_profile": "启动游戏兼容中文用户目录",
+        "v125_ai_analysis": "AI分析功能，可以使用AI扫描所有当前已启用的MOD，检查这些MOD的评论区有没有BUG反馈",
+        "v125_folder_actions": "优化文件夹功能，支持一键启用/禁用文件夹中的所有MOD，支持将MOD直接拖拽到文件夹或者拖出，支持按照文件夹来筛选",
         "v124_adjusted_title": "调整",
         "v124_patch_compatibility": "提高了补丁功能对各种MOD的兼容性",
         "v123_added_title": "新增",
@@ -963,6 +976,11 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。",
     },
     "en-US": {
+        "v125_added_title": "Added",
+        "v125_adjusted_title": "Adjusted",
+        "v125_chinese_profile": "Game launch compatibility with Windows user folders containing Chinese characters.",
+        "v125_ai_analysis": "AI analysis can scan all currently enabled MODs and check their comment sections for bug reports.",
+        "v125_folder_actions": "Improved folders: enable or disable all MODs in a folder with one click, drag MODs into or out of folders, and filter MODs by folder.",
         "v124_adjusted_title": "Adjusted",
         "v124_patch_compatibility": "Improved compatibility of patch features with various MODs.",
         "v123_added_title": "Added",
@@ -1214,6 +1232,11 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog.",
     },
     "ko-KR": {
+        "v125_added_title": "추가",
+        "v125_adjusted_title": "조정",
+        "v125_chinese_profile": "중국어 문자가 포함된 Windows 사용자 폴더에서도 게임을 실행할 수 있도록 호환성을 개선했습니다.",
+        "v125_ai_analysis": "AI 분석으로 현재 활성화된 모든 MOD를 살펴보고 댓글에서 버그 보고를 확인할 수 있습니다.",
+        "v125_folder_actions": "폴더 기능 개선: 폴더 안의 모든 MOD를 한 번에 활성화하거나 비활성화하고, MOD를 폴더 안팎으로 드래그하며, 폴더별로 필터링할 수 있습니다.",
         "v124_adjusted_title": "조정",
         "v124_patch_compatibility": "패치 기능의 다양한 MOD 호환성을 개선했습니다.",
         "v123_added_title": "추가",
@@ -1465,6 +1488,11 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다.",
     },
     "ru-RU": {
+        "v125_added_title": "Добавлено",
+        "v125_adjusted_title": "Изменено",
+        "v125_chinese_profile": "Совместимость запуска игры с папками пользователя Windows, содержащими китайские символы.",
+        "v125_ai_analysis": "Анализ ИИ позволяет проверить все включённые MOD и найти сообщения об ошибках в их комментариях.",
+        "v125_folder_actions": "Улучшены папки: включение и отключение всех MOD в папке одним нажатием, перетаскивание MOD в папки и из них, а также фильтрация по папкам.",
         "v124_adjusted_title": "Изменено",
         "v124_patch_compatibility": "Улучшена совместимость функций патчей с различными MOD.",
         "v123_added_title": "Добавлено",
@@ -1716,6 +1744,11 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении.",
     },
     "ja-JP": {
+        "v125_added_title": "追加",
+        "v125_adjusted_title": "調整",
+        "v125_chinese_profile": "中国語の文字を含むWindowsユーザーフォルダーでのゲーム起動に対応しました。",
+        "v125_ai_analysis": "AI分析で現在有効なすべてのMODを調べ、コメント欄に不具合報告があるか確認できます。",
+        "v125_folder_actions": "フォルダー機能を改善し、フォルダー内のすべてのMODを一括で有効・無効にする操作、MODのフォルダーへのドラッグと取り出し、フォルダー別の絞り込みに対応しました。",
         "v124_adjusted_title": "調整",
         "v124_patch_compatibility": "パッチ機能と各種MODの互換性を向上しました。",
         "v123_added_title": "追加",
@@ -1967,6 +2000,11 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。",
     },
     "es-ES": {
+        "v125_added_title": "Añadido",
+        "v125_adjusted_title": "Ajustado",
+        "v125_chinese_profile": "Compatibilidad al iniciar el juego con carpetas de usuario de Windows que contienen caracteres chinos.",
+        "v125_ai_analysis": "El análisis con IA puede examinar todos los MODs activos y buscar informes de errores en sus comentarios.",
+        "v125_folder_actions": "Mejoras en las carpetas: activar o desactivar todos sus MODs con un clic, arrastrar MODs dentro o fuera de las carpetas y filtrar por carpeta.",
         "v124_adjusted_title": "Ajustado",
         "v124_patch_compatibility": "Se mejoró la compatibilidad de las funciones de parches con diversos MOD.",
         "v123_added_title": "Añadido",

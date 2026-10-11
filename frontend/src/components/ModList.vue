@@ -3,7 +3,8 @@ import { computed, nextTick, onBeforeUnmount, onUpdated, ref, watch } from 'vue'
 import { localizeBackendMessage, t } from '../languages'
 import SortMenu from './SortMenu.vue'
 import TagSearchBox from './TagSearchBox.vue'
-import { buildFolderGroups } from '../modFolderLayout'
+import ThemedSelect from './ThemedSelect.vue'
+import { buildFolderGroups, UNGROUPED_FOLDER } from '../modFolderLayout'
 import { createDragFeedback } from '../dragFeedback'
 
 const props = defineProps({
@@ -34,6 +35,8 @@ const props = defineProps({
   unitDataModIds: { type: Array, default: () => [] },
   folders: { type: Array, default: () => [] },
   folderLayout: { type: Array, default: () => [] },
+  folderFilter: { type: String, default: '' },
+  folderModCounts: { type: Object, default: () => ({}) },
   busy: { type: Boolean, default: false },
 })
 
@@ -61,6 +64,10 @@ const emit = defineEmits([
   'delete-folder',
   'move-folder',
   'folder-drag-start',
+  'update:folder-filter',
+  'enable-folder',
+  'disable-folder',
+  'drop-in-folder',
 ])
 const draggingIds = ref([])
 const draggingOriginId = ref('')
@@ -73,9 +80,16 @@ const dragFeedback = createDragFeedback(() => listElement.value, () => insertion
 onUpdated(() => dragFeedback.restore())
 onBeforeUnmount(() => dragFeedback.clear())
 const rowElements = new Map()
+const folderFilterOptions = computed(() => [
+  { value: '', label: t('folders.all') },
+  { value: UNGROUPED_FOLDER, label: t('folders.ungrouped') },
+  ...props.folders.map(folder => ({ value: folder.id, label: folder.name })),
+])
 const displayGroups = computed(() => {
   const searching = props.searchTokens.length > 0 || props.searchActive || props.warningsOnly
-  const groups = buildFolderGroups(props.mods, props.folders, props.folderLayout, searching)
+  const folders = props.folderFilter === UNGROUPED_FOLDER ? []
+    : props.folders.filter(folder => !props.folderFilter || folder.id === props.folderFilter)
+  const groups = buildFolderGroups(props.mods, folders, props.folderLayout, searching)
   return groups.map(group => {
     const collapsed = Boolean(group.folder?.[props.active ? 'collapsed_active' : 'collapsed_inactive'])
     const expanded = !collapsed || searching || group.mods.some(mod => mod.id === props.searchFocusId)
@@ -83,6 +97,8 @@ const displayGroups = computed(() => {
   })
 })
 const visibleMods = computed(() => displayGroups.value.flatMap(group => group.visibleMods))
+const folderCount = (group, listName) => props.folderModCounts[group.folder.id]?.[listName]
+  ?? (listName === (props.active ? 'active' : 'inactive') ? group.mods.length : 0)
 
 const orderPositions = computed(() => new Map(props.orderIds.map((id, index) => [id, index + 1])))
 const positionOf = modId => orderPositions.value.get(modId) || 0
@@ -112,10 +128,24 @@ const currentDragSource = () => (
         source: targetList(),
         ids: draggingIds.value,
         draggedId: draggingOriginId.value,
+        sourceOrder: visibleMods.value.map(mod => mod.id),
       }
     : null)
 )
+const folderMembers = computed(() => new Map(
+  props.folders.map(folder => [folder.id, new Set(folder.mod_ids || [])]),
+))
+const groupedModIds = computed(() => new Set(props.folders.flatMap(folder => folder.mod_ids || [])))
+const shouldAssignFolder = (folderId, payload = currentDragSource()) => {
+  if (!payload?.ids?.length) return false
+  if (!folderId) return payload.ids.some(id => groupedModIds.value.has(id))
+  const members = folderMembers.value.get(folderId)
+  return Boolean(members && (
+    payload.source !== targetList() || payload.ids.some(id => !members.has(id))
+  ))
+}
 const canAcceptDrop = targetId => {
+  if (props.busy) return false
   const source = currentDragSource()
   if (!source) return true
   if (props.active && props.sortMode !== 'priority' && source.source === 'active') return false
@@ -128,7 +158,9 @@ const clearDropPreview = () => {
 }
 
 const currentFolderDrag = () => (
-  props.dragSource?.kind === 'folder' ? props.dragSource.folderId : draggingFolderId
+  props.dragSource
+    ? (props.dragSource.kind === 'folder' ? props.dragSource.folderId : '')
+    : draggingFolderId
 )
 const dropPlacement = event => {
   const bounds = event.currentTarget?.getBoundingClientRect?.()
@@ -139,6 +171,7 @@ const onFolderDragStart = (event, folderId) => {
     event.preventDefault()
     return
   }
+  resetDragging()
   draggingFolderId = folderId
   dragFeedback.setSource(event.currentTarget)
   const payload = { kind: 'folder', folderId, source: targetList() }
@@ -149,8 +182,21 @@ const onFolderDragStart = (event, folderId) => {
   emit('folder-drag-start', payload)
 }
 const onFolderDragOver = (event, targetFolderId) => {
-  if (!currentFolderDrag() || props.busy || currentFolderDrag() === targetFolderId) {
+  if (props.busy || currentFolderDrag() === targetFolderId) {
     clearDropPreview()
+    return
+  }
+  if (!currentFolderDrag()) {
+    if (!currentDragSource()?.ids?.length
+      && !Array.from(event.dataTransfer?.types || []).includes('application/x-wyccc-mods')) {
+      clearDropPreview()
+      return
+    }
+    event.preventDefault()
+    dropPreview = null
+    folderDropPreview = null
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
+    dragFeedback.showTarget(event.currentTarget, 'inside')
     return
   }
   event.preventDefault()
@@ -168,6 +214,9 @@ const onFolderDrop = (event, targetFolderId = '', targetModId = '') => {
     const placement = preview?.targetFolderId === targetFolderId && preview?.targetModId === targetModId
       ? preview.placement : dropPlacement(event)
     emit('move-folder', { folderId, targetFolderId, targetModId, placement, listName: targetList() })
+  } else if (!folderId && targetFolderId && !props.busy) {
+    const payload = readModDrag(event)
+    if (payload?.ids?.length) emit('drop-in-folder', { ids: payload.ids, folderId: targetFolderId })
   }
   clearDragging()
 }
@@ -207,16 +256,25 @@ const onKeydown = event => {
   emit('select-all', visibleMods.value.map(mod => mod.id))
 }
 
-const clearDragging = () => {
+const resetDragging = () => {
   draggingIds.value = []
   draggingOriginId.value = ''
   draggingFolderId = ''
   clearDropPreview()
   dragFeedback.clear()
+}
+
+const clearDragging = () => {
+  resetDragging()
   emit('drag-end')
 }
 
 const onDragStart = (event, sourceId) => {
+  if (props.busy) {
+    event.preventDefault()
+    return
+  }
+  resetDragging()
   const visibleOrder = visibleMods.value.map(mod => mod.id)
   const visibleIds = new Set(visibleOrder)
   const selected = new Set([...props.selectedIds, props.selectedId].filter(Boolean))
@@ -239,13 +297,21 @@ const onDragStart = (event, sourceId) => {
   }
 }
 
-const onRowDragOver = (event, targetId) => {
+const onRowDragOver = (event, targetId, targetFolderId = '') => {
   if (currentFolderDrag()) {
     if (!props.busy) {
       const placement = dropPlacement(event)
       folderDropPreview = { targetFolderId: '', targetModId: targetId, placement }
       dragFeedback.showTarget(event.currentTarget, placement)
     }
+    return
+  }
+  if (!props.busy && (shouldAssignFolder(targetFolderId)
+    || (targetFolderId && !currentDragSource() && Array.from(event.dataTransfer?.types || []).includes('application/x-wyccc-mods')))) {
+    dropPreview = null
+    folderDropPreview = null
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
+    dragFeedback.showTarget(event.currentTarget, 'inside')
     return
   }
   if (!canAcceptDrop(targetId)) {
@@ -267,6 +333,13 @@ const onListDragOver = event => {
     dragFeedback.showEnd()
     return
   }
+  if (!props.busy && shouldAssignFolder('')) {
+    dropPreview = null
+    folderDropPreview = null
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
+    dragFeedback.showTarget(event.currentTarget, 'inside')
+    return
+  }
   if (!canAcceptDrop()) return
   dropPreview = { targetId: '', placement: 'after' }
   dragFeedback.showEnd()
@@ -278,29 +351,29 @@ const onListDragLeave = event => {
   clearDropPreview()
 }
 
-const onDrop = (event, targetId = '') => {
+const readModDrag = event => {
+  let payload = currentDragSource()
+  try {
+    const encoded = event.dataTransfer?.getData('application/x-wyccc-mods')
+    if (encoded) payload = JSON.parse(encoded)
+  } catch { /* Use the current internal drag if the transfer is unavailable. */ }
+  return Array.isArray(payload?.ids) && ['active', 'inactive'].includes(payload.source) ? payload : null
+}
+
+const onDrop = (event, targetId = '', targetFolderId = '') => {
   if (currentFolderDrag() || event.dataTransfer?.getData('application/x-wyccc-folder')) {
     onFolderDrop(event, '', targetId)
+    return
+  }
+  const payload = readModDrag(event)
+  if (!props.busy && shouldAssignFolder(targetFolderId, payload)) {
+    emit('drop-in-folder', { ids: payload.ids, folderId: targetFolderId })
+    clearDragging()
     return
   }
   if (!canAcceptDrop(targetId)) {
     clearDragging()
     return
-  }
-  let payload = null
-  try {
-    const encoded = event.dataTransfer?.getData('application/x-wyccc-mods')
-    if (encoded) payload = JSON.parse(encoded)
-  } catch {
-    payload = null
-  }
-  if (!payload && draggingIds.value.length) {
-    payload = {
-      source: props.active ? 'active' : 'inactive',
-      ids: [...draggingIds.value],
-      draggedId: draggingOriginId.value,
-      sourceOrder: visibleMods.value.map(mod => mod.id),
-    }
   }
   if (payload?.ids?.length) {
     const placement = dropPreview?.targetId === targetId
@@ -319,7 +392,9 @@ const onDrop = (event, targetId = '') => {
 
 watch(
   () => props.dragSource,
-  source => { if (!source) clearDropPreview() },
+  // A folder assignment can replace the source row before native dragend.
+  // Ending it or starting a new drag in the other list releases local state.
+  source => { if (!source || source.source !== targetList()) resetDragging() },
 )
 
 watch(
@@ -390,6 +465,16 @@ watch(
           @update:descending="emit('update:sort-descending', $event)"
         />
       </div>
+      <div v-if="folders.length || folderFilter" class="panel-folder-filter">
+        <span>{{ t('folders.filter') }}</span>
+        <ThemedSelect
+          :model-value="folderFilter"
+          :options="folderFilterOptions"
+          :aria-label="t('folders.filter')"
+          :data-testid="active ? 'active-folder-filter' : 'inactive-folder-filter'"
+          @update:model-value="emit('update:folder-filter', $event)"
+        />
+      </div>
     </header>
 
     <div
@@ -408,20 +493,31 @@ watch(
           @dragstart.stop="onFolderDragStart($event, group.folder.id)"
           @dragend.stop="clearDragging"
           @dragover.stop="onFolderDragOver($event, group.folder.id)"
+          @dragleave="onListDragLeave"
           @drop.prevent.stop="onFolderDrop($event, group.folder.id)">
           <button
             type="button"
             class="mod-folder-toggle"
             :aria-expanded="group.expanded"
             :disabled="busy"
-            :title="t('folders.orderHelp')"
+            :title="t('folders.orderHelp') + ' ' + t('folders.dropHelp')"
             @click="emit('toggle-folder', group.folder.id, active ? 'active' : 'inactive')"
           >
             <span class="mod-folder-chevron" aria-hidden="true">{{ group.expanded ? '▾' : '▸' }}</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h7l2 3h9v11H3z" /></svg>
             <span class="mod-folder-name" :title="group.folder.name">{{ group.folder.name }}</span>
-            <span class="count-badge">{{ group.mods.length }}</span>
           </button>
+          <button type="button" class="icon-button mod-folder-enable"
+            :disabled="busy || !folderCount(group, 'inactive')"
+            :data-testid="`enable-folder-${group.folder.id}`"
+            :title="t('folders.enableAll')" :aria-label="t('folders.enableAll')"
+            @click="emit('enable-folder', group.folder.id)">+</button>
+          <button type="button" class="icon-button mod-folder-disable"
+            :disabled="busy || !folderCount(group, 'active')"
+            :data-testid="`disable-folder-${group.folder.id}`"
+            :title="t('folders.disableAll')" :aria-label="t('folders.disableAll')"
+            @click="emit('disable-folder', group.folder.id)">−</button>
+          <span class="count-badge">{{ group.mods.length }}</span>
           <button type="button" class="icon-button" :disabled="busy"
             :title="t('folders.rename')" :aria-label="t('folders.rename')"
             @click="emit('rename-folder', group.folder)">✎</button>
@@ -434,6 +530,8 @@ watch(
           :key="mod.id"
           :ref="element => setRowElement(mod.id, element)"
           class="mod-row"
+          :data-mod-id="mod.id"
+          :data-folder-id="group.folder?.id || ''"
           :class="{
             selected: isSelected(mod.id),
             dragging: draggingIds.includes(mod.id),
@@ -447,7 +545,7 @@ watch(
           role="button"
           tabindex="0"
           :aria-selected="isSelected(mod.id)"
-          draggable="true"
+          :draggable="!busy"
           @click="selectMod($event, mod)"
           @dblclick="onDoubleClick($event, mod)"
           @keydown.enter="selectMod($event, mod)"
@@ -455,8 +553,8 @@ watch(
           @contextmenu.prevent.stop="onContextMenu($event, mod)"
           @dragstart="onDragStart($event, mod.id)"
           @dragend="clearDragging"
-          @dragover.prevent.stop="onRowDragOver($event, mod.id)"
-          @drop.prevent.stop="onDrop($event, mod.id)"
+          @dragover.prevent.stop="onRowDragOver($event, mod.id, group.folder?.id)"
+          @drop.prevent.stop="onDrop($event, mod.id, group.folder?.id)"
         >
           <span class="mod-thumbnail">
             <img

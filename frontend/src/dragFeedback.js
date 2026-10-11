@@ -5,7 +5,7 @@ export const createDragFeedback = (getRoot, getEndMarker) => {
   let source = null
   let atEnd = false
   const clearPreview = () => {
-    target?.classList.remove('drop-before', 'drop-after')
+    target?.classList.remove('drop-before', 'drop-after', 'drop-inside')
     target = null
     placement = ''
     atEnd = false

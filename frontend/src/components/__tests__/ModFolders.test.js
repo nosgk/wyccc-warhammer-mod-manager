@@ -8,6 +8,66 @@ const folder = { id: 'folder', name: '界面', mod_ids: ['a', 'c'], collapsed_ac
 const list = (overrides = {}) => mount(ModList, { props: { title: 'MOD', mods, folders: [folder], ...overrides } })
 
 describe('MOD folder list', () => {
+  it('accepts a MOD transfer onto the header and ignores unrelated or invalid drag data', async () => {
+    const wrapper = list()
+    const target = wrapper.get('[data-testid="mod-folder-folder"]')
+    const transfer = encoded => ({ getData: type => type === 'application/x-wyccc-mods' ? encoded : '' })
+    await target.trigger('drop', { dataTransfer: transfer(JSON.stringify({ source: 'active', ids: ['b', 'c'] })) })
+    expect(wrapper.emitted('drop-in-folder')).toEqual([[{ folderId: 'folder', ids: ['b', 'c'] }]])
+    await target.trigger('drop', { dataTransfer: transfer('invalid') })
+    await target.trigger('drop', { dataTransfer: transfer(JSON.stringify({ source: 'external', ids: ['a'] })) })
+    expect(wrapper.emitted('drop-in-folder')).toHaveLength(1)
+    expect(wrapper.emitted('drop-mods')).toBeUndefined()
+    expect(wrapper.emitted('move-folder')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('clears the folder highlight when a MOD drag leaves or ends without dropping', async () => {
+    const wrapper = list()
+    const source = wrapper.findAll('.mod-row').find(row => row.get('.row-title').text() === 'b')
+    const target = wrapper.get('[data-testid="mod-folder-folder"]')
+    await source.trigger('dragstart')
+    await target.trigger('dragover')
+    expect(target.classes()).toContain('drop-inside')
+    await target.trigger('dragleave')
+    expect(target.classes()).not.toContain('drop-inside')
+    await target.trigger('dragover')
+    await source.trigger('dragend')
+    expect(target.classes()).not.toContain('drop-inside')
+    expect(wrapper.emitted('drop-in-folder')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('adds a transferred MOD through a folder member row and clears its inside marker', async () => {
+    const wrapper = list()
+    const target = wrapper.findAll('.mod-row').find(row => row.get('.row-title').text() === 'a')
+    const dataTransfer = {
+      types: ['application/x-wyccc-mods'],
+      getData: type => type === 'application/x-wyccc-mods' ? JSON.stringify({ source: 'active', ids: ['b'] }) : '',
+    }
+    await target.trigger('dragover', { dataTransfer })
+    expect(target.classes()).toContain('drop-inside')
+    await target.trigger('drop', { dataTransfer })
+    expect(wrapper.emitted('drop-in-folder')).toEqual([[{ ids: ['b'], folderId: 'folder' }]])
+    expect(wrapper.emitted('drop-mods')).toBeUndefined()
+    expect(wrapper.findAll('.drop-inside')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('keeps normal insertion and sorting for members dragged within the same folder', async () => {
+    const wrapper = list({ active: true, orderIds: ['a', 'c', 'b'] })
+    const source = wrapper.findAll('.mod-row').find(row => row.get('.row-title').text() === 'a')
+    const target = wrapper.findAll('.mod-row').find(row => row.get('.row-title').text() === 'c')
+    await source.trigger('dragstart')
+    await target.trigger('dragover', { clientY: -1 })
+    expect(target.classes()).toContain('drop-before')
+    expect(target.classes()).not.toContain('drop-inside')
+    await target.trigger('drop')
+    expect(wrapper.emitted('drop-mods')[0][0]).toMatchObject({ ids: ['a'], source: 'active', target: 'active', targetId: 'c', placement: 'before' })
+    expect(wrapper.emitted('drop-in-folder')).toBeUndefined()
+    wrapper.unmount()
+  })
+
   it('drags a folder below another folder without dragging MODs or changing load order', async () => {
     const other = { ...folder, id: 'other', name: '其他', mod_ids: ['b'] }
     const wrapper = list({ active: true, orderIds: ['a', 'b', 'c'], folders: [folder, other] })

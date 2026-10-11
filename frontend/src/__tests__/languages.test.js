@@ -34,6 +34,20 @@ const localizedValues = key => languageCodes.map(language => {
 afterEach(() => applyInterfaceLanguage('zh-CN'))
 
 describe('built-in interface languages', () => {
+  it('localizes automatic profile preparation failures in all six languages', () => {
+    for (const key of ['launchProfile.prepareFailed', 'launchProfile.invalidPaths', 'launchProfile.networkPath']) {
+      const messages = []
+      for (const language of languageCodes) {
+        applyInterfaceLanguage(language)
+        const message = localizeBackendMessage(key)
+        expect(message, `${language}: ${key}`).toBe(t(key))
+        expect(message).not.toBe(key)
+        messages.push(message)
+      }
+      expect(new Set(messages).size).toBe(6)
+    }
+  })
+
   it('uses English when no detected or stored interface language is available', () => {
     expect(DEFAULT_LANGUAGE).toBe('en-US')
     applyInterfaceLanguage('unsupported')

@@ -15,6 +15,7 @@ import UnitEncyclopediaModal from './components/UnitEncyclopediaModal.vue'
 import ModContextMenu from './components/ModContextMenu.vue'
 import ModDetails from './components/ModDetails.vue'
 import ModDiagnosticsModal from './components/ModDiagnosticsModal.vue'
+import ModAIAnalysisModal from './components/ModAIAnalysisModal.vue'
 import SchemaUpdateModal from './components/SchemaUpdateModal.vue'
 import ModList from './components/ModList.vue'
 import OfficialProfileImportModal from './components/OfficialProfileImportModal.vue'
@@ -41,6 +42,7 @@ const unitEncyclopediaRevision = ref(0)
 const openingUnitDataModification = ref(false)
 const showCompatibilityPatch = ref(false)
 const showDiagnostics = ref(false)
+const showAIAnalysis = ref(false)
 const diagnosticsBusy = ref(false)
 const diagnosticSession = ref({ status: 'idle', running: false })
 const crashDiagnosis = ref({})
@@ -506,6 +508,7 @@ const toggleSearchHighlight = async listName => {
 const shortcutsBlocked = () => (
   showGameDataModification.value
   || showDiagnostics.value
+  || showAIAnalysis.value
   || showUnitDataModification.value
   || showUnitEncyclopedia.value
   || showSettings.value
@@ -579,6 +582,11 @@ const toggleModFolder = async (folderId, listName) => {
 }
 const moveModFolder = async move => {
   try { await store.moveModFolder(move) } catch {
+    // Store actions surface failures through the shared toast.
+  }
+}
+const dropModsIntoFolder = async payload => {
+  try { await store.dropModsIntoFolder(payload) } catch {
     // Store actions surface failures through the shared toast.
   }
 }
@@ -833,14 +841,6 @@ const enterManualModType = async (modIds, initialMod = null) => {
     const selected = target.mod_types?.length ? target.mod_types : [target.mod_type || 'unknown']
     if (!selected.includes(type.id)) await store.toggleModType(modId, type.id)
   }
-}
-
-const syncWorkshopToData = async () => {
-  const confirmed = await requestConfirmation({
-    message: t('app.confirmSyncData'),
-  })
-  if (!confirmed) return
-  try { await store.syncWorkshopToData() } catch { /* shared toast */ }
 }
 
 const selectWarning = async item => {
@@ -1171,6 +1171,8 @@ onBeforeUnmount(() => {
         :mods="store.inactiveMods"
         :folders="store.modFolders"
         :folder-layout="store.modFolderLayouts.inactive"
+        :folder-filter="store.modFolderFilter('inactive')"
+        :folder-mod-counts="store.modFolderCounts"
         :busy="!!store.busy"
         :warnings-only="store.warningsOnly"
         :selected-id="store.selectedId"
@@ -1181,7 +1183,7 @@ onBeforeUnmount(() => {
         :visual-sorted="store.inactiveSortMode !== 'priority'"
         :search-tokens="store.inactiveSearchTokens"
         :search-logic="store.inactiveSearchLogic"
-        :search-suggestion-mods="store.inactiveDisplayMods"
+        :search-suggestion-mods="store.inactiveFolderMods"
         search-test-id="inactive-mod-search"
         :search-highlight-mode="store.inactiveSearchHighlightMode"
         search-highlight-test-id="inactive-search-highlight-button"
@@ -1203,6 +1205,10 @@ onBeforeUnmount(() => {
         @context-menu="openModContextMenu"
         @toggle-folder="toggleModFolder"
         @move-folder="moveModFolder"
+        @update:folder-filter="store.setModFolderFilter('inactive', $event)"
+        @enable-folder="store.setModFolderEnabled($event, true)"
+        @disable-folder="store.setModFolderEnabled($event, false)"
+        @drop-in-folder="dropModsIntoFolder"
         @rename-folder="renameModFolder"
         @delete-folder="deleteModFolder"
         @open-unit-data="openUnitDataModification"
@@ -1221,6 +1227,8 @@ onBeforeUnmount(() => {
         :mods="store.activeMods"
         :folders="store.modFolders"
         :folder-layout="store.modFolderLayouts.active"
+        :folder-filter="store.modFolderFilter('active')"
+        :folder-mod-counts="store.modFolderCounts"
         :busy="!!store.busy"
         :selected-id="store.selectedId"
         :selected-ids="store.selectedIds"
@@ -1230,7 +1238,7 @@ onBeforeUnmount(() => {
         :visual-sorted="store.activeSortMode !== 'priority'"
         :search-tokens="store.activeSearchTokens"
         :search-logic="store.activeSearchLogic"
-        :search-suggestion-mods="store.activeDisplayMods"
+        :search-suggestion-mods="store.activeFolderMods"
         search-test-id="active-mod-search"
         :search-highlight-mode="store.activeSearchHighlightMode"
         search-highlight-test-id="active-search-highlight-button"
@@ -1254,6 +1262,10 @@ onBeforeUnmount(() => {
         @move="store.move"
         @toggle-folder="toggleModFolder"
         @move-folder="moveModFolder"
+        @update:folder-filter="store.setModFolderFilter('active', $event)"
+        @enable-folder="store.setModFolderEnabled($event, true)"
+        @disable-folder="store.setModFolderEnabled($event, false)"
+        @drop-in-folder="dropModsIntoFolder"
         @rename-folder="renameModFolder"
         @delete-folder="deleteModFolder"
         @context-menu="openModContextMenu"
@@ -1271,18 +1283,6 @@ onBeforeUnmount(() => {
 
     <footer class="action-footer">
       <div class="footer-left">
-        <button
-          v-if="supportsPackActions"
-          type="button"
-          class="secondary-button sync-data-button footer-sync-button"
-          :disabled="!!store.busy || store.runtime.running || store.workshopRefreshing || !store.pathHealth.game_ready || !store.pathHealth.workshop_path_exists"
-          :title="store.runtime.running ? t('context.gameRunningBlocked') : ''"
-          data-testid="sync-data-button"
-          @click="syncWorkshopToData"
-        >
-          {{ t('app.syncData') }}
-        </button>
-
         <button type="button" class="secondary-button sync-data-button" :disabled="!!store.busy || store.workshopRefreshing || !store.pathHealth.game_ready" @click="store.scan(false)">
           {{ t('app.rescan') }}
         </button>
@@ -1332,9 +1332,14 @@ onBeforeUnmount(() => {
         >
           {{ t('app.compatibilityPatch') }}
         </button>
-        <button v-if="supportsPackActions" type="button" class="secondary-button sync-data-button footer-diagnostics-button"
-          :disabled="!!store.busy || !store.pathHealth.game_ready" data-testid="mod-diagnostics-button"
-          @click="refreshDiagnostics(true)">{{ t('diagnostics.title') }}</button>
+        <div class="footer-analysis-actions">
+          <button v-if="supportsPackActions" type="button" class="secondary-button sync-data-button footer-diagnostics-button"
+            :disabled="!!store.busy || !store.pathHealth.game_ready" data-testid="mod-diagnostics-button"
+            @click="refreshDiagnostics(true)">{{ t('diagnostics.title') }}</button>
+          <button type="button" class="secondary-button sync-data-button footer-ai-analysis-button"
+            :disabled="!!store.busy" data-testid="ai-analysis-button"
+            @click="showAIAnalysis = true">{{ t('aiAnalysis.title') }}</button>
+        </div>
       </div>
 
       <div class="footer-status" :class="`status-${statusDisplay.kind}`">
@@ -1432,6 +1437,8 @@ onBeforeUnmount(() => {
       @save="saveUnitData"
     />
 
+    <ModAIAnalysisModal :open="showAIAnalysis" @close="showAIAnalysis = false"
+      @settings="showAIAnalysis = false; showSettings = true" />
     <ModDiagnosticsModal
       :open="showDiagnostics" :session="diagnosticSession" :diagnosis="crashDiagnosis"
       :history="diagnosticHistory" :busy="diagnosticsBusy" :game-running="store.runtime.running"
