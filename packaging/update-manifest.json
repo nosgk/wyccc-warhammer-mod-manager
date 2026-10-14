@@ -1,38 +1,29 @@
 {
   "schema_version": 1,
   "app": "Wyccc's Mod Manager",
-  "version": "1.2.5",
-  "published_at": "2026-10-11",
+  "version": "1.2.6",
+  "published_at": "2026-10-14",
   "download": {
-    "url": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.5/Wyccc's%20Mod%20Manager.exe",
+    "url": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.6/Wyccc's%20Mod%20Manager.exe",
     "mirrors": {
-      "gitee": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.5/Wyccc's%20Mod%20Manager.exe",
-      "github": "https://github.com/scnjwyc/wyccc-warhammer-mod-manager/releases/download/1.2.5/Wyccc.s.Mod.Manager.exe"
+      "gitee": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.6/Wyccc's%20Mod%20Manager.exe",
+      "github": "https://github.com/scnjwyc/wyccc-warhammer-mod-manager/releases/download/1.2.6/Wyccc.s.Mod.Manager.exe"
     },
     "filename": "Wyccc's Mod Manager.exe",
-    "sha256": "0AC8B9C1A100140A13B49B09990EA82835471288E6F0678859DC79FD3A1BBC8E",
-    "size": 65592723
+    "sha256": "CE4A7F93065690C6C382D82C570994FE19B70DF93E36599A5AC1A08151C6258B",
+    "size": 65595833
   },
   "changelog": [
     {
-      "title": "新增",
+      "title": "修复",
       "changes": [
         {
-          "type": "feature",
-          "text": "启动游戏兼容中文用户目录"
+          "type": "fix",
+          "text": "修复三国全战某些MOD会被错误隐藏的问题"
         },
         {
-          "type": "feature",
-          "text": "AI分析功能，可以使用AI扫描所有当前已启用的MOD，检查这些MOD的评论区有没有BUG反馈"
-        }
-      ]
-    },
-    {
-      "title": "调整",
-      "changes": [
-        {
-          "type": "improvement",
-          "text": "优化文件夹功能，支持一键启用/禁用文件夹中的所有MOD，支持将MOD直接拖拽到文件夹或者拖出，支持按照文件夹来筛选"
+          "type": "fix",
+          "text": "修复上传/更新MOD时，分类标签读取错误的问题"
         }
       ]
     }
