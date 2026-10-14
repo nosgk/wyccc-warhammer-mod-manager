@@ -12,7 +12,7 @@
 
 - `backend/unit_encyclopedia.py` 复用单位修改功能的 `collect_game_data_source_snapshot`、`build_unit_table_snapshot`、权限合并与 DB 行优先级。原版作为底层，启用 MOD 与自动加载的 Movie Pack 参与覆盖；同内部文件名的冲突按现有加载顺序解决，内部 DB 文件名优先级保持一致。
 - 保存的单位编辑会反映到图鉴；被禁用单位、海军占位和没有招募权限的隐藏辅助记录不进入列表。显示数据库基础规模，不应用启动时生成的全局兵力倍率、游戏内兵力规模、战役加成或战斗临时效果。
-- 兵牌首先沿 `main_units.land_unit → unit_variants.unit_card` 查找。领主和英雄同时读取 `units_custom_battle_permissions.general_portrait` 的兵牌与头像；坐骑变体可复用相同 `unit_card` 对应的角色图片。忽略原版 `placeholder` 兵牌，找不到有效图片时保留可操作的文字占位。
+- 兵牌首先沿 `main_units.land_unit → unit_variants.unit_card` 查找。缺少对应图片时，领主和英雄优先使用自身 `units_custom_battle_permissions.general_portrait` 的兵牌与头像；坐骑变体可复用相同 `unit_variants.name` 中唯一的角色头像。只有相同 `unit_card` 对应唯一头像时才允许按兵牌回退，避免原版共用兵牌标识的不同角色互相串图。图片路径统一大小写和斜杠；忽略原版 `placeholder` 兵牌，找不到有效图片时保留可操作的文字占位。
 - 原版种族画、兵牌、详情图、属性图标、类别图标、能力图标和羊皮纸来自本机 `ui.pack` / `ui2.pack` / `ui3.pack`，启用 MOD 的同路径素材优先。序章的原版占位横幅和徽记复用正式基斯里夫素材。程序不内置整包游戏图片，也不读取其他开发目录的解包素材。
 - 派系徽记沿 `factions.subculture → cultures_subcultures.culture` 关联，读取最终生效的 `factions.flags_path`，优先采用文化同名或多人对战代表派系。路径及图片均支持 MOD 覆盖，并按可用尺寸回退；混沌矮人读取声明的正式旗帜目录，避免误用带 PH 的文化占位图片。「流浪军团」和「其他单位」使用原版通用图标。
 - `backend/encyclopedia_assets.py` 复用公共 Pack 索引读取器，只索引 UI 图片。图片按当前页分批读取，单批最多 96 个请求；缓存以 Pack 路径、大小和修改时间区分。游戏更新后旧快照停止返回过期图片。
@@ -67,3 +67,9 @@ node node_modules/vite/bin/vite.js build
 - [领主与英雄页](validation/unit-encyclopedia-20260927/two-pages-characters.png)
 - [普通单位页与远程详情](validation/unit-encyclopedia-20260927/two-pages-ranged.png)
 - [1024×768 两页布局](validation/unit-encyclopedia-20260927/two-pages-1024.png)
+
+## 角色头像修复验证（2026-10-12）
+
+仅读取本机原版 `db.pack` 和 `ui.pack` / `ui2.pack` / `ui3.pack` 即可复现卡尔头像错配：卡尔与数名其他角色的 `unit_card` 都为 `wh_main_emp_karl_franz`，旧逻辑合并这些角色的头像后按路径排序，卡尔的 5 个条目均选中 `def_crone_0.png`。修复后优先保留自身头像，缺少独立权限头像的坐骑条目按明确的变体名称复用卡尔头像；5 个条目的兵牌与详情头像均解析为 `emp_ch_karl_2h_hammer_0.png`。已从真实 UI Pack 读取图片并核对，图鉴仍返回 2,704 个原版单位，图片读取无警告。
+
+后端图鉴、单位编辑、编辑状态和三国单位编辑共 74 项测试、24 个子用例通过；前端图鉴 9 项测试通过。新增回归覆盖共享兵牌时保留自身头像、按角色变体名称补齐坐骑头像、拒绝歧义兵牌回退，以及路径大小写和斜杠归一化；原有唯一兵牌回退和 MOD 素材覆盖测试仍通过。验证未修改游戏 Pack，未打包或发布；玩家的实际 MOD 组合仍需新版启动器复测。

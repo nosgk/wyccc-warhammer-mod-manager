@@ -8,11 +8,24 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from backend.api import API
+from backend.constants import INTERNAL_FEATURE_PACK_NAMES
 from backend.launcher import launch_game
 from backend.save_games import SaveGameService, default_save_directory
 
 
 class SaveGameTests(unittest.TestCase):
+    def test_three_kingdoms_save_mods_are_not_filtered_by_warhammer_feature_names(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            save_dir = Path(temporary)
+            names = sorted(INTERNAL_FEATURE_PACK_NAMES)
+            (save_dir / "campaign.save").write_bytes(
+                b"header\0data.pack\0" + b"\0".join(name.encode() for name in names) + b"\0"
+            )
+            service = SaveGameService(save_dir, game_id="three_kingdoms")
+            result = service.pack_names("campaign.save")
+
+        self.assertEqual(result["pack_names"], names)
+
     def test_default_save_directory_is_scoped_to_the_selected_game(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             app_data = Path(temporary) / "AppData"

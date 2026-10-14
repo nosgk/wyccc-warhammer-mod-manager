@@ -105,7 +105,7 @@ class ModDiagnosticsService:
                 mods = [
                     {"pack_name": row["pack_name"], "effective_name": ""}
                     for row in record.get("packs", [])
-                    if row["pack_name"].casefold() not in INTERNAL_RUNTIME_PACK_NAMES
+                    if paths.game_id != "warhammer3" or row["pack_name"].casefold() not in INTERNAL_RUNTIME_PACK_NAMES
                 ]
             return {"available": True, "game_id": paths.game_id,
                     "started_at": record["started_at"], "mods": deepcopy(mods)}
@@ -180,7 +180,9 @@ class ModDiagnosticsService:
             assets = deepcopy(self.api._assets)
             if not ids or any(mod_id not in assets or not Path(assets[mod_id].path).is_file() for mod_id in ids):
                 raise ValueError("diagnostics.missingMods")
-            if any(assets[mod_id].pack_name.casefold() in INTERNAL_RUNTIME_PACK_NAMES for mod_id in ids):
+            if paths.game_id == "warhammer3" and any(
+                assets[mod_id].pack_name.casefold() in INTERNAL_RUNTIME_PACK_NAMES for mod_id in ids
+            ):
                 raise ValueError("diagnostics.runtimePack")
             names = [assets[mod_id].pack_name.casefold() for mod_id in ids]
             if len(names) != len(set(names)):

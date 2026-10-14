@@ -8,7 +8,6 @@ from typing import Any, Iterable
 from .constants import (
     CORE_VANILLA_PACKS,
     INTERNAL_FEATURE_PACK_NAMES,
-    INTERNAL_RUNTIME_PACK_NAMES,
     SAVE_BOOT_PACK_NAMES,
 )
 from .games import get_game_definition
@@ -22,14 +21,16 @@ _LENGTH_PREFIX_BYTES = 4
 
 def _save_exclusion_index(
     extra_names: Iterable[str] | None = None,
+    *,
+    game_id: str = "warhammer3",
 ) -> tuple[set[str], set[str]]:
     exact: set[str] = set()
     bang_stripped: set[str] = set()
+    internal_names = INTERNAL_FEATURE_PACK_NAMES if game_id == "warhammer3" else ()
     for name in (
         *CORE_VANILLA_PACKS,
         *SAVE_BOOT_PACK_NAMES,
-        *INTERNAL_FEATURE_PACK_NAMES,
-        *INTERNAL_RUNTIME_PACK_NAMES,
+        *internal_names,
         *(extra_names or ()),
     ):
         key = str(name).casefold()
@@ -153,7 +154,7 @@ class SaveGameService:
         except OSError as exc:
             raise ValueError(f"无法读取存档：{exc}") from exc
 
-        excluded, bang_stripped = _save_exclusion_index(excluded_pack_names)
+        excluded, bang_stripped = _save_exclusion_index(excluded_pack_names, game_id=self.game_id)
         lowered = content.lower()
         pack_names: list[str] = []
         seen: set[str] = set()

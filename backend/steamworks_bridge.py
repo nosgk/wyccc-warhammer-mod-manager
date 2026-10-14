@@ -394,20 +394,23 @@ def publish_workshop_item(
     normalized_id = str(workshop_id or "").strip()
     if normalized_id and not normalized_id.isdigit():
         raise ValueError("Invalid Workshop ID")
+    request = {
+        "operation": "publish_item",
+        "appId": int(app_id),
+        "id": normalized_id,
+        "contentPath": str(Path(content_path).resolve(strict=False)),
+        "previewPath": str(Path(preview_path).resolve(strict=False)),
+        "title": str(title),
+        "description": str(description),
+        "changeNote": str(change_note),
+        "visibility": int(visibility),
+        "language": str(language or "english").strip() or "english",
+    }
+    # An omitted tags field leaves an existing Workshop item's tags untouched.
+    if tags is not None:
+        request["tags"] = list(dict.fromkeys(str(item) for item in tags if str(item)))
     payload = _run_bridge_request(
-        {
-            "operation": "publish_item",
-            "appId": int(app_id),
-            "id": normalized_id,
-            "contentPath": str(Path(content_path).resolve(strict=False)),
-            "previewPath": str(Path(preview_path).resolve(strict=False)),
-            "title": str(title),
-            "description": str(description),
-            "changeNote": str(change_note),
-            "tags": list(dict.fromkeys(str(item) for item in (tags or []) if str(item))),
-            "visibility": int(visibility),
-            "language": str(language or "english").strip() or "english",
-        },
+        request,
         root=root,
         timeout_seconds=timeout_seconds,
     )

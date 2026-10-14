@@ -38,7 +38,6 @@ from .constants import (
     INTERNAL_FEATURE_PACK_NAMES,
     INTERNAL_FEATURE_WORKSHOP_IDS,
     INTERNAL_RUNTIME_PACK_NAMES,
-    internal_pack_display_name,
     SOURCE_DATA,
     SOURCE_WORKSHOP,
     UNIT_DATA_FEATURE_PACK_NAME,
@@ -70,7 +69,7 @@ from .mod_watcher import ModChangeMonitor
 from .pack_reader import read_pack_index, read_pack_layout
 from .schema_update import db_table_name, installed_definitions, update_mod_schema
 from .table_schema import load_latest_schema
-from .scanner import ModScanner
+from .scanner import ModScanner, is_internal_feature_mod
 from .save_games import SaveGameService
 from .share import (
     export_share,
@@ -348,12 +347,7 @@ class API:
         return str(self.settings_service.get().get("language") or DEFAULT_LANGUAGE)
 
     def _apply_internal_asset_metadata(self, assets: Mapping[str, ModAsset]) -> None:
-        language = self.interface_language()
-        for asset in assets.values():
-            asset.hidden = True
-            alias = internal_pack_display_name(asset.pack_name, language)
-            if alias:
-                asset.display_name = alias
+        self.scanner._apply_internal_pack_metadata(assets, self.interface_language(), self._active_game().id)
 
     def low_consumption_enabled(self) -> bool:
         return not self.diagnostics.running and bool(
@@ -792,20 +786,17 @@ class API:
     def _unit_data_source_ids(self) -> list[str]:
         """Enabled mods excluding Wyccc's internal runtime/feature Packs so the
         unit table and its stats never include the game-data patch itself."""
-        excluded = {
-            str(name).casefold()
-            for name in INTERNAL_FEATURE_PACK_NAMES
-        } | {
-            str(name).casefold()
-            for name in INTERNAL_RUNTIME_PACK_NAMES
-        }
-        excluded.add(UNIT_DATA_PATCH_NAME.casefold())
+        excluded: set[str] = set()
+        if self._active_game().id == "warhammer3":
+            excluded.update(INTERNAL_FEATURE_PACK_NAMES)
         result: list[str] = []
         for mod_id in self._current_enabled_mod_ids():
             asset = self._assets.get(mod_id)
             if asset is None:
                 continue
             if Path(asset.path).name.casefold() in excluded:
+                continue
+            if asset.pack_name.casefold() == UNIT_DATA_PATCH_NAME.casefold() and asset.is_launcher_runtime_pack:
                 continue
             result.append(mod_id)
         return result
@@ -1139,8 +1130,8 @@ class API:
                 self._internal_feature_mod_ids = {
                     mod_id
                     for mod_id, custom in user_data.items()
-                    if str(custom.get("published_workshop_id") or "")
-                    in INTERNAL_FEATURE_WORKSHOP_IDS
+                    if game_id == "warhammer3"
+                    and str(custom.get("published_workshop_id") or "") in INTERNAL_FEATURE_WORKSHOP_IDS
                 }
                 legacy_owned_candidates: list[tuple[ModAsset, dict[str, Any]]] = []
                 for mod in scan_result.mods:
@@ -1214,9 +1205,7 @@ class API:
                             if str(warning.get("code") or "") != "workshop_update_available"
                         ]
                     mod.hidden = bool(
-                        mod.pack_name.casefold() in INTERNAL_FEATURE_PACK_NAMES
-                        or mod.workshop_id in INTERNAL_FEATURE_WORKSHOP_IDS
-                        or mod.is_launcher_runtime_pack
+                        is_internal_feature_mod(mod, game_id)
                         or hidden_mod_ids.intersection([mod.id, *mod.alternate_ids])
                     )
                     raw_ignored_warning_codes = custom.get("ignored_warning_codes")
@@ -1361,18 +1350,18 @@ class API:
     def _set_mod_hidden(self, mod_id: str, hidden: bool) -> dict[str, Any]:
         asset = self._require_asset(mod_id)
         game_id = self._active_game().id
-        managed = (
-            asset.pack_name.casefold() in INTERNAL_FEATURE_PACK_NAMES
-            or asset.workshop_id in INTERNAL_FEATURE_WORKSHOP_IDS
-            or asset.is_launcher_runtime_pack
-        )
+        managed = is_internal_feature_mod(asset, game_id)
         effective_hidden = bool(hidden) or managed
+        playset_id = self.state_repository.get_current_playset_id(game_id)
         asset.hidden = self.state_repository.set_playset_mod_hidden(
-            self.state_repository.get_current_playset_id(game_id),
+            playset_id,
             asset.id,
             effective_hidden,
             game_id,
         )
+        if not effective_hidden:
+            for alternate_id in asset.alternate_ids:
+                self.state_repository.set_playset_mod_hidden(playset_id, alternate_id, False, game_id)
         return asset.to_dict()
 
     def _set_mod_warning_ignored(
@@ -1944,11 +1933,22 @@ class API:
             logger.exception("Unit data patch status=generation_failed")
             raise
         data_root = Path(paths.data_path).resolve(strict=False)
-        unit_data_path = self._stage_runtime_pack_in_data(
-            str(unit_data_patch.get("path") or ""),
-            data_root,
-            UNIT_DATA_PATCH_NAME,
+        selected_ids = saved["plan"]["ordered_mod_ids"]
+        selected_data_patch = any(
+            Path(self._assets[mod_id].path).resolve(strict=False) == data_root / UNIT_DATA_PATCH_NAME
+            for mod_id in selected_ids
         )
+        managed_data_patch = any(
+            asset.is_launcher_runtime_pack
+            and Path(asset.path).resolve(strict=False) == data_root / UNIT_DATA_PATCH_NAME
+            for asset in self._assets.values()
+        )
+        source_value = str(unit_data_patch.get("path") or "")
+        # A visible patch may be enabled manually. Preserve that file when
+        # there are no new edits, and load a regenerated patch only once.
+        unit_data_path = None
+        if source_value or (managed_data_patch and not selected_data_patch):
+            unit_data_path = self._stage_runtime_pack_in_data(source_value, data_root, UNIT_DATA_PATCH_NAME)
         launch_plan = saved["plan"]
         launch_path = str(saved["plan"]["target_path"])
         if unit_data_path is not None:
@@ -1970,7 +1970,10 @@ class API:
                 paths.game_path,
                 paths.data_path,
                 runtime_assets,
-                [unit_data_id, *saved["plan"]["ordered_mod_ids"]],
+                [unit_data_id, *(
+                    mod_id for mod_id in selected_ids
+                    if self._assets[mod_id].pack_name.casefold() != UNIT_DATA_PATCH_NAME.casefold()
+                )],
                 target_name="wyccc_launch_mods.txt",
                 path_mapper=path_map.map_path,
             )
@@ -2308,9 +2311,7 @@ class API:
         effective_hidden_ids: list[str] = []
         for asset in self._assets.values():
             asset.hidden = bool(
-                asset.pack_name.casefold() in INTERNAL_FEATURE_PACK_NAMES
-                or asset.workshop_id in INTERNAL_FEATURE_WORKSHOP_IDS
-                or asset.is_launcher_runtime_pack
+                is_internal_feature_mod(asset, game_id)
                 or hidden_mod_ids.intersection([asset.id, *asset.alternate_ids])
             )
             if asset.hidden:
@@ -3037,14 +3038,16 @@ class API:
             raise ValueError("Workshop 描述或更新日志过长")
 
         category_value = str(publish_data.get("category") or "").strip().casefold()
-        category = category_value or workshop_category_for_mod_types(
-            asset.mod_types or [asset.mod_type]
-        )
+        category = category_value
+        if mode == "upload":
+            category = category or workshop_category_for_mod_types(asset.mod_types or [asset.mod_type])
+            if not category:
+                raise ValueError("请选择 Workshop 分类标签")
         allowed_categories = {
             "graphical", "campaign", "units", "battle", "ui",
             "maps", "overhaul", "compilation", "cheat",
         }
-        if category not in allowed_categories:
+        if category and category not in allowed_categories:
             raise ValueError("Workshop 分类标签无效")
         visibility = int(publish_data.get("visibility", 0))
         if visibility not in {0, 1, 2, 3}:
@@ -3070,7 +3073,7 @@ class API:
                     title=title,
                     description=description,
                     change_note=change_note,
-                    tags=["mod", category],
+                    tags=["mod", category] if category else None,
                     visibility=visibility,
                     workshop_id=workshop_id,
                     language=steam_language,
@@ -3164,7 +3167,7 @@ class API:
                 layout = read_pack_layout(path)
                 if layout is None or layout.type_and_flags & 0xF < 3:
                     raise ValueError("schemaUpdate.invalidPack")
-                if path.name.casefold() in {name.casefold() for name in INTERNAL_RUNTIME_PACK_NAMES}:
+                if active_game == "warhammer3" and path.name.casefold() in INTERNAL_RUNTIME_PACK_NAMES:
                     raise ValueError("schemaUpdate.internalPack")
                 table_names = {db_table_name(entry.name) for entry in read_pack_index(path)} - {""}
                 if table_names:
@@ -3434,6 +3437,9 @@ class API:
         return result
 
     def _is_internal_feature_mod_id(self, mod_id: str) -> bool:
+        game_id = self._active_game().id
+        if game_id != "warhammer3":
+            return False
         normalized = str(mod_id)
         if any(
             normalized.casefold().endswith(f":{name}")
@@ -3444,7 +3450,7 @@ class API:
             return True
         asset_id = self._asset_aliases.get(normalized, normalized)
         asset = self._assets.get(asset_id)
-        if asset is not None and asset.is_launcher_runtime_pack:
+        if asset is not None and is_internal_feature_mod(asset, game_id):
             return True
         pending = parse_pending_workshop_mod_id(normalized)
         if pending and pending[0] in INTERNAL_FEATURE_WORKSHOP_IDS:

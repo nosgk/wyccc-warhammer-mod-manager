@@ -7,7 +7,7 @@ import os
 import re
 import time
 from pathlib import Path, PurePosixPath
-from typing import Iterable
+from typing import Iterable, Mapping
 
 from .app_settings import DEFAULT_LANGUAGE
 from .constants import (
@@ -58,6 +58,16 @@ def _is_launcher_runtime_pack(entry_names: Iterable[str]) -> bool:
     # Logging and intro overrides are shared by ordinary MODs. Only Wyccc's
     # dedicated markers can identify a generated Pack after it is renamed.
     return any(_is_launcher_runtime_pack_entry(name) for name in entry_names)
+
+
+def is_internal_feature_mod(asset: ModAsset, game_id: str) -> bool:
+    # The feature registry and generated-Pack protections belong to WH3.
+    # Other games must retain user-controlled visibility and load order.
+    return game_id == "warhammer3" and (
+        asset.pack_name.casefold() in INTERNAL_FEATURE_PACK_NAMES
+        or asset.workshop_id in INTERNAL_FEATURE_WORKSHOP_IDS
+        or asset.is_launcher_runtime_pack
+    )
 
 
 def _read_subscription_file(subscription_path: Path, app_id: str) -> dict[str, int] | None:
@@ -283,7 +293,7 @@ class ModScanner:
                 excluded_names={
                     name
                     for name in vanilla
-                    if name.casefold() not in INTERNAL_FEATURE_PACK_NAMES
+                    if paths.game_id != "warhammer3" or name.casefold() not in INTERNAL_FEATURE_PACK_NAMES
                 },
             )
         workshop_ids: list[str] = []
@@ -423,7 +433,7 @@ class ModScanner:
                             }
                         )
 
-        self._apply_internal_pack_metadata(assets, interface_language)
+        self._apply_internal_pack_metadata(assets, interface_language, paths.game_id)
         result.mods = sorted(
             assets.values(),
             key=lambda mod: (mod.pack_name.casefold(), mod.pack_name, mod.id),
@@ -740,16 +750,14 @@ class ModScanner:
 
     @staticmethod
     def _apply_internal_pack_metadata(
-        assets: dict[str, ModAsset],
+        assets: Mapping[str, ModAsset],
         language: str,
+        game_id: str = "warhammer3",
     ) -> None:
+        if game_id != "warhammer3":
+            return
         for asset in assets.values():
-            pack_key = asset.pack_name.casefold()
-            if (
-                pack_key in INTERNAL_FEATURE_PACK_NAMES
-                or asset.workshop_id in INTERNAL_FEATURE_WORKSHOP_IDS
-                or asset.is_launcher_runtime_pack
-            ):
+            if is_internal_feature_mod(asset, game_id):
                 asset.hidden = True
             alias = internal_pack_display_name(asset.pack_name, language)
             if alias:

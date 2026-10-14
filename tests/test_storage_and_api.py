@@ -2606,7 +2606,7 @@ class ApiContractTests(unittest.TestCase):
             self.assertEqual(bridge_calls[0]["workshop_id"], "")
             self.assertEqual(bridge_calls[1]["workshop_id"], "456789")
             self.assertEqual(bridge_calls[0]["tags"], ["mod", "units"])
-            self.assertEqual(bridge_calls[1]["tags"], ["mod", "units"])
+            self.assertIsNone(bridge_calls[1]["tags"])
             self.assertEqual(bridge_calls[0]["language"], "schinese")
             self.assertEqual(bridge_calls[1]["language"], "schinese")
             self.assertEqual(

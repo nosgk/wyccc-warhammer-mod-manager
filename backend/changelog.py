@@ -9,6 +9,13 @@ SUPPORTED_CHANGELOG_LANGUAGES = frozenset({"zh-CN", "en-US", "ko-KR", "ru-RU", "
 
 CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
     {
+        "version": "1.2.6",
+        "date": "2026-10-14",
+        "entries": (
+            ("v126_fixed_title", (("fix", "v126_tk_hidden_mods"), ("fix", "v126_publish_categories"))),
+        ),
+    },
+    {
         "version": "1.2.5",
         "date": "2026-10-11",
         "entries": (
@@ -720,6 +727,9 @@ CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
 
 CHANGELOG_TEXT: dict[str, dict[str, str]] = {
     "zh-CN": {
+        "v126_fixed_title": "修复",
+        "v126_tk_hidden_mods": "修复三国全战某些MOD会被错误隐藏的问题",
+        "v126_publish_categories": "修复上传/更新MOD时，分类标签读取错误的问题",
         "v125_added_title": "新增",
         "v125_adjusted_title": "调整",
         "v125_chinese_profile": "启动游戏兼容中文用户目录",
@@ -976,6 +986,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。",
     },
     "en-US": {
+        "v126_fixed_title": "Fixed",
+        "v126_tk_hidden_mods": "Fixed an issue that incorrectly hid some MODs in Total War: THREE KINGDOMS.",
+        "v126_publish_categories": "Fixed incorrect category tag reading when uploading/updating MODs.",
         "v125_added_title": "Added",
         "v125_adjusted_title": "Adjusted",
         "v125_chinese_profile": "Game launch compatibility with Windows user folders containing Chinese characters.",
@@ -1232,6 +1245,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog.",
     },
     "ko-KR": {
+        "v126_fixed_title": "수정",
+        "v126_tk_hidden_mods": "토탈 워: 삼국에서 일부 MOD가 잘못 숨겨지는 문제를 수정했습니다.",
+        "v126_publish_categories": "MOD 업로드/업데이트 시 분류 태그를 잘못 읽는 문제를 수정했습니다.",
         "v125_added_title": "추가",
         "v125_adjusted_title": "조정",
         "v125_chinese_profile": "중국어 문자가 포함된 Windows 사용자 폴더에서도 게임을 실행할 수 있도록 호환성을 개선했습니다.",
@@ -1488,6 +1504,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다.",
     },
     "ru-RU": {
+        "v126_fixed_title": "Исправлено",
+        "v126_tk_hidden_mods": "Исправлена ошибка, из-за которой некоторые MOD неправильно скрывались в Total War: THREE KINGDOMS.",
+        "v126_publish_categories": "Исправлено неверное чтение категории при загрузке/обновлении MOD.",
         "v125_added_title": "Добавлено",
         "v125_adjusted_title": "Изменено",
         "v125_chinese_profile": "Совместимость запуска игры с папками пользователя Windows, содержащими китайские символы.",
@@ -1744,6 +1763,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении.",
     },
     "ja-JP": {
+        "v126_fixed_title": "修正",
+        "v126_tk_hidden_mods": "Total War: THREE KINGDOMSで一部のMODが誤って非表示になる問題を修正しました。",
+        "v126_publish_categories": "MODのアップロード/更新時にカテゴリタグを誤って読み取る問題を修正しました。",
         "v125_added_title": "追加",
         "v125_adjusted_title": "調整",
         "v125_chinese_profile": "中国語の文字を含むWindowsユーザーフォルダーでのゲーム起動に対応しました。",
@@ -2000,6 +2022,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。",
     },
     "es-ES": {
+        "v126_fixed_title": "Corregido",
+        "v126_tk_hidden_mods": "Corregido un problema que ocultaba incorrectamente algunos MODs en Total War: THREE KINGDOMS.",
+        "v126_publish_categories": "Corregida la lectura incorrecta de las etiquetas de categoría al subir/actualizar MODs.",
         "v125_added_title": "Añadido",
         "v125_adjusted_title": "Ajustado",
         "v125_chinese_profile": "Compatibilidad al iniciar el juego con carpetas de usuario de Windows que contienen caracteres chinos.",

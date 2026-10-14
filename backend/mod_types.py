@@ -20,8 +20,8 @@ DEFAULT_MOD_TYPE_NAMES: Final = frozenset(item["name"].casefold() for item in DE
 
 # Workshop exposes a smaller, fixed set of category tags than the launcher's
 # MOD type list. Keep this mapping in the backend as the source of truth for
-# requests that do not include an explicit category (for example, older
-# clients opening the update dialog).
+# new uploads that do not include an explicit category. Unknown types must
+# prompt for a category rather than silently publishing as graphical.
 WORKSHOP_CATEGORY_BY_MOD_TYPE: Final = {
     "graphical": "graphical",
     "visual": "graphical",
@@ -45,7 +45,7 @@ def workshop_category_for_mod_types(type_ids: Iterable[object] | None) -> str:
         category = WORKSHOP_CATEGORY_BY_MOD_TYPE.get(str(raw_type or "").strip().casefold())
         if category:
             return category
-    return "graphical"
+    return ""
 
 
 def default_mod_types() -> list[dict[str, object]]:

@@ -112,7 +112,7 @@ def build_catalogue(
         culture = values("cultures_subcultures_tables", faction.get("subculture")).get("culture")
         if culture:
             permissions[permission.unit_key].add(culture)
-        portrait = str(permission.row.values.get("general_portrait") or "").replace("\\", "/")
+        portrait = str(permission.row.values.get("general_portrait") or "").replace("\\", "/").casefold()
         if portrait:
             character_portraits[permission.unit_key].append(portrait)
 
@@ -121,10 +121,14 @@ def build_catalogue(
                   "building_units_allowed_tables"):
         recruitable.update(p.unit_key for p in _collect_permission_rows(sources, table).values())
 
+    portraits_by_name = defaultdict(set)
     portraits_by_card = defaultdict(set)
     for unit_key, paths in character_portraits.items():
         land_key = values("main_units_tables", unit_key).get("land_unit")
         for variant in variants[land_key]:
+            name = str(variant.get("name") or "")
+            if name:
+                portraits_by_name[name].update(paths)
             card = str(variant.get("unit_card") or "")
             if card and "placeholder" not in card.casefold():
                 portraits_by_card[card].update(paths)
@@ -151,10 +155,20 @@ def build_catalogue(
         card_keys = [v.get("unit_card") for v in variant_rows if v.get("unit_card")]
         icon = _unit_image(assets, "icons", *card_keys, row["land_unit"], row["key"])
         portrait = _unit_image(assets, "infopics", *card_keys, row["land_unit"], row["key"])
-        # Characters use the battle-permission portrait, often with no unit-card texture at all.
-        portrait_paths = sorted(set(character_portraits[row["key"]]).union(
-            *(portraits_by_card[key] for key in card_keys),
-        ))
+        # Vanilla reuses some unit_card values across unrelated characters.
+        # Prefer this unit's permissions; mounts can reuse an unambiguous variant name.
+        shared_portraits = []
+        for variant in variant_rows:
+            paths = portraits_by_name[str(variant.get("name") or "")]
+            if len(paths) == 1:
+                shared_portraits.extend(paths)
+        if not shared_portraits:
+            for key in card_keys:
+                if len(portraits_by_card[key]) == 1:
+                    shared_portraits.extend(portraits_by_card[key])
+        portrait_paths = list(dict.fromkeys([
+            *sorted(set(character_portraits[row["key"]])), *shared_portraits,
+        ]))
         icon = icon or assets.resolve(*(p.replace("/portholes/", "/units/") for p in portrait_paths),
                                       *portrait_paths, f"ui/units/minspec_portholes/{row['land_unit']}.png")
         portrait = portrait or assets.resolve(*portrait_paths)

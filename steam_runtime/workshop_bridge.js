@@ -4,6 +4,9 @@ const fs = require("fs");
 const path = require("path");
 
 const RESULT_PREFIX = "WMM_WORKSHOP_RESULT=";
+const WORKSHOP_CATEGORY_TAGS = new Set([
+  "graphical", "campaign", "units", "battle", "ui", "maps", "overhaul", "compilation", "cheat",
+]);
 const QUERY_CHUNK_SIZE = 100;
 const DEPENDENCY_QUERY_CONCURRENCY = 16;
 const WORKSHOP_ITEM_INSTALLED = 4;
@@ -355,7 +358,7 @@ const main = async () => {
     const changeNote = String(request?.changeNote || "");
     const visibility = Number(request?.visibility ?? 0);
     const language = String(request?.language || "english").trim();
-    const tags = [...new Set((request?.tags || []).map(String).filter(Boolean))];
+    let tags = request?.tags == null ? null : [...new Set(request.tags.map(String).filter(Boolean))];
     if (!contentPath || !fs.statSync(contentPath).isDirectory()) throw new Error("Upload content folder is missing");
     if (!previewPath || !fs.statSync(previewPath).isFile()) throw new Error("Workshop preview image is missing");
     if (!title) throw new Error("Workshop title is required");
@@ -380,6 +383,13 @@ const main = async () => {
       if (!item) throw new Error(`Workshop item ${requestedId} was not found`);
       const itemOwnerId = item.owner?.steamId64?.toString?.() || "";
       if (itemOwnerId !== ownerId) throw new Error("The current Steam account does not own this Workshop item");
+      if (tags !== null) {
+        const existingTags = Array.isArray(item.tags) ? item.tags.map(String) : [];
+        tags = [...new Set([
+          ...existingTags.filter(tag => !WORKSHOP_CATEGORY_TAGS.has(tag.toLowerCase())),
+          ...tags,
+        ])];
+      }
     } else {
       const createdItem = await client.workshop.createItem(appId);
       itemId = createdItem.itemId;
@@ -388,16 +398,17 @@ const main = async () => {
     }
 
     try {
-      const updatedItem = await client.workshop.updateItem(itemId, {
+      const update = {
         title,
         description,
         changeNote,
         previewPath,
         contentPath,
-        tags: tags.length ? tags : ["mod"],
         visibility,
         language,
-      }, appId);
+      };
+      if (tags !== null || created) update.tags = tags?.length ? tags : ["mod"];
+      const updatedItem = await client.workshop.updateItem(itemId, update, appId);
       needsToAcceptAgreement = needsToAcceptAgreement || Boolean(updatedItem.needsToAcceptAgreement);
     } catch (error) {
       if (created) {

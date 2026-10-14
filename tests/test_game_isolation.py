@@ -10,9 +10,16 @@ from pathlib import Path
 from unittest.mock import patch
 
 from backend.api import API
+from backend.constants import (
+    GAME_DATA_FEATURE_WORKSHOP_ITEMS,
+    INTERNAL_FEATURE_PACK_NAMES,
+    INTERNAL_FEATURE_WORKSHOP_IDS,
+    RUNTIME_OPTIONS_MARKER_ENTRY,
+)
 from backend.games import get_game_definition
 from backend.models import ScanResult
 from backend.share import export_share, parse_share
+from backend.start_options import UNIT_DATA_PATCH_NAME
 from backend.storage import StateRepository
 from tests.helpers import make_asset, write_pack
 
@@ -80,6 +87,207 @@ class GameIsolationTests(unittest.TestCase):
         self.assertEqual(self.api.state_repository.get_enabled_order("three_kingdoms"), [])
         exported = self.api.call("export_share", [[asset.id]])["data"]["share_code"]
         self.assertEqual(parse_share(exported, "three_kingdoms")[0]["id"], asset.id)
+
+    def test_three_kingdoms_mod_with_warhammer_feature_name_is_visible_and_enableable(self):
+        game, _ = self.select_game("three_kingdoms")
+        pack_name = GAME_DATA_FEATURE_WORKSHOP_ITEMS["unit_size"]["pack_name"]
+        write_pack(game / "data" / pack_name)
+
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        mod = scanned["data"]["mods"][0]
+        self.assertFalse(mod["hidden"])
+        self.assertEqual(self.api._canonicalize_mod_ids([mod["id"]]), [mod["id"]])
+
+    def test_three_kingdoms_can_unhide_mod_with_generated_pack_entry(self):
+        game, _ = self.select_game("three_kingdoms")
+        write_pack(
+            game / "data" / "ordinary.pack",
+            entries=[(RUNTIME_OPTIONS_MARKER_ENTRY, b"{}")],
+        )
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        mod = scanned["data"]["mods"][0]
+
+        self.assertFalse(mod["hidden"])
+        hidden = self.api.call("set_mod_hidden", [mod["id"], True])
+        self.assertTrue(hidden["ok"], hidden)
+        self.assertTrue(hidden["data"]["hidden"])
+        self.assertTrue(self.api.call("scan_mods", [False])["data"]["mods"][0]["hidden"])
+        unhidden = self.api.call("set_mod_hidden", [mod["id"], False])
+        self.assertTrue(unhidden["ok"], unhidden)
+        self.assertFalse(unhidden["data"]["hidden"])
+        rescanned = self.api.call("scan_mods", [False])
+        self.assertFalse(rescanned["data"]["mods"][0]["hidden"])
+        self.assertEqual(self.api._canonicalize_mod_ids([mod["id"]]), [mod["id"]])
+
+    def test_three_kingdoms_keeps_all_warhammer_pack_names_in_playsets_and_load_order(self):
+        game, _ = self.select_game("three_kingdoms")
+        for pack_name in INTERNAL_FEATURE_PACK_NAMES:
+            write_pack(game / "data" / pack_name)
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        mods = scanned["data"]["mods"]
+        ids = [mod["id"] for mod in mods]
+        self.assertEqual(len(mods), len(INTERNAL_FEATURE_PACK_NAMES))
+        self.assertTrue(all(not mod["hidden"] for mod in mods))
+        self.assertTrue(all(mod["display_name"] == Path(mod["pack_name"]).stem for mod in mods))
+
+        default_id = scanned["data"]["current_playset"]["id"]
+        created = self.api.call("create_playset", ["Three Kingdoms", ids])
+        self.assertTrue(created["ok"], created)
+        self.assertEqual(created["data"]["ordered_mod_ids"], ids)
+        self.assertEqual(created["data"]["current_playset"]["hidden_mod_ids"], [])
+        other_id = created["data"]["current_playset"]["id"]
+        saved = self.api.call("save_load_order", [ids, scanned["data"]["order_token"]])
+        self.assertTrue(saved["ok"], saved)
+        self.assertEqual(saved["data"]["plan"]["ordered_mod_ids"], ids)
+        self.assertEqual(self.api._unit_data_source_ids(), ids)
+        rescanned = self.api.call("scan_mods", [False])
+        self.assertEqual(rescanned["data"]["enabled_order"], ids)
+        for playset_id in (default_id, other_id):
+            switched = self.api.call("switch_playset", [playset_id])
+            self.assertTrue(switched["ok"], switched)
+            self.assertEqual(switched["data"]["current_playset"]["hidden_mod_ids"], [])
+            self.assertTrue(all(not asset.hidden for asset in self.api._assets.values()))
+
+    def test_three_kingdoms_ignores_warhammer_published_and_pending_workshop_ids(self):
+        game, _ = self.select_game("three_kingdoms")
+        path = write_pack(game / "data" / "ordinary.pack")
+        for workshop_id in INTERNAL_FEATURE_WORKSHOP_IDS:
+            with self.subTest(workshop_id=workshop_id):
+                scanned = self.api.call("scan_mods", [False])
+                self.assertTrue(scanned["ok"], scanned)
+                mod_id = scanned["data"]["mods"][0]["id"]
+                self.api.state_repository.set_published_workshop_id(mod_id, workshop_id)
+                rescanned = self.api.call("scan_mods", [False])
+                mod = rescanned["data"]["mods"][0]
+                self.assertEqual(mod["path"], str(path.resolve()))
+                self.assertFalse(mod["hidden"])
+                self.assertEqual(self.api._canonicalize_mod_ids([mod_id]), [mod_id])
+                pending_id = f"steam:{workshop_id}:missing.pack"
+                self.assertEqual(self.api._canonicalize_mod_ids([pending_id]), [pending_id])
+
+    def test_three_kingdoms_unhide_clears_old_hidden_flags_on_merged_workshop_copy(self):
+        game, workshop = self.select_game("three_kingdoms")
+        write_pack(game / "data" / "ordinary.pack")
+        write_pack(workshop / "123" / "ordinary.pack")
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        mod = scanned["data"]["mods"][0]
+        self.assertTrue(mod["alternate_ids"])
+        playset_id = scanned["data"]["current_playset"]["id"]
+        for old_id in [mod["id"], *mod["alternate_ids"]]:
+            self.api.state_repository.set_playset_mod_hidden(playset_id, old_id, True, "three_kingdoms")
+        self.assertTrue(self.api.call("scan_mods", [False])["data"]["mods"][0]["hidden"])
+
+        unhidden = self.api.call("set_mod_hidden", [mod["id"], False])
+        self.assertTrue(unhidden["ok"], unhidden)
+        self.assertFalse(unhidden["data"]["hidden"])
+        rescanned = self.api.call("scan_mods", [False])
+        self.assertFalse(rescanned["data"]["mods"][0]["hidden"])
+        self.assertEqual(self.api.state_repository.get_playset_hidden_mod_ids(playset_id, "three_kingdoms"), set())
+
+    def test_three_kingdoms_diagnostics_accepts_a_warhammer_runtime_pack_name(self):
+        game, _ = self.select_game("three_kingdoms")
+        write_pack(game / "data" / "!!!!wyccc_runtime_options.pack", byte_mask=3)
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        mod_id = scanned["data"]["mods"][0]["id"]
+
+        with patch("backend.diagnostics_api.GameProbe.run", return_value={"verdict": "ok"}) as probe:
+            started = self.api.call("start_mod_diagnostics", [[mod_id], "bisect"])
+            self.assertTrue(started["ok"], started)
+            self.api.diagnostics.session._thread.join(5)
+            self.assertEqual(self.api.diagnostics.session.status()["status"], "no_repro")
+            self.assertTrue(probe.called)
+
+    def test_three_kingdoms_legacy_launch_list_keeps_warhammer_runtime_pack_names(self):
+        game, _ = self.select_game("three_kingdoms")
+        names = ["!!!!wyccc_runtime_options.pack", "ordinary.pack"]
+        self.api.diagnostics.launches.save({"version": 1, "games": {"three_kingdoms": {
+            "game_path": str(game.resolve()), "started_at": 123,
+            "packs": [{"pack_name": name} for name in names],
+        }}})
+
+        history = self.api.call("get_last_launch_mods")
+        self.assertTrue(history["ok"], history)
+        self.assertEqual([mod["pack_name"] for mod in history["data"]["mods"]], names)
+
+    def test_three_kingdoms_launch_loads_a_visible_generated_unit_patch_once(self):
+        game, _ = self.select_game("three_kingdoms")
+        source = write_pack(
+            self.root / "generated" / UNIT_DATA_PATCH_NAME,
+            entries=[("db\\land_units_tables\\!!!!wyccc_unit_data_v0035", b"generated")],
+        )
+        target = game / "data" / UNIT_DATA_PATCH_NAME
+        target.write_bytes(source.read_bytes())
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        mod = scanned["data"]["mods"][0]
+        self.assertFalse(mod["hidden"])
+        result = {"status": "generated", "path": str(source), "fingerprint": "unit", "entry_count": 1}
+
+        with patch("backend.api.ensure_unit_data_patch", return_value=result), \
+                patch("backend.api.launch_game", return_value={"pid": 7}), \
+                patch.object(self.api, "set_game_running"):
+            launched = self.api.call("launch_game", [[mod["id"]], scanned["data"]["order_token"]])
+        self.assertTrue(launched["ok"], launched)
+        self.assertEqual(launched["data"]["launch_plan"]["pack_names"], [UNIT_DATA_PATCH_NAME])
+        self.assertEqual(self.api._unit_data_source_ids(), [])
+
+    def test_three_kingdoms_launch_preserves_a_manually_enabled_unit_patch_without_new_edits(self):
+        game, _ = self.select_game("three_kingdoms")
+        target = write_pack(
+            game / "data" / UNIT_DATA_PATCH_NAME,
+            entries=[("db\\land_units_tables\\saved_units", b"saved edits")],
+        )
+        original = target.read_bytes()
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        mod_id = scanned["data"]["mods"][0]["id"]
+        result = {"status": "zero_modification", "path": "", "fingerprint": "", "entry_count": 0}
+
+        with patch("backend.api.ensure_unit_data_patch", return_value=result), \
+                patch("backend.api.launch_game", return_value={"pid": 7}), \
+                patch.object(self.api, "set_game_running"):
+            launched = self.api.call("launch_game", [[mod_id], scanned["data"]["order_token"]])
+        self.assertTrue(launched["ok"], launched)
+        self.assertTrue(target.is_file())
+        self.assertEqual(target.read_bytes(), original)
+        self.assertEqual(launched["data"]["launch_plan"]["pack_names"], [UNIT_DATA_PATCH_NAME])
+        self.assertEqual(self.api._unit_data_source_ids(), [mod_id])
+
+    def test_three_kingdoms_schema_update_does_not_reject_a_warhammer_runtime_pack_name(self):
+        game, _ = self.select_game("three_kingdoms")
+        write_pack(game / "data" / "!!!!wyccc_runtime_options.pack", byte_mask=3)
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        mod_id = scanned["data"]["mods"][0]["id"]
+
+        updated = self.api.call("update_mod_table_schemas", [[mod_id], "three_kingdoms"])
+        self.assertTrue(updated["ok"], updated)
+        self.assertEqual(updated["data"]["failed_count"], 0)
+        self.assertEqual(updated["data"]["unchanged_count"], 1)
+
+    def test_three_kingdoms_launch_does_not_delete_an_ordinary_inactive_mod_named_like_the_unit_patch(self):
+        game, _ = self.select_game("three_kingdoms")
+        target = write_pack(
+            game / "data" / UNIT_DATA_PATCH_NAME,
+            entries=[("db\\land_units_tables\\ordinary_units", b"user data")],
+        )
+        original = target.read_bytes()
+        scanned = self.api.call("scan_mods", [False])
+        self.assertTrue(scanned["ok"], scanned)
+        result = {"status": "zero_modification", "path": "", "fingerprint": "", "entry_count": 0}
+
+        with patch("backend.api.ensure_unit_data_patch", return_value=result), \
+                patch("backend.api.launch_game", return_value={"pid": 7}), \
+                patch.object(self.api, "set_game_running"):
+            launched = self.api.call("launch_game", [[], scanned["data"]["order_token"]])
+        self.assertTrue(launched["ok"], launched)
+        self.assertTrue(target.is_file())
+        self.assertEqual(target.read_bytes(), original)
 
     def test_data_sync_does_not_claim_another_game_or_installation(self):
         game_a, workshop_a = self.select_game()

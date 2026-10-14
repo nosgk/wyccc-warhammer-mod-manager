@@ -199,6 +199,67 @@ class CatalogueTests(unittest.TestCase):
             units = build_catalogue([source, base_source()], {}, {}, EncyclopediaAssets([pack]))["units"]
             self.assertEqual(next(u for u in units if u["key"] == "mounted")["icon"], card)
 
+    def test_shared_card_keeps_each_characters_explicit_portrait(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            portraits = {
+                "custom_unit": "ui/portraits/portholes/empire/karl_franz.png",
+                "morathi": "ui/portraits/portholes/dark_elves/morathi.png",
+            }
+            entries = [(path, png("red")) for path in portraits.values()]
+            entries += [(path.replace("/portholes/", "/units/"), png("blue"))
+                        for path in portraits.values()]
+            pack = write_pack(Path(tmp) / "ui.pack", entries=entries)
+            source = DbSource("shared character card", (
+                table("main_units_tables", [{"unit": "morathi", "land_unit": "morathi_land",
+                                              "caste": "lord", "in_encyclopedia": True}]),
+                table("land_units_tables", [{"key": "morathi_land", "man_entity": "man"}]),
+                table("unit_variants_tables", [{"unit": "morathi_land", "unit_card": "real_card"}]),
+                table("units_custom_battle_permissions_tables", [
+                    {"unit": key, "faction": "faction", "general_portrait": path}
+                    for key, path in portraits.items()
+                ]),
+            ))
+            units = {unit["key"]: unit for unit in
+                     build_catalogue([source, base_source()], {}, {}, EncyclopediaAssets([pack]))["units"]}
+            for key, path in portraits.items():
+                with self.subTest(character=key):
+                    self.assertEqual(units[key]["icon"], path.replace("/portholes/", "/units/"))
+                    self.assertEqual(units[key]["portrait"], path)
+
+    def test_shared_card_mount_uses_its_variant_name_and_rejects_ambiguous_fallback(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            karl = "ui/portraits/portholes/no_culture/emp_ch_karl_2h_hammer_0.png"
+            crone = "ui/portraits/portholes/no_culture/def_crone_0.png"
+            pack = write_pack(Path(tmp) / "ui.pack", entries=[
+                (path, png("red")) for path in (karl, crone)
+            ] + [(path.replace("/portholes/", "/units/"), png("blue")) for path in (karl, crone)])
+            source = DbSource("shared vanilla character card", (
+                table("main_units_tables", [
+                    {"unit": key, "land_unit": key + "_land", "caste": "lord", "in_encyclopedia": True}
+                    for key in ("crone", "karl_mounted", "unknown_mounted")
+                ]),
+                table("land_units_tables", [
+                    {"key": key + "_land", "man_entity": "man"}
+                    for key in ("crone", "karl_mounted", "unknown_mounted")
+                ]),
+                table("unit_variants_tables", [
+                    {"unit": land, "name": name, "unit_card": "real_card"}
+                    for land, name in (("custom_land", "karl_franz"), ("karl_mounted_land", "karl_franz"),
+                                       ("crone_land", "crone"), ("unknown_mounted_land", ""))
+                ]),
+                table("units_custom_battle_permissions_tables", [
+                    {"unit": "custom_unit", "faction": "faction", "general_portrait": karl},
+                    {"unit": "custom_unit", "faction": "other", "general_portrait": karl.replace("/", "\\").upper()},
+                    {"unit": "crone", "faction": "faction", "general_portrait": crone},
+                ]),
+            ))
+            units = {unit["key"]: unit for unit in
+                     build_catalogue([source, base_source()], {}, {}, EncyclopediaAssets([pack]))["units"]}
+            self.assertEqual(units["karl_mounted"]["icon"], karl.replace("/portholes/", "/units/"))
+            self.assertEqual(units["karl_mounted"]["portrait"], karl)
+            self.assertEqual(units["unknown_mounted"]["icon"], "")
+            self.assertEqual(units["unknown_mounted"]["portrait"], "")
+
     def test_original_placeholder_is_skipped_in_favour_of_a_character_portrait(self):
         with tempfile.TemporaryDirectory() as tmp:
             portrait = "ui/portraits/portholes/no_culture/character.png"

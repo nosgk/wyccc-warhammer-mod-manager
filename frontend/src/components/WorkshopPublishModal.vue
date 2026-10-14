@@ -19,7 +19,7 @@ const draft = reactive({
   description: '',
   change_note: '',
   language: 'en-US',
-  category: 'graphical',
+  category: '',
   visibility: 0,
 })
 const languageLoading = ref(false)
@@ -56,10 +56,10 @@ const languageSelectOptions = computed(() => LANGUAGE_OPTIONS.map(language => ({
   value: language.code,
   label: languageLabel(language),
 })))
-const categorySelectOptions = computed(() => categories.map(category => ({
-  value: category[0],
-  label: t(category[1]),
-})))
+const categorySelectOptions = computed(() => [
+  { value: '', label: t(props.mode === 'update' ? 'publish.categoryKeep' : 'publish.categoryChoose') },
+  ...categories.map(category => ({ value: category[0], label: t(category[1]) })),
+])
 const visibilitySelectOptions = computed(() => [
   { value: 0, label: t('publish.public') },
   { value: 1, label: t('publish.friendsOnly') },
@@ -74,7 +74,7 @@ const workshopCategoryForMod = mod => {
     const category = workshopCategoryByModType[String(type || '').trim().toLowerCase()]
     if (category) return category
   }
-  return 'graphical'
+  return ''
 }
 
 watch(
@@ -87,7 +87,7 @@ watch(
     draft.language = props.mode === 'update'
       ? normalizeLanguage(store.settings.language)
       : 'en-US'
-    draft.category = workshopCategoryForMod(props.mod)
+    draft.category = props.mode === 'update' ? '' : workshopCategoryForMod(props.mod)
     draft.visibility = 0
     languageMessage.value = ''
     languageRequestId += 1
@@ -131,7 +131,7 @@ async function loadWorkshopLanguage(language, allowEnglishDefault = false) {
 }
 
 const submit = () => {
-  if (!draft.title.trim()) return
+  if (!draft.title.trim() || (props.mode === 'upload' && !draft.category)) return
   emit('submit', {
     mode: props.mode,
     title: draft.title.trim(),
@@ -220,7 +220,7 @@ const submit = () => {
         <button
           type="button"
           class="primary-button"
-          :disabled="!!busy || !draft.title.trim()"
+          :disabled="!!busy || !draft.title.trim() || (mode === 'upload' && !draft.category)"
           @click="submit"
         >
           {{ busy || (mode === 'upload' ? t('publish.createUpload') : t('publish.submitUpdate')) }}

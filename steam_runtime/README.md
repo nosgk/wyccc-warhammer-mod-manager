@@ -5,6 +5,8 @@
 创建或更新 Workshop 项目；更新时会把用户选择的 Steam 语言写入标题与描述，更新前会比较项目所有者与当前本机 Steam 账号。Python 后端
 通过标准输入/输出与它通信。
 
+发布分类与启动器本地 MOD 分类分别处理。新上传只推断能明确映射到 Workshop 的本地类型，无法映射时要求用户选择分类。更新默认保持现有工坊标签，Python 请求和原生更新参数均省略 `tags`；用户明确选择分类时，桥接层从所有权查询的最新结果保留非分类标签，再替换分类。参见 [分类标签修复与验证](../docs/validation/2026-10-14-workshop-publish-tags.md)。
+
 源码运行时使用 `WMM_STEAMWORKS_NODE`、`WMM_NODE` 或 `PATH` 中的 Node.js。旧版
 `WWM_*`、`WWMM_*` 环境变量仍可兼容读取。发布打包
 流程会将构建时检测到的 `node.exe` 一并放入 PyInstaller 单文件程序，不要求发布版用户

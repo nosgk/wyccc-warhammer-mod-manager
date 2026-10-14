@@ -68,6 +68,62 @@ describe('visual-only list sorting guardrails', () => {
 })
 
 describe('Workshop publish dialog', () => {
+  it.each(['unknown', 'unit', 'visual'])('preserves Workshop tags on update with local type %s', async type => {
+    const pinia = createPinia()
+    setActivePinia(pinia)
+    const store = useAppStore()
+    store.loadWorkshopPublishCopy = vi.fn(() => new Promise(() => {}))
+    const wrapper = mount(WorkshopPublishModal, {
+      global: { plugins: [pinia] },
+      props: { open: true, mode: 'update', mod: { ...localMod, workshop_id: '123', mod_types: [type] } },
+    })
+
+    await wrapper.get('.primary-button').trigger('click')
+    expect(wrapper.emitted('submit')[0][0].category).toBe('')
+    wrapper.unmount()
+  })
+
+  it('requires an explicit category for uploads whose local type has no Workshop category', async () => {
+    const wrapper = mount(WorkshopPublishModal, {
+      global: { plugins: [createPinia()] },
+      props: { open: true, mode: 'upload', mod: { ...localMod, mod_types: ['feature'] } },
+    })
+
+    expect(wrapper.get('.primary-button').attributes('disabled')).toBeDefined()
+    await wrapper.get('.primary-button').trigger('click')
+    expect(wrapper.emitted('submit')).toBeUndefined()
+
+    const category = wrapper.get('[data-testid="publish-category-select"]')
+    await category.get('.themed-select-trigger').trigger('click')
+    await category.get('[data-value="campaign"]').trigger('click')
+    expect(wrapper.get('.primary-button').attributes('disabled')).toBeUndefined()
+    await wrapper.get('.primary-button').trigger('click')
+    expect(wrapper.emitted('submit')[0][0].category).toBe('campaign')
+    wrapper.unmount()
+  })
+
+  it('submits an explicit update category and resets to keeping tags when reopened', async () => {
+    const pinia = createPinia()
+    setActivePinia(pinia)
+    useAppStore().loadWorkshopPublishCopy = vi.fn(() => new Promise(() => {}))
+    const wrapper = mount(WorkshopPublishModal, {
+      global: { plugins: [pinia] },
+      props: { open: true, mode: 'update', mod: { ...localMod, workshop_id: '123' } },
+    })
+
+    const category = wrapper.get('[data-testid="publish-category-select"]')
+    await category.get('.themed-select-trigger').trigger('click')
+    await category.get('[data-value="units"]').trigger('click')
+    await wrapper.get('.primary-button').trigger('click')
+    expect(wrapper.emitted('submit')[0][0].category).toBe('units')
+
+    await wrapper.setProps({ open: false })
+    await wrapper.setProps({ open: true })
+    await wrapper.get('.primary-button').trigger('click')
+    expect(wrapper.emitted('submit')[1][0].category).toBe('')
+    wrapper.unmount()
+  })
+
   it('uses the shared icon button style for the close control', () => {
     const wrapper = mount(WorkshopPublishModal, {
       global: { plugins: [createPinia()] },
@@ -122,7 +178,7 @@ describe('Workshop publish dialog', () => {
       mode: 'update',
       title: 'My Own Mod',
       language: 'zh-CN',
-      category: 'units',
+      category: '',
     })
   })
 

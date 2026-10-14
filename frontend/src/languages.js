@@ -369,6 +369,9 @@ const entries = {
   'publish.preview': ['封面图（同名 PNG，最大 1 MB）', 'Cover image (same-name PNG, max 1 MB)', '표지 이미지(동일 이름 PNG, 최대 1MB)', 'Обложка (PNG с тем же именем, до 1 МБ)', '表紙画像（同名 PNG、最大 1 MB）'],
   'publish.coverHelp': ['封面必须与 Pack 位于同一目录并同名，例如 example.pack 与 example.png；它会作为 MOD 文件一同上传。', 'The cover must be beside the Pack with the same name, for example example.pack and example.png. It is uploaded as part of the MOD.', '표지는 Pack과 같은 폴더에 같은 이름으로 있어야 합니다(예: example.pack, example.png). MOD 파일로 함께 업로드됩니다.', 'Обложка должна находиться рядом с Pack и иметь то же имя, например example.pack и example.png. Она загружается вместе с файлами MOD.', '表紙は Pack と同じフォルダーに同名で配置してください（例: example.pack と example.png）。MOD ファイルとして一緒にアップロードされます。'],
   'publish.category': ['分类标签', 'Category tag', '분류 태그', 'Категория', 'カテゴリタグ'],
+  'publish.categoryKeep': ['保持现有标签', 'Keep existing tags', '기존 태그 유지', 'Сохранить текущие теги', '既存のタグを保持'],
+  'publish.categoryChoose': ['请选择分类', 'Choose a category', '분류를 선택하세요', 'Выберите категорию', 'カテゴリを選択'],
+  'publish.categoryRequired': ['请选择 Workshop 分类标签', 'Choose a Workshop category tag', '창작마당 분류 태그를 선택하세요', 'Выберите категорию Мастерской', 'ワークショップのカテゴリタグを選択してください'],
   'publish.visibility': ['可见性', 'Visibility', '공개 범위', 'Видимость', '公開範囲'],
   'publish.public': ['公开', 'Public', '공개', 'Открытый доступ', '公開'],
   'publish.friendsOnly': ['仅好友', 'Friends only', '친구만', 'Только друзья', 'フレンドのみ'],
@@ -1134,6 +1137,9 @@ const spanishEntries = {
   "publish.preview": "Imagen de portada (mismo nombre PNG, máximo 1 MB)",
   "publish.coverHelp": "La portada debe estar al lado del Pack con el mismo nombre, por ejemplo ejemplo.pack y ejemplo.png. Se carga como parte del MOD.",
   "publish.category": "Etiqueta de categoría",
+  "publish.categoryKeep": "Mantener las etiquetas actuales",
+  "publish.categoryChoose": "Elige una categoría",
+  "publish.categoryRequired": "Elige una etiqueta de categoría de Workshop",
   "publish.visibility": "Visibilidad",
   "publish.public": "Público",
   "publish.friendsOnly": "solo amigos",
@@ -1920,6 +1926,7 @@ export const localizeBackendMessage = (message, fallbackKey = 'common.backendFai
   const language = normalizeLanguage(interfaceLanguage.value)
   if (!value) return t(fallbackKey)
   const knownMessages = {
+    '请选择 Workshop 分类标签': 'publish.categoryRequired',
     '游戏运行期间不能修改 MOD 文件': 'context.gameRunningBlocked',
     '分享码所属游戏与当前游戏不一致，请切换到对应游戏后导入': 'share.wrongGame',
     '旧版分享码仅支持战锤3，请切换游戏或使用包含游戏信息的新版分享码': 'share.legacyGame',
