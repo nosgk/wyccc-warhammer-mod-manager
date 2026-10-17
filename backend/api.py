@@ -45,6 +45,10 @@ from .constants import (
     VARIANT_SELECTOR_FEATURE_PACK_NAME,
     VARIANT_SELECTOR_FEATURE_TITLE,
     TIER5_COMPATIBILITY_PATCH_NAME,
+    VOICE_COMPATIBILITY_PATCH_NAME,
+    VOICE_FEATURE_PACK_NAME,
+    VOICE_FEATURE_TITLE,
+    VOICE_FEATURE_WORKSHOP_ID,
 )
 from .file_operations import (
     build_delete_preview,
@@ -94,6 +98,7 @@ from .dynamic_ror_patch_state import ensure_dynamic_ror_compatibility_patch
 from .variant_selector_patch_state import ensure_variant_selector_compatibility_patch
 from .tier5_feature import tier5_feature_status
 from .tier5_patch_state import ensure_tier5_compatibility_patch
+from .voice_patch_state import ensure_voice_compatibility_patch
 from .unit_data import (
     _display_source_name,
     build_unit_table_snapshot,
@@ -108,6 +113,7 @@ from .unit_encyclopedia import load_catalogue, catalogue_fingerprint
 from .steamworks_bridge import (
     SteamworksBridgeError,
     get_current_user,
+    get_subscribed_workshop_items,
     perform_workshop_operation,
     publish_workshop_item,
     query_workshop_subscription_status,
@@ -220,6 +226,7 @@ class API:
         self._game_data_subscription_cache: dict[str, dict[str, Any]] = {}
         self._game_data_subscription_cache_known = False
         self._game_data_patch_lock = threading.Lock()
+        self._voice_patch_subscribed = False
         self._internal_feature_mod_ids: set[str] = set()
         self.mod_monitor = ModChangeMonitor(self._record_mod_change)
         self._window: Any | None = None
@@ -249,6 +256,7 @@ class API:
             "get_game_data_feature_status": self._get_game_data_feature_status,
             "get_unit_data_feature_status": self._get_unit_data_feature_status,
             "get_variant_selector_feature_status": self._get_variant_selector_feature_status,
+            "get_voice_feature_status": self._get_voice_feature_status,
             "get_unit_data_list": self._get_unit_data_list,
             "get_unit_encyclopedia": self._get_unit_encyclopedia,
             "get_unit_encyclopedia_images": self._get_unit_encyclopedia_images,
@@ -466,6 +474,7 @@ class API:
             "update_install_error": self.update_service.consume_install_error(),
             "unit_data_feature": self._unit_data_feature_status(paths),
             "variant_selector_feature": self._variant_selector_feature_status(paths),
+            "voice_feature": self._voice_feature_status(paths),
         }
 
     @staticmethod
@@ -551,6 +560,26 @@ class API:
         return self._variant_selector_feature_status(
             self.settings_service.resolve_game_paths()
         )
+
+    def _voice_feature_status(self, paths: GamePaths, *, refresh: bool = False) -> dict[str, Any]:
+        required = paths.game_id == "warhammer3"
+        if required and refresh:
+            try:
+                self._voice_patch_subscribed = VOICE_FEATURE_WORKSHOP_ID in get_subscribed_workshop_items(
+                    app_id=int(paths.game_definition.app_id), timeout_seconds=20,
+                )
+            except SteamworksBridgeError as exc:
+                self._voice_patch_subscribed = False
+                logger.warning("Voice patch subscription could not be verified: %s", exc)
+        return {
+            "pack_name": VOICE_FEATURE_PACK_NAME, "title": VOICE_FEATURE_TITLE,
+            "workshop_id": VOICE_FEATURE_WORKSHOP_ID,
+            "subscribed": required and self._voice_patch_subscribed, "required": required,
+        }
+
+    def _get_voice_feature_status(self) -> dict[str, Any]:
+        self._require_game_capability("supports_game_data_modification", "Voice compatibility patch")
+        return self._voice_feature_status(self.settings_service.resolve_game_paths(), refresh=True)
 
     def _get_game_data_feature_status(self) -> dict[str, Any]:
         self._require_game_capability("supports_game_data_modification", "Game data modification")
@@ -767,6 +796,7 @@ class API:
                 "dynamic_ror_compatibility_patch_enabled",
                 "variant_selector_compatibility_patch_enabled",
                 "tier5_compatibility_patch_enabled",
+                "voice_compatibility_patch_enabled",
             )
             if key in changes
         }
@@ -774,6 +804,8 @@ class API:
             filtered["tier5_compatibility_patch_enabled"] = tier5_feature_status(
                 self._assets, self._current_enabled_mod_ids(),
             )["available"]
+        if filtered.get("voice_compatibility_patch_enabled"):
+            filtered["voice_compatibility_patch_enabled"] = self._get_voice_feature_status()["subscribed"]
         self.settings_service.save(filtered)
         return {"settings": self.settings_service.get_public()}
 
@@ -1263,6 +1295,7 @@ class API:
                         "mod_revision": scan_revision,
                         "unit_data_feature": self._unit_data_feature_status(paths),
                         "variant_selector_feature": self._variant_selector_feature_status(paths),
+                        "voice_feature": self._voice_feature_status(paths),
                     }
                 )
                 return payload
@@ -1699,6 +1732,26 @@ class API:
                 str(tier5_patch.get("fingerprint") or "")[:12],
                 tier5_patch.get("entry_count", 0), tier5_patch.get("stats", {}),
             )
+            try:
+                voice_patch = ensure_voice_compatibility_patch(
+                    output_dir=self.data_dir / "runtime",
+                    data_path=paths.data_path,
+                    assets=self._assets,
+                    active_ids=saved["plan"]["ordered_mod_ids"],
+                    playset_id=self.state_repository.get_current_playset_id(paths.game_id),
+                    settings=settings,
+                    subscribed=self._voice_feature_status(paths, refresh=True)["subscribed"]
+                    if settings.get("voice_compatibility_patch_enabled") else False,
+                )
+            except Exception:
+                logger.exception("Voice compatibility patch status=generation_failed")
+                raise
+            logger.info(
+                "Voice compatibility patch status=%s reason=%s fingerprint=%s entries=%s stats=%s",
+                voice_patch["status"], voice_patch.get("reason", ""),
+                str(voice_patch.get("fingerprint") or "")[:12],
+                voice_patch.get("entry_count", 0), voice_patch.get("stats", {}),
+            )
             runtime_settings = dict(settings)
             probe_subscribed = False
             if settings.get("enable_exception_probe") and memreader_plus_enabled(
@@ -1750,6 +1803,9 @@ class API:
             )
             tier5_path = self._stage_runtime_pack_in_data(
                 str(tier5_patch.get("path") or ""), data_root, TIER5_COMPATIBILITY_PATCH_NAME,
+            )
+            voice_path = self._stage_runtime_pack_in_data(
+                str(voice_patch.get("path") or ""), data_root, VOICE_COMPATIBILITY_PATCH_NAME,
             )
             runtime_path = self._stage_runtime_pack_in_data(
                 str(runtime.get("path") or ""),
@@ -1833,6 +1889,14 @@ class API:
                     directory=str(data_root), source=SOURCE_DATA, sources=[SOURCE_DATA],
                 )
                 internal_ids.append(tier5_id)
+            if voice_path is not None:
+                voice_id = "runtime:voice-compatibility"
+                internal_assets[voice_id] = ModAsset(
+                    id=voice_id, pack_name=VOICE_COMPATIBILITY_PATCH_NAME,
+                    display_name="Dynamic Voice Compatibility Patch", path=str(voice_path),
+                    directory=str(data_root), source=SOURCE_DATA, sources=[SOURCE_DATA],
+                )
+                internal_ids.append(voice_id)
             if runtime_path is not None:
                 runtime_id = "runtime:start-options"
                 internal_assets[runtime_id] = ModAsset(
@@ -1905,6 +1969,7 @@ class API:
                 "dynamic_ror_compatibility_patch": dynamic_ror_patch,
                 "variant_selector_compatibility_patch": variant_selector_patch,
                 "tier5_compatibility_patch": tier5_patch,
+                "voice_compatibility_patch": voice_patch,
                 "runtime_options": runtime,
                 "launch_plan": launch_plan,
                 "save": selected_save,

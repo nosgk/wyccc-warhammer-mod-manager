@@ -6,7 +6,7 @@ LEGACY_APP_SLUGS = (
     "WycccWarhammerManager",
     "WycccWarhammerModManager",
 )
-APP_VERSION = "1.2.6"
+APP_VERSION = "1.2.7"
 
 IGNORABLE_MOD_WARNING_CODES = (
     "outdated_mod",
@@ -55,6 +55,9 @@ UNIT_DATA_FEATURE_PACK_NAME = "wyccc_dynamic_units_modify.pack"
 UNIT_DATA_FEATURE_TITLE = "Dynamic Units Modify"
 VARIANT_SELECTOR_FEATURE_PACK_NAME = "wyccc_variant_selector_patch.pack"
 VARIANT_SELECTOR_FEATURE_TITLE = "Dynamic Variant Selector Patch"
+VOICE_FEATURE_PACK_NAME = "wyccc_dynamic_audio_patch.pack"
+VOICE_FEATURE_TITLE = "Dynamic Voice Patch"
+VOICE_FEATURE_WORKSHOP_ID = "3821459750"
 TIER5_FEATURE_PACK_NAME = "wyccc_tier5_patch.pack"
 TIER5_COMPATIBILITY_PATCH_NAME = "!!!!wyccc_tier5_patch.pack"
 TIER5_BASE_WORKSHOP_ID = "3071058075"
@@ -65,8 +68,10 @@ UNIT_RECRUITMENT_CAPACITY_MULTIPLIER_MAX = 5
 UNIT_RECRUITMENT_CAPACITY_UNLIMITED = 0
 INTERNAL_FEATURE_WORKSHOP_IDS = frozenset(
     item["workshop_id"] for item in GAME_DATA_FEATURE_WORKSHOP_ITEMS.values()
-)
+) | {VOICE_FEATURE_WORKSHOP_ID}
 RUNTIME_OPTIONS_MARKER_ENTRY = "wyccc\\launcher_runtime_options.json"
+VOICE_COMPATIBILITY_PATCH_NAME = "!!!!wyccc_voice_compatibility.pack"
+VOICE_COMPATIBILITY_MARKER_ENTRY = "wyccc\\voice_compatibility.json"
 INTERNAL_RUNTIME_PACK_NAMES = frozenset(
     {
         "!!!!wyccc_dynamic_ror_compatibility.pack",
@@ -75,6 +80,7 @@ INTERNAL_RUNTIME_PACK_NAMES = frozenset(
         "!!!!wyccc_game_data_patch.pack",
         "!!!!wyccc_runtime_options.pack",
         "!!!!wyccc_unit_data_patch.pack",
+        VOICE_COMPATIBILITY_PATCH_NAME,
     }
 )
 INTERNAL_FEATURE_PACK_NAMES = frozenset(
@@ -82,6 +88,7 @@ INTERNAL_FEATURE_PACK_NAMES = frozenset(
 ) | INTERNAL_RUNTIME_PACK_NAMES | {
     UNIT_DATA_FEATURE_PACK_NAME.casefold(),
     VARIANT_SELECTOR_FEATURE_PACK_NAME.casefold(),
+    VOICE_FEATURE_PACK_NAME.casefold(),
     TIER5_FEATURE_PACK_NAME.casefold(),
     "wyccc_nanu_rors_patch.pack",
 }
@@ -91,6 +98,18 @@ INTERNAL_FEATURE_PACK_NAMES = frozenset(
 # them, but their display name should describe the feature instead of exposing
 # an implementation filename.
 INTERNAL_PACK_DISPLAY_NAMES = {
+    VOICE_FEATURE_PACK_NAME: {
+        language: VOICE_FEATURE_TITLE
+        for language in ("zh-CN", "en-US", "ko-KR", "ru-RU", "ja-JP", "es-ES")
+    },
+    VOICE_COMPATIBILITY_PATCH_NAME: {
+        "zh-CN": "动态语音兼容补丁",
+        "en-US": "Dynamic Voice Compatibility Patch",
+        "ko-KR": "동적 음성 호환 패치",
+        "ru-RU": "Динамический патч совместимости озвучки",
+        "ja-JP": "動的音声互換パッチ",
+        "es-ES": "Parche dinámico de compatibilidad de voces",
+    },
     TIER5_FEATURE_PACK_NAME: {
         "zh-CN": "五级小城美化兼容",
         "en-US": "Tier 5 Settlement Appearance Compatibility",

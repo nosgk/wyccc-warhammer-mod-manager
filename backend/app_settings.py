@@ -226,6 +226,7 @@ def default_settings(language: str = DEFAULT_LANGUAGE) -> dict[str, Any]:
         "dynamic_ror_compatibility_patch_enabled": False,
         "variant_selector_compatibility_patch_enabled": True,
         "tier5_compatibility_patch_enabled": False,
+        "voice_compatibility_patch_enabled": False,
         "check_updates_automatically": True,
         "workshop_page_open_counts": {"browser": 0, "client": 0},
         "last_update_check_at": 0,
@@ -479,6 +480,7 @@ class SettingsService:
             "dynamic_ror_compatibility_patch_enabled",
             "variant_selector_compatibility_patch_enabled",
             "tier5_compatibility_patch_enabled",
+            "voice_compatibility_patch_enabled",
             "check_updates_automatically",
         ):
             result[key] = bool(result.get(key, default_settings()[key]))

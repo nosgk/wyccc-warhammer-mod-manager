@@ -12,6 +12,7 @@ const props = defineProps({
   variantSelectorMissingPacks: { type: Array, default: () => [] },
   tier5PacksEnabled: { type: Boolean, default: false },
   tier5MissingPacks: { type: Array, default: () => [] },
+  voicePatchSubscribed: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['close', 'save'])
@@ -20,9 +21,13 @@ const draft = reactive({
   dynamic_ror_compatibility_patch_enabled: false,
   variant_selector_compatibility_patch_enabled: false,
   tier5_compatibility_patch_enabled: false,
+  voice_compatibility_patch_enabled: false,
 })
 
 const resetDraft = () => {
+  draft.voice_compatibility_patch_enabled = Boolean(
+    props.voicePatchSubscribed && props.settings.voice_compatibility_patch_enabled,
+  )
   draft.dynamic_ror_compatibility_patch_enabled = Boolean(
     props.requiredPacksEnabled
     && props.settings.dynamic_ror_compatibility_patch_enabled,
@@ -53,13 +58,14 @@ watch(
 )
 
 watch(
-  () => [props.requiredPacksEnabled, props.variantSelectorPacksEnabled, props.tier5PacksEnabled],
+  () => [props.requiredPacksEnabled, props.variantSelectorPacksEnabled, props.tier5PacksEnabled, props.voicePatchSubscribed],
   () => {
     if (props.open) resetDraft()
   },
 )
 
 const currentSettings = () => ({
+  voice_compatibility_patch_enabled: Boolean(props.voicePatchSubscribed && draft.voice_compatibility_patch_enabled),
   dynamic_ror_compatibility_patch_enabled: Boolean(
     props.requiredPacksEnabled && draft.dynamic_ror_compatibility_patch_enabled,
   ),
@@ -103,6 +109,24 @@ const submit = () => {
       </header>
 
       <div class="modal-body compatibility-patch-body">
+        <section class="compatibility-patch-card">
+          <label class="switch-row compatibility-patch-option">
+            <input
+              v-model="draft.voice_compatibility_patch_enabled"
+              type="checkbox"
+              :disabled="!!busy || !voicePatchSubscribed"
+              data-testid="voice-compatibility-patch-enabled"
+            />
+            <span>
+              <strong>{{ t('compatibilityPatch.voiceTitle') }}</strong>
+              <small>{{ t('compatibilityPatch.voiceDescription') }}</small>
+            </span>
+          </label>
+          <p v-if="!voicePatchSubscribed" class="compatibility-patch-requirement" data-testid="voice-patch-required">
+            {{ t('compatibilityPatch.voiceRequired') }}
+          </p>
+          <p class="compatibility-patch-note">{{ t('compatibilityPatch.voicePriorityNote') }}</p>
+        </section>
         <section class="compatibility-patch-card">
           <label class="switch-row compatibility-patch-option">
             <input

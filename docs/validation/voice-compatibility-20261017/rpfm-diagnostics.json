@@ -1,0 +1,13 @@
+{
+  "jsonrpc": "2.0",
+  "id": 7,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"Diagnostics\":{\"folders_ignored\":[],\"files_ignored\":[],\"fields_ignored\":[],\"diagnostics_ignored\":[],\"results\":[]}}"
+      }
+    ],
+    "isError": false
+  }
+}

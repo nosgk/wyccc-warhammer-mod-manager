@@ -1,0 +1,249 @@
+{
+  "kind": "offline_real_pack_validation",
+  "result": {
+    "entry_count": 34,
+    "fingerprint": "604e7ddc78e2fcb3927dba7842a3e248158273b405736f29a91eca17b268cd84",
+    "path": "G:\\git\\wyccc-warhammer-mod-manager\\docs\\validation\\voice-compatibility-20261017\\!!!!wyccc_voice_compatibility.pack",
+    "reason": "",
+    "source_diagnostics": {
+      "source_pack_names": [
+        "!nippon_expedition_voices.pack",
+        "@cathay_vo_chinese.pack"
+      ],
+      "vanilla_pack_names": [
+        "audio_base_bnk.pack",
+        "audio_cn_bnk.pack",
+        "audio_en_bnk.pack",
+        "audio_fr_bnk.pack",
+        "audio_ge_bnk.pack",
+        "audio_it_bnk.pack",
+        "audio_pl_bnk.pack",
+        "audio_ru_bnk.pack",
+        "audio_sp_bnk.pack"
+      ]
+    },
+    "stats": {
+      "conflicting_path_count": 0,
+      "merged_event_count": 94,
+      "merged_path_count": 51839,
+      "patched_bank_count": 33,
+      "voice_pack_count": 2
+    },
+    "status": "reused"
+  },
+  "cache_status": "reused",
+  "source_sha256_before_and_after": {
+    "X:\\SteamLibrary\\steamapps\\workshop\\content\\1142710\\3821219934\\!nippon_expedition_voices.pack": "0e1ef65b62fc5d6a018bae17998d2a64c97839ee401f22745aa04c4262370521",
+    "X:\\SteamLibrary\\steamapps\\workshop\\content\\1142710\\3780589718\\@cathay_vo_chinese.pack": "b93aa6bde24b5f730bc36d446e74d4703f02f9b85220a22eb20ec95924f39f43",
+    "X:\\SteamLibrary\\steamapps\\workshop\\content\\1142710\\3821220044\\!nippon_expedition_voices_cathay_vo_compat.pack": "75d6ac29c7cb219bce3dade18040b5b14d16f016d0bc1908e400d08758d8e291"
+  },
+  "original_packs_unchanged": true,
+  "game_launched": false,
+  "current_builder_output_matches_cached_pack": true,
+  "generated_pack_size": 4435440,
+  "generated_pack_sha256": "a566ffc2dfc0c2a9f4ca7126e6843eb10f38421dacfba00f26f2164559881ceb",
+  "reference_event_count": 94,
+  "reference_path_count": 51839,
+  "different_paths": [],
+  "additional_paths": 0,
+  "consistent_event_copies": 188,
+  "tree_metadata_differences": [],
+  "mode_differences": [
+    {
+      "scope": "",
+      "event_id": 894625206,
+      "reference": 1,
+      "generated": 0
+    },
+    {
+      "scope": "",
+      "event_id": 2692524880,
+      "reference": 1,
+      "generated": 0
+    },
+    {
+      "scope": "",
+      "event_id": 364316595,
+      "reference": 1,
+      "generated": 0
+    },
+    {
+      "scope": "",
+      "event_id": 3693221533,
+      "reference": 1,
+      "generated": 0
+    }
+  ],
+  "entries": [
+    {
+      "name": "audio\\wwise\\battle_vo_orders_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1013741,
+      "sha256": "7cc68de2694431f1248b47e23ee69bfc87d07466770f18ee96dc0a94e2865179"
+    },
+    {
+      "name": "audio\\wwise\\campaign_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 212610,
+      "sha256": "85c9c8ea32dd30a22bd84c97182a8e966f030c4a83fbc1d7a8791eae51495b0b"
+    },
+    {
+      "name": "audio\\wwise\\campaign_vo_conversational_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 145294,
+      "sha256": "f64331acb1691c2aa8d1674c19bf1980826bf594c70478e1d286062492c9ec50"
+    },
+    {
+      "name": "audio\\wwise\\chinese\\frontend_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1438,
+      "sha256": "a02a6ae196655f71afe424139476a25cb16463d98a7eb7723c6fe6ac35c52dfd"
+    },
+    {
+      "name": "audio\\wwise\\english(uk)\\frontend_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1438,
+      "sha256": "a02a6ae196655f71afe424139476a25cb16463d98a7eb7723c6fe6ac35c52dfd"
+    },
+    {
+      "name": "audio\\wwise\\french(france)\\frontend_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1438,
+      "sha256": "a02a6ae196655f71afe424139476a25cb16463d98a7eb7723c6fe6ac35c52dfd"
+    },
+    {
+      "name": "audio\\wwise\\german\\frontend_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1438,
+      "sha256": "a02a6ae196655f71afe424139476a25cb16463d98a7eb7723c6fe6ac35c52dfd"
+    },
+    {
+      "name": "audio\\wwise\\italian\\frontend_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1438,
+      "sha256": "a02a6ae196655f71afe424139476a25cb16463d98a7eb7723c6fe6ac35c52dfd"
+    },
+    {
+      "name": "audio\\wwise\\polish\\frontend_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1438,
+      "sha256": "a02a6ae196655f71afe424139476a25cb16463d98a7eb7723c6fe6ac35c52dfd"
+    },
+    {
+      "name": "audio\\wwise\\russian\\frontend_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1438,
+      "sha256": "a02a6ae196655f71afe424139476a25cb16463d98a7eb7723c6fe6ac35c52dfd"
+    },
+    {
+      "name": "audio\\wwise\\spanish(spain)\\frontend_vo_1_cth_npex_cn_voices_for_testing.bnk",
+      "size": 1438,
+      "sha256": "a02a6ae196655f71afe424139476a25cb16463d98a7eb7723c6fe6ac35c52dfd"
+    },
+    {
+      "name": "audio\\wwise\\battle_vo_orders_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1022992,
+      "sha256": "e71156e882256d6e6188031bfe47cf0f9567cd7c55cb3953c436a3aef4336abf"
+    },
+    {
+      "name": "audio\\wwise\\battle_vo_orders_cathay_vo_chinese_for_merging.bnk",
+      "size": 1111047,
+      "sha256": "f2ded019d35da16dc8aba44c99f3a7ed75478212ca609a405ec712701eadec2b"
+    },
+    {
+      "name": "audio\\wwise\\campaign_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 230082,
+      "sha256": "ff0302b0a8ec3c4f8e0b94f7470b65d66e075be307965805c05aba608953b13b"
+    },
+    {
+      "name": "audio\\wwise\\campaign_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 281140,
+      "sha256": "ae3e63bdc0611d2611f53926e1af10eeb139a6a1a1d3e3f214c5d61f239b96db"
+    },
+    {
+      "name": "audio\\wwise\\campaign_vo_conversational_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 172033,
+      "sha256": "6d1d7e06a292e7caedd2f4d04e402f2b4cb210deedfe0e468cc2f064dd04fa00"
+    },
+    {
+      "name": "audio\\wwise\\campaign_vo_conversational_cathay_vo_chinese_for_merging.bnk",
+      "size": 207214,
+      "sha256": "a48f3e6860686876cb66cc8cf342f71ed9662fcfa745950afa4d825ddd7473ec"
+    },
+    {
+      "name": "audio\\wwise\\chinese\\frontend_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1438,
+      "sha256": "b76e7f7a42aecc0e3598ed3858c3ed63f5d873a59021e8fdda5f3aa1113393f4"
+    },
+    {
+      "name": "audio\\wwise\\chinese\\frontend_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 1702,
+      "sha256": "0de358c25fe05bca4fa7a68cd3339e65e8e12acaa9938d3d5ce5f979dd1705dc"
+    },
+    {
+      "name": "audio\\wwise\\english(uk)\\frontend_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1438,
+      "sha256": "b76e7f7a42aecc0e3598ed3858c3ed63f5d873a59021e8fdda5f3aa1113393f4"
+    },
+    {
+      "name": "audio\\wwise\\english(uk)\\frontend_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 1702,
+      "sha256": "0de358c25fe05bca4fa7a68cd3339e65e8e12acaa9938d3d5ce5f979dd1705dc"
+    },
+    {
+      "name": "audio\\wwise\\french(france)\\frontend_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1438,
+      "sha256": "b76e7f7a42aecc0e3598ed3858c3ed63f5d873a59021e8fdda5f3aa1113393f4"
+    },
+    {
+      "name": "audio\\wwise\\french(france)\\frontend_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 1702,
+      "sha256": "0de358c25fe05bca4fa7a68cd3339e65e8e12acaa9938d3d5ce5f979dd1705dc"
+    },
+    {
+      "name": "audio\\wwise\\german\\frontend_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1438,
+      "sha256": "b76e7f7a42aecc0e3598ed3858c3ed63f5d873a59021e8fdda5f3aa1113393f4"
+    },
+    {
+      "name": "audio\\wwise\\german\\frontend_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 1702,
+      "sha256": "0de358c25fe05bca4fa7a68cd3339e65e8e12acaa9938d3d5ce5f979dd1705dc"
+    },
+    {
+      "name": "audio\\wwise\\italian\\frontend_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1438,
+      "sha256": "b76e7f7a42aecc0e3598ed3858c3ed63f5d873a59021e8fdda5f3aa1113393f4"
+    },
+    {
+      "name": "audio\\wwise\\italian\\frontend_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 1702,
+      "sha256": "0de358c25fe05bca4fa7a68cd3339e65e8e12acaa9938d3d5ce5f979dd1705dc"
+    },
+    {
+      "name": "audio\\wwise\\polish\\frontend_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1438,
+      "sha256": "b76e7f7a42aecc0e3598ed3858c3ed63f5d873a59021e8fdda5f3aa1113393f4"
+    },
+    {
+      "name": "audio\\wwise\\polish\\frontend_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 1702,
+      "sha256": "0de358c25fe05bca4fa7a68cd3339e65e8e12acaa9938d3d5ce5f979dd1705dc"
+    },
+    {
+      "name": "audio\\wwise\\russian\\frontend_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1438,
+      "sha256": "b76e7f7a42aecc0e3598ed3858c3ed63f5d873a59021e8fdda5f3aa1113393f4"
+    },
+    {
+      "name": "audio\\wwise\\russian\\frontend_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 1702,
+      "sha256": "0de358c25fe05bca4fa7a68cd3339e65e8e12acaa9938d3d5ce5f979dd1705dc"
+    },
+    {
+      "name": "audio\\wwise\\spanish(spain)\\frontend_vo_1_cathay_vo_chinese_for_testing.bnk",
+      "size": 1438,
+      "sha256": "b76e7f7a42aecc0e3598ed3858c3ed63f5d873a59021e8fdda5f3aa1113393f4"
+    },
+    {
+      "name": "audio\\wwise\\spanish(spain)\\frontend_vo_cathay_vo_chinese_for_merging.bnk",
+      "size": 1702,
+      "sha256": "0de358c25fe05bca4fa7a68cd3339e65e8e12acaa9938d3d5ce5f979dd1705dc"
+    },
+    {
+      "name": "wyccc\\voice_compatibility.json",
+      "size": 165,
+      "sha256": "0c3254d27ca899111fdea60cf0da841013097d559a76ad9e02ca88a1201a465b"
+    }
+  ]
+}

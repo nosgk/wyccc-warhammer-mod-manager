@@ -19,6 +19,7 @@ from .constants import (
     PACK_TYPE_MOVIE,
     PACK_TYPE_UNKNOWN,
     RUNTIME_OPTIONS_MARKER_ENTRY,
+    VOICE_COMPATIBILITY_MARKER_ENTRY,
     SOURCE_DATA,
     SOURCE_LOCAL,
     SOURCE_WORKSHOP,
@@ -42,6 +43,7 @@ _LAUNCHER_RUNTIME_ENTRY_NAMES = frozenset(
         "script\\campaign\\mod\\wyccc_variant_selector_patch.lua",
         "db\\units_custom_battle_permissions_tables\\!!!!wyccc_runtime",
         RUNTIME_OPTIONS_MARKER_ENTRY,
+        VOICE_COMPATIBILITY_MARKER_ENTRY,
     }
 )
 

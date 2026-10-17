@@ -307,7 +307,7 @@ const saveUnitData = async edits => {
 
 const openCompatibilityPatch = async () => {
   if (!supportsWh3Tools.value) return
-  await store.refreshVariantSelectorFeature().catch(() => {})
+  await Promise.allSettled([store.refreshVariantSelectorFeature(), store.refreshVoiceFeature()])
   showCompatibilityPatch.value = true
 }
 
@@ -1458,6 +1458,7 @@ onBeforeUnmount(() => {
       :variant-selector-missing-packs="variantSelectorPackRequirement.missing"
       :tier5-packs-enabled="tier5Requirement.allEnabled"
       :tier5-missing-packs="tier5Requirement.missing"
+      :voice-patch-subscribed="store.voiceFeatureSubscribed"
       @close="showCompatibilityPatch = false"
       @save="saveCompatibilityPatch"
     />

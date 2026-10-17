@@ -9,6 +9,13 @@ SUPPORTED_CHANGELOG_LANGUAGES = frozenset({"zh-CN", "en-US", "ko-KR", "ru-RU", "
 
 CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
     {
+        "version": "1.2.7",
+        "date": "2026-10-17",
+        "entries": (
+            ("v127_added_title", (("feature", "v127_dynamic_voice"),)),
+        ),
+    },
+    {
         "version": "1.2.6",
         "date": "2026-10-14",
         "entries": (
@@ -727,6 +734,8 @@ CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
 
 CHANGELOG_TEXT: dict[str, dict[str, str]] = {
     "zh-CN": {
+        "v127_added_title": "新增",
+        "v127_dynamic_voice": "兼容补丁-动态语音兼容， 由于原版的限制，各个增加了新语音的MOD，会互相冲突，只有一个能生效，所以我制作了这个功能，能让各个MOD的语音动态兼容",
         "v126_fixed_title": "修复",
         "v126_tk_hidden_mods": "修复三国全战某些MOD会被错误隐藏的问题",
         "v126_publish_categories": "修复上传/更新MOD时，分类标签读取错误的问题",
@@ -986,6 +995,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。",
     },
     "en-US": {
+        "v127_added_title": "Added",
+        "v127_dynamic_voice": "Compatibility patches - Dynamic voice compatibility. Due to limitations in the base game, MODs that add new voices conflict with each other, and only one can take effect. I created this feature to make the voices from different MODs dynamically compatible.",
         "v126_fixed_title": "Fixed",
         "v126_tk_hidden_mods": "Fixed an issue that incorrectly hid some MODs in Total War: THREE KINGDOMS.",
         "v126_publish_categories": "Fixed incorrect category tag reading when uploading/updating MODs.",
@@ -1245,6 +1256,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog.",
     },
     "ko-KR": {
+        "v127_added_title": "추가",
+        "v127_dynamic_voice": "호환 패치 - 동적 음성 호환. 원본 게임의 제한으로 새로운 음성을 추가하는 MOD는 서로 충돌하여 하나만 적용됩니다. 여러 MOD의 음성을 동적으로 호환할 수 있도록 이 기능을 만들었습니다.",
         "v126_fixed_title": "수정",
         "v126_tk_hidden_mods": "토탈 워: 삼국에서 일부 MOD가 잘못 숨겨지는 문제를 수정했습니다.",
         "v126_publish_categories": "MOD 업로드/업데이트 시 분류 태그를 잘못 읽는 문제를 수정했습니다.",
@@ -1504,6 +1517,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다.",
     },
     "ru-RU": {
+        "v127_added_title": "Добавлено",
+        "v127_dynamic_voice": "Патчи совместимости — динамическая совместимость озвучки. Из-за ограничений базовой игры MOD, добавляющие новые голоса, конфликтуют друг с другом, и работает только один. Я создал эту функцию, чтобы озвучка разных MOD могла динамически работать вместе.",
         "v126_fixed_title": "Исправлено",
         "v126_tk_hidden_mods": "Исправлена ошибка, из-за которой некоторые MOD неправильно скрывались в Total War: THREE KINGDOMS.",
         "v126_publish_categories": "Исправлено неверное чтение категории при загрузке/обновлении MOD.",
@@ -1763,6 +1778,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении.",
     },
     "ja-JP": {
+        "v127_added_title": "追加",
+        "v127_dynamic_voice": "互換パッチ - 動的音声互換。ゲーム本体の制限により、新しい音声を追加するMOD同士は競合し、1つしか有効になりません。各MODの音声を動的に併用できるよう、この機能を作成しました。",
         "v126_fixed_title": "修正",
         "v126_tk_hidden_mods": "Total War: THREE KINGDOMSで一部のMODが誤って非表示になる問題を修正しました。",
         "v126_publish_categories": "MODのアップロード/更新時にカテゴリタグを誤って読み取る問題を修正しました。",
@@ -2022,6 +2039,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。",
     },
     "es-ES": {
+        "v127_added_title": "Añadido",
+        "v127_dynamic_voice": "Parches de compatibilidad - Compatibilidad dinámica de voces. Debido a las limitaciones del juego base, los MOD que añaden nuevas voces entran en conflicto y solo uno puede funcionar. He creado esta función para que las voces de distintos MOD sean compatibles de forma dinámica.",
         "v126_fixed_title": "Corregido",
         "v126_tk_hidden_mods": "Corregido un problema que ocultaba incorrectamente algunos MODs en Total War: THREE KINGDOMS.",
         "v126_publish_categories": "Corregida la lectura incorrecta de las etiquetas de categoría al subir/actualizar MODs.",

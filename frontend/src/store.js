@@ -57,6 +57,14 @@ const defaultVariantSelectorFeature = () => ({
   required: true,
 })
 
+const defaultVoiceFeature = () => ({
+  workshop_id: '3821459750',
+  pack_name: 'wyccc_dynamic_audio_patch.pack',
+  title: 'Dynamic Voice Patch',
+  subscribed: false,
+  required: true,
+})
+
 const localizedSelectedGameName = settings => t(gameLabelKey(settings?.selected_game))
 
 const enqueuePlaysetWrite = task => {
@@ -83,7 +91,7 @@ const sameListState = (left, right) => (
 export const useAppStore = defineStore('app', {
   state: () => ({
     appName: "Wyccc's Mod Manager",
-    appVersion: '1.2.6',
+    appVersion: '1.2.7',
     settings: {},
     paths: {},
     gameContextRevision: 0,
@@ -143,6 +151,7 @@ export const useAppStore = defineStore('app', {
     gameDataFeatures: defaultGameDataFeatures(),
     unitDataFeature: defaultUnitDataFeature(),
     variantSelectorFeature: defaultVariantSelectorFeature(),
+    voiceFeature: defaultVoiceFeature(),
     gameDataFeatureWarning: '',
     workshopUpdateEligibility: new Set(),
     workshopEligibilityKnownIds: new Set(),
@@ -156,6 +165,7 @@ export const useAppStore = defineStore('app', {
     ),
     unitDataFeatureSubscribed: state => Boolean(state.unitDataFeature?.subscribed),
     variantSelectorFeatureSubscribed: state => Boolean(state.variantSelectorFeature?.subscribed),
+    voiceFeatureSubscribed: state => Boolean(state.voiceFeature?.subscribed),
     unitDataModIds: state => state.mods
       .filter(mod => Array.isArray(mod.unit_data_tables) && mod.unit_data_tables.length > 0)
       .map(mod => mod.id),
@@ -427,6 +437,8 @@ export const useAppStore = defineStore('app', {
         ...(data.variant_selector_feature || {}),
         subscribed: Boolean(data.variant_selector_feature?.subscribed),
       }
+      this.voiceFeature = { ...defaultVoiceFeature(), ...(data.voice_feature || {}),
+        subscribed: Boolean(data.voice_feature?.subscribed) }
       if (this.pathHealth.game_ready) {
         await this.scan(false)
         if (this.settings.fetch_workshop_metadata) {
@@ -510,6 +522,8 @@ export const useAppStore = defineStore('app', {
           ...(data.variant_selector_feature || {}),
           subscribed: Boolean(data.variant_selector_feature?.subscribed),
         }
+        this.voiceFeature = { ...defaultVoiceFeature(), ...(data.voice_feature || {}),
+          subscribed: Boolean(data.voice_feature?.subscribed) }
         const currentThumbnails = this.thumbnails
         this.thumbnails = Object.fromEntries(
           data.mods
@@ -1455,6 +1469,11 @@ export const useAppStore = defineStore('app', {
         subscribed: Boolean(data?.subscribed),
       }
       return this.variantSelectorFeature
+    },
+    async refreshVoiceFeature() {
+      const data = await invoke('get_voice_feature_status')
+      this.voiceFeature = { ...defaultVoiceFeature(), ...(data || {}), subscribed: Boolean(data?.subscribed) }
+      return this.voiceFeature
     },
     async loadChangelog() {
       const data = await invoke('get_changelog')
