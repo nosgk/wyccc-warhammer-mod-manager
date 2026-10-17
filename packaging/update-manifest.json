@@ -1,29 +1,25 @@
 {
   "schema_version": 1,
   "app": "Wyccc's Mod Manager",
-  "version": "1.2.6",
-  "published_at": "2026-10-14",
+  "version": "1.2.7",
+  "published_at": "2026-10-17",
   "download": {
-    "url": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.6/Wyccc's%20Mod%20Manager.exe",
+    "url": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.7/Wyccc's%20Mod%20Manager.exe",
     "mirrors": {
-      "gitee": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.6/Wyccc's%20Mod%20Manager.exe",
-      "github": "https://github.com/scnjwyc/wyccc-warhammer-mod-manager/releases/download/1.2.6/Wyccc.s.Mod.Manager.exe"
+      "gitee": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.7/Wyccc's%20Mod%20Manager.exe",
+      "github": "https://github.com/scnjwyc/wyccc-warhammer-mod-manager/releases/download/1.2.7/Wyccc.s.Mod.Manager.exe?v=1.2.7"
     },
     "filename": "Wyccc's Mod Manager.exe",
-    "sha256": "CE4A7F93065690C6C382D82C570994FE19B70DF93E36599A5AC1A08151C6258B",
-    "size": 65595833
+    "sha256": "78D54340F08D0964545615D9E77E3C93B5D2E5E8DF993C6160144EB9F1F3390F",
+    "size": 65618507
   },
   "changelog": [
     {
-      "title": "修复",
+      "title": "新增",
       "changes": [
         {
-          "type": "fix",
-          "text": "修复三国全战某些MOD会被错误隐藏的问题"
-        },
-        {
-          "type": "fix",
-          "text": "修复上传/更新MOD时，分类标签读取错误的问题"
+          "type": "feature",
+          "text": "兼容补丁-动态语音兼容， 由于原版的限制，各个增加了新语音的MOD，会互相冲突，只有一个能生效，所以我制作了这个功能，能让各个MOD的语音动态兼容"
         }
       ]
     }
