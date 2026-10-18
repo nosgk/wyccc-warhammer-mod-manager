@@ -107,6 +107,7 @@ describe('folder filtering, batch enablement and MOD drops through the actual li
     await flushPromises()
     expect(rowNames(false)).toEqual(['d'])
     expect(store.modFolderCounts.ui).toEqual({ active: 1, inactive: 2 })
+    expect(panel(false).get('.mod-folder-toggle .count-badge').text()).toBe('2')
     await panel(false).get('[data-testid="enable-folder-ui"]').trigger('click')
     await store.flushPlaysetUpdates()
     await flushPromises()
@@ -127,19 +128,22 @@ describe('folder filtering, batch enablement and MOD drops through the actual li
     expect(store.activeIds).toEqual(['b', 'a', 'c', 'd'])
   })
 
-  it('keeps the selected empty folder and its batch controls available after moving all members to the other panel', async () => {
+  it('hides a folder after moving all members to the other panel and restores it when enabled again', async () => {
     await mountApp()
     await selectFolder(true, 'ui')
     await panel(true).get('[data-testid="disable-folder-ui"]').trigger('click')
     await store.flushPlaysetUpdates()
     await flushPromises()
     expect(rowNames(true)).toEqual([])
-    expect(panel(true).findAll('.mod-folder-row')).toHaveLength(1)
-    expect(panel(true).get('[data-testid="enable-folder-ui"]').attributes('disabled')).toBeUndefined()
-    expect(panel(true).get('[data-testid="disable-folder-ui"]').attributes('disabled')).toBeDefined()
-    await panel(true).get('[data-testid="enable-folder-ui"]').trigger('click')
+    expect(panel(true).findAll('.mod-folder-row')).toHaveLength(0)
+    expect(panel(true).find('.empty-state').exists()).toBe(true)
+    expect(panel(false).get('[data-testid="mod-folder-ui"] .count-badge').text()).toBe('3')
+    await panel(false).get('[data-testid="enable-folder-ui"]').trigger('click')
     await store.flushPlaysetUpdates()
+    await flushPromises()
     expect(store.activeIds).toEqual(['a', 'b', 'c', 'd'])
+    expect(panel(true).get('[data-testid="mod-folder-ui"] .count-badge').text()).toBe('3')
+    expect(panel(false).find('[data-testid="mod-folder-ui"]').exists()).toBe(false)
   })
 
   it('adds multiple MODs to a collapsed folder across panels and saves membership without changing enablement or order', async () => {
@@ -166,14 +170,13 @@ describe('folder filtering, batch enablement and MOD drops through the actual li
     expect(invokeMock.mock.calls.filter(([method]) => method === 'assign_mod_folder')).toHaveLength(1)
   })
 
-  it('accepts an inactive MOD in an empty folder and blocks assignment while saving', async () => {
+  it('keeps hidden empty folders in the context menu and restores them after assigning a MOD', async () => {
     await mountApp()
+    expect(panel(true).find('[data-testid="mod-folder-empty"]').exists()).toBe(false)
+    expect(panel(false).find('[data-testid="mod-folder-empty"]').exists()).toBe(false)
     const source = panel(false).get('.mod-row')
-    await source.trigger('dragstart')
-    const target = panel(true).get('[data-testid="mod-folder-empty"]')
-    await target.trigger('dragover')
-    expect(target.classes()).toContain('drop-inside')
-    await target.trigger('drop')
+    await source.trigger('contextmenu', { clientX: 100, clientY: 100 })
+    await wrapper.get('[data-testid="context-add-folder-empty"]').trigger('click')
     await flushPromises()
     expect(invokeMock).toHaveBeenCalledWith('assign_mod_folder', ['e'], 'empty', 'warhammer3', 'default')
     expect(store.activeIds).toEqual(['b', 'a'])
@@ -292,7 +295,7 @@ describe('folder filtering, batch enablement and MOD drops through the actual li
     expect(invokeMock.mock.calls.filter(([method]) => method === 'assign_mod_folder')).toHaveLength(1)
   })
 
-  it('removes the last visible member from a filtered folder and keeps the empty folder available', async () => {
+  it('hides a filtered folder after removing its last member and preserves its definition', async () => {
     await mountApp()
     await selectFolder(true, 'units')
     await panel(true).get('[data-mod-id="b"]').trigger('dragstart')
@@ -302,7 +305,8 @@ describe('folder filtering, batch enablement and MOD drops through the actual li
     expect(store.modFolders.find(folder => folder.id === 'units').mod_ids).toEqual([])
     expect(store.modFolderFilter('active')).toBe('units')
     expect(rowNames(true)).toEqual([])
-    expect(panel(true).findAll('.mod-folder-row')).toHaveLength(1)
+    expect(panel(true).findAll('.mod-folder-row')).toHaveLength(0)
+    expect(panel(true).find('.empty-state').exists()).toBe(true)
     expect(store.activeIds).toEqual(['b', 'a'])
     await selectFolder(true, UNGROUPED_FOLDER)
     expect(rowNames(true)).toEqual(['b'])
@@ -402,7 +406,7 @@ describe('folder filtering, batch enablement and MOD drops through the actual li
   it('does not confuse a new MOD drag with a completed folder drag whose native dragend was missed', async () => {
     await mountApp()
     const sourceFolder = panel(true).get('[data-testid="mod-folder-units"]')
-    const otherPanelFolder = panel(false).get('[data-testid="mod-folder-empty"]')
+    const otherPanelFolder = panel(false).get('[data-testid="mod-folder-ui"]')
     await sourceFolder.trigger('dragstart')
     await otherPanelFolder.trigger('dragover')
     await otherPanelFolder.trigger('drop')

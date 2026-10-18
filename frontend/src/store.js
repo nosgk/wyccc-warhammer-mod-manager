@@ -91,7 +91,7 @@ const sameListState = (left, right) => (
 export const useAppStore = defineStore('app', {
   state: () => ({
     appName: "Wyccc's Mod Manager",
-    appVersion: '1.2.7',
+    appVersion: '1.2.8',
     settings: {},
     paths: {},
     gameContextRevision: 0,
@@ -749,10 +749,8 @@ export const useAppStore = defineStore('app', {
       const listName = move.listName
       if (!['active', 'inactive'].includes(listName)) return Promise.resolve(null)
       const active = listName === 'active'
-      const filtered = this.warningsOnly || Boolean(this.modFolderFilter(listName))
-        || (active ? this.activeSearchTokens.length : this.inactiveSearchTokens.length) > 0
       const previous = this.modFolderLayouts[listName] || []
-      const groups = buildFolderGroups(active ? this.activeMods : this.inactiveMods, this.modFolders, previous, filtered)
+      const groups = buildFolderGroups(active ? this.activeMods : this.inactiveMods, this.modFolders, previous)
       const keys = moveFolderLayout(groups, previous, move)
       if (!keys) return Promise.resolve(null)
       return this.updateModFolders('reorder_mod_folder_groups', listName, keys)

@@ -1420,8 +1420,12 @@ textarea {
 }
 
 .mod-folder-name {
-  flex: 1;
+  flex: 0 1 auto;
   font-weight: 700;
+}
+
+.mod-folder-toggle .count-badge {
+  flex-shrink: 0;
 }
 
 .mod-folder-row .mod-folder-enable {

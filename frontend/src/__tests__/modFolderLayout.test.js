@@ -29,7 +29,7 @@ describe('folder positions independent of MOD order', () => {
 
   it('retains hidden groups when moving during a search', () => {
     const oldLayout = ['mod:b', 'folder:one', 'mod:missing', 'folder:two', 'mod:d']
-    const visible = buildFolderGroups([mods[0], mods[2]], folders, oldLayout, true)
+    const visible = buildFolderGroups([mods[0], mods[2]], folders, oldLayout)
     const next = moveFolderLayout(visible, oldLayout, {
       folderId: 'one', targetFolderId: 'two', placement: 'after',
     })
@@ -40,6 +40,16 @@ describe('folder positions independent of MOD order', () => {
 
   it('restores a moved folder when its anchor MOD is no longer visible', () => {
     expect(keys(buildFolderGroups([mods[0]], folders, ['mod:b', 'folder:one', 'mod:d', 'folder:two'])))
-      .toEqual(['folder:one', 'folder:two'])
+      .toEqual(['folder:one'])
+  })
+
+  it('omits empty and unavailable folders without losing their saved positions when members return', () => {
+    const allFolders = [...folders, { id: 'empty', mod_ids: [] }, { id: 'missing', mod_ids: ['missing'] }]
+    const layout = ['folder:two', 'mod:b', 'folder:one', 'mod:d', 'folder:empty', 'folder:missing']
+    expect(keys(buildFolderGroups([mods[0], mods[1], mods[3]], allFolders, layout)))
+      .toEqual(['mod:b', 'folder:one', 'mod:d'])
+    expect(buildFolderGroups([], allFolders, layout)).toEqual([])
+    expect(keys(buildFolderGroups(mods, allFolders, layout)))
+      .toEqual(['folder:two', 'mod:b', 'folder:one', 'mod:d'])
   })
 })

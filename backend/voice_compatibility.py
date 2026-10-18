@@ -223,6 +223,22 @@ def _overlay(current: DecisionNode, incoming: DecisionNode, baseline: DecisionNo
     return replace(metadata, children=tuple(children[key] for key in sorted(children)))
 
 
+def _source_events(items):
+    # Prefer explicit authoring trees over their pre-merged testing copies.
+    selected = {}
+    for priority, name, event in sorted(items, key=lambda item: (
+        item[0], "_for_merging" not in item[1], item[1],
+    )):
+        selected.setdefault(priority, (name, event))
+    return selected
+
+
+def _baseline_event(base, key):
+    event_id = key[1]
+    return (base.get(key) or base.get(("english(uk)", event_id)) or base.get(("chinese", event_id))
+            or next((event for (_, base_id), event in base.items() if base_id == event_id), None))
+
+
 def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list[GameDataEntry], dict]:
     """Sources are ordered from highest to lowest Pack priority; vanilla is fallback."""
     banks = []
@@ -270,26 +286,30 @@ def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list
              "conflicting_path_count": 0, "patched_bank_count": 0}
     voice_sources = {priority for items in candidates.values() for priority, _, _ in items}
     stats["voice_pack_count"] = len(voice_sources)
-    for scope, event_id in candidates:
-        if scope and ("", event_id) in candidates and len({
-            priority for priority, _, _ in [*candidates[(scope, event_id)], *candidates[("", event_id)]]
-        }) > 1:
-            raise ValueError(f"语音事件 {event_id} 同时使用通用目录和语言目录，暂不支持这种混合布局")
-    for key, items in candidates.items():
+    event_keys = defaultdict(list)
+    for key in candidates:
+        event_keys[key[1]].append(key)
+    merge_groups = []
+    for event_id, keys in event_keys.items():
+        if ("", event_id) in candidates:
+            # A shared event in a global bank must receive the same tree as its
+            # localized copies; separate language-only events remain isolated.
+            key = next((key for key in keys if key[0]), keys[0])
+            merge_groups.append((key, keys, [item for target in keys for item in candidates[target]]))
+        else:
+            merge_groups.extend((key, [key], candidates[key]) for key in keys)
+    for key, target_keys, items in merge_groups:
         if len({priority for priority, _, _ in items}) < 2:
             continue
-        scope, event_id = key
-        baseline = base.get(key)
-        if baseline is None:
-            baseline = base.get(("english(uk)", event_id)) or base.get(("chinese", event_id))
-            if baseline is None:
-                baseline = next((event for (_, base_id), event in base.items() if base_id == event_id), None)
-        # Prefer explicit authoring trees over their pre-merged testing copies.
-        by_source = {}
-        for priority, name, event in sorted(items, key=lambda item: (
-            item[0], "_for_merging" not in item[1], item[1],
-        )):
-            by_source.setdefault(priority, (name, event))
+        event_id = key[1]
+        localized = [key for key in target_keys if key[0]]
+        if len(localized) > 1:
+            signatures = [({priority: event for priority, (_, event) in _source_events(candidates[key]).items()},
+                           _baseline_event(base, key)) for key in localized]
+            if any(signature != signatures[0] for signature in signatures[1:]):
+                raise ValueError(f"语音事件 {event_id} 同时使用通用目录和语言目录，暂不支持这种混合布局")
+        baseline = _baseline_event(base, key)
+        by_source = _source_events(items)
         selected = [by_source[priority] for priority in sorted(by_source, reverse=True)]
         prototype = selected[-1][1]
         for event in [*(event for _, event in selected), *([baseline] if baseline else [])]:
@@ -310,7 +330,7 @@ def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list
         payload = encode_dialogue_event(merged)
         if parse_dialogue_event(payload) != merged:
             raise ValueError(f"语音事件 {event_id} 合并回读失败")
-        replacements[key] = payload
+        replacements.update(dict.fromkeys(target_keys, payload))
         stats["merged_event_count"] += 1
         stats["merged_path_count"] += len(event_paths(merged))
 

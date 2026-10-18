@@ -91,7 +91,7 @@ describe('MOD folder list', () => {
     expect(wrapper.findAll('.row-title').map(item => item.text())).toEqual(['a', 'c', 'b'])
     expect(wrapper.findAll('.thumbnail-order').map(item => item.text())).toEqual(['1', '3', '2'])
     expect(wrapper.findAll('.mod-row.in-folder')).toHaveLength(2)
-    expect(wrapper.get('.mod-folder-row .count-badge').text()).toBe('2')
+    expect(wrapper.get('.mod-folder-toggle .count-badge').text()).toBe('2')
   })
 
   it('collapses members and uses only visible rows for selection and dragging', async () => {
@@ -117,17 +117,35 @@ describe('MOD folder list', () => {
     expect(wrapper.findAll('.row-title').map(item => item.text())).toEqual(['b'])
   })
 
-  it('keeps empty folders available and hides folders with no results in a filtered list', async () => {
+  it('hides empty folders and folders with no results in a filtered list', async () => {
     const wrapper = list({ folders: [folder, { ...folder, id: 'empty', name: '空文件夹', mod_ids: [] }] })
-    expect(wrapper.findAll('.mod-folder-row')).toHaveLength(2)
+    expect(wrapper.findAll('.mod-folder-row')).toHaveLength(1)
+    expect(wrapper.find('[data-testid="mod-folder-empty"]').exists()).toBe(false)
     await wrapper.setProps({ mods: [mods[1]], searchTokens: [{ value: 'b' }] })
     expect(wrapper.findAll('.mod-folder-row')).toHaveLength(0)
   })
 
-  it('shows folders whose members are disabled, hidden or no longer installed', () => {
+  it('hides folders with no visible members and restores them when a member returns', async () => {
     const wrapper = list({ mods: [], active: true })
-    expect(wrapper.get('[data-testid="mod-folder-folder"] .count-badge').text()).toBe('0')
+    expect(wrapper.find('[data-testid="mod-folder-folder"]').exists()).toBe(false)
     expect(wrapper.findAll('.mod-row')).toHaveLength(0)
+    expect(wrapper.find('.empty-state').exists()).toBe(true)
+    await wrapper.setProps({ mods: [mods[0]] })
+    expect(wrapper.get('[data-testid="mod-folder-folder"] .count-badge').text()).toBe('1')
+  })
+
+  it('shows the panel member count beside the name while collapsed or searching', async () => {
+    const wrapper = list({
+      mods: [mods[0]], folders: [{ ...folder, collapsed_inactive: true }],
+      folderModCounts: { folder: { active: 1, inactive: 2 } },
+    })
+    expect(wrapper.findAll('.mod-row')).toHaveLength(0)
+    expect(wrapper.get('.mod-folder-toggle .count-badge').text()).toBe('2')
+    await wrapper.setProps({ searchTokens: [{ value: 'a' }] })
+    expect(wrapper.findAll('.mod-row')).toHaveLength(1)
+    expect(wrapper.get('.mod-folder-toggle .count-badge').text()).toBe('2')
+    await wrapper.setProps({ active: true })
+    expect(wrapper.get('.mod-folder-toggle .count-badge').text()).toBe('1')
   })
 
   it('moves a collapsed folder onto a plain MOD and can render the saved position', async () => {

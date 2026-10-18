@@ -74,7 +74,7 @@ describe('folder movement and playset recovery through the actual lists', () => 
     await store.switchPlayset('other')
     await store.flushPlaysetUpdates()
     await flushPromises()
-    expect(groupNames(active)).toEqual(['b', 'UI', '单位'])
+    expect(groupNames(active)).toEqual(['b'])
     expect(store.modFolders.map(item => item.id)).toEqual(['ui', 'units'])
     expect(store.activeIds).toEqual(['b'])
     await store.switchPlayset('default')

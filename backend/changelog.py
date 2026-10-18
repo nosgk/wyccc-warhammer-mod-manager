@@ -9,6 +9,14 @@ SUPPORTED_CHANGELOG_LANGUAGES = frozenset({"zh-CN", "en-US", "ko-KR", "ru-RU", "
 
 CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
     {
+        "version": "1.2.8",
+        "date": "2026-10-18",
+        "entries": (
+            ("v128_fixed_title", (("fix", "v128_voice_fix"),)),
+            ("v128_adjusted_title", (("improvement", "v128_empty_folders"),)),
+        ),
+    },
+    {
         "version": "1.2.7",
         "date": "2026-10-17",
         "entries": (
@@ -734,6 +742,10 @@ CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
 
 CHANGELOG_TEXT: dict[str, dict[str, str]] = {
     "zh-CN": {
+        "v128_fixed_title": "修复",
+        "v128_voice_fix": "动态语音兼容功能存在的问题",
+        "v128_adjusted_title": "调整",
+        "v128_empty_folders": "空文件夹现在将自动隐藏",
         "v127_added_title": "新增",
         "v127_dynamic_voice": "兼容补丁-动态语音兼容， 由于原版的限制，各个增加了新语音的MOD，会互相冲突，只有一个能生效，所以我制作了这个功能，能让各个MOD的语音动态兼容",
         "v126_fixed_title": "修复",
@@ -995,6 +1007,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。",
     },
     "en-US": {
+        "v128_fixed_title": "Fixed",
+        "v128_voice_fix": "Issues with dynamic voice compatibility.",
+        "v128_adjusted_title": "Changed",
+        "v128_empty_folders": "Empty folders are now hidden automatically.",
         "v127_added_title": "Added",
         "v127_dynamic_voice": "Compatibility patches - Dynamic voice compatibility. Due to limitations in the base game, MODs that add new voices conflict with each other, and only one can take effect. I created this feature to make the voices from different MODs dynamically compatible.",
         "v126_fixed_title": "Fixed",
@@ -1256,6 +1272,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog.",
     },
     "ko-KR": {
+        "v128_fixed_title": "수정",
+        "v128_voice_fix": "동적 음성 호환 기능의 문제를 수정했습니다.",
+        "v128_adjusted_title": "조정",
+        "v128_empty_folders": "빈 폴더가 이제 자동으로 숨겨집니다.",
         "v127_added_title": "추가",
         "v127_dynamic_voice": "호환 패치 - 동적 음성 호환. 원본 게임의 제한으로 새로운 음성을 추가하는 MOD는 서로 충돌하여 하나만 적용됩니다. 여러 MOD의 음성을 동적으로 호환할 수 있도록 이 기능을 만들었습니다.",
         "v126_fixed_title": "수정",
@@ -1517,6 +1537,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다.",
     },
     "ru-RU": {
+        "v128_fixed_title": "Исправлено",
+        "v128_voice_fix": "Исправлены проблемы динамической совместимости озвучки.",
+        "v128_adjusted_title": "Изменено",
+        "v128_empty_folders": "Пустые папки теперь скрываются автоматически.",
         "v127_added_title": "Добавлено",
         "v127_dynamic_voice": "Патчи совместимости — динамическая совместимость озвучки. Из-за ограничений базовой игры MOD, добавляющие новые голоса, конфликтуют друг с другом, и работает только один. Я создал эту функцию, чтобы озвучка разных MOD могла динамически работать вместе.",
         "v126_fixed_title": "Исправлено",
@@ -1778,6 +1802,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении.",
     },
     "ja-JP": {
+        "v128_fixed_title": "修正",
+        "v128_voice_fix": "動的音声互換機能の問題を修正。",
+        "v128_adjusted_title": "調整",
+        "v128_empty_folders": "空のフォルダーが自動的に非表示になりました。",
         "v127_added_title": "追加",
         "v127_dynamic_voice": "互換パッチ - 動的音声互換。ゲーム本体の制限により、新しい音声を追加するMOD同士は競合し、1つしか有効になりません。各MODの音声を動的に併用できるよう、この機能を作成しました。",
         "v126_fixed_title": "修正",
@@ -2039,6 +2067,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。",
     },
     "es-ES": {
+        "v128_fixed_title": "Corregido",
+        "v128_voice_fix": "Corregidos problemas de la compatibilidad dinámica de voces.",
+        "v128_adjusted_title": "Ajustado",
+        "v128_empty_folders": "Las carpetas vacías ahora se ocultan automáticamente.",
         "v127_added_title": "Añadido",
         "v127_dynamic_voice": "Parches de compatibilidad - Compatibilidad dinámica de voces. Debido a las limitaciones del juego base, los MOD que añaden nuevas voces entran en conflicto y solo uno puede funcionar. He creado esta función para que las voces de distintos MOD sean compatibles de forma dinámica.",
         "v126_fixed_title": "Corregido",

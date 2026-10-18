@@ -9,7 +9,7 @@ export const filterModsByFolder = (mods, folders, folderId) => {
   return mods.filter(mod => folderId === UNGROUPED_FOLDER ? !ids.has(mod.id) : ids.has(mod.id))
 }
 
-export const buildFolderGroups = (mods, folders, layout = [], filtered = false) => {
+export const buildFolderGroups = (mods, folders, layout = []) => {
   const membership = new Map()
   for (const folder of folders) {
     for (const id of folder.mod_ids || []) if (!membership.has(id)) membership.set(id, folder)
@@ -27,11 +27,6 @@ export const buildFolderGroups = (mods, folders, layout = [], filtered = false) 
         groups.push(group)
       }
       folderGroups.get(folder.id).mods.push(mod)
-    }
-  }
-  if (!filtered) {
-    for (const folder of folders) {
-      if (!folderGroups.has(folder.id)) groups.push({ key: `folder:${folder.id}`, folder, mods: [] })
     }
   }
   // Only folder positions are restored. Ungrouped MODs keep the selected sort

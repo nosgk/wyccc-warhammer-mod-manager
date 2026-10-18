@@ -150,10 +150,73 @@ def test_language_scopes_are_isolated():
     assert all("\\chinese\\" in entry.name for entry in entries)
 
 
-def test_mixed_global_and_localized_event_layout_is_reported_instead_of_silently_skipped():
+@pytest.mark.parametrize("reverse", [False, True])
+def test_mixed_global_and_localized_events_share_one_merged_tree_with_vanilla_fallback(reverse):
+    global_source = source("global", {1: 111, 2: 20}, event_id=610793228)
+    localized = source("local", {1: 222, 2: 200}, event_id=610793228,
+                       filename=PREFIX + "english(uk)\\local.bnk")
+    sources = [global_source, localized] if not reverse else [localized, global_source]
+    entries, stats = build_voice_compatibility_entries([
+        *sources, source("base", {1: 10, 2: 20, 3: 30}, role="vanilla", event_id=610793228,
+                         filename=BASE_NAME),
+    ])
+    copies = {parse_soundbank(entry.payload).dialogues()[610793228] for entry in entries}
+    assert len(entries) == 2 and len(copies) == 1
+    assert event_paths(copies.pop()) == {(1,): (222 if reverse else 111, 50, 100),
+                                        (2,): (200, 50, 100), (3,): (30, 50, 100)}
+    assert stats["merged_event_count"] == 1
+    assert stats["conflicting_path_count"] == 1
+
+
+def test_mixed_layout_prefers_authoring_tree_across_directories_in_the_same_mod():
+    high = DbSource("high", (
+        *source("high", {1: 10}, filename=PREFIX + "high_for_merging.bnk").entries,
+        *source("high", {1: 999}, filename=PREFIX + "english(uk)\\high_for_testing.bnk").entries,
+    ))
+    entries, _ = build_voice_compatibility_entries([
+        high, source("low", {1: 222, 2: 200}, filename=PREFIX + "english(uk)\\low.bnk"),
+        source("base", {1: 10, 3: 30}, role="vanilla", filename=BASE_NAME),
+    ])
+    merged, = merged_events(entries)
+    assert event_paths(merged) == {(1,): (10, 50, 100), (2,): (200, 50, 100), (3,): (30, 50, 100)}
+    assert len(entries) == 3
+
+
+def test_mixed_layout_can_share_identical_localized_trees_without_counting_copies_as_mods():
+    localized = DbSource("local", (
+        *source("local", {2: 222}, filename=PREFIX + "english(uk)\\local.bnk").entries,
+        *source("local", {2: 222}, filename=PREFIX + "chinese\\local.bnk").entries,
+    ))
+    entries, stats = build_voice_compatibility_entries([source("global", {1: 111}), localized])
+    merged, = merged_events(entries)
+    assert len(entries) == 3 and stats["voice_pack_count"] == 2
+    assert stats["merged_event_count"] == 1
+    assert event_paths(merged) == {(1,): (111, 50, 100), (2,): (222, 50, 100)}
+    entries, stats = build_voice_compatibility_entries([
+        DbSource("single", (*source("global", {1: 111}).entries, *localized.entries)),
+    ])
+    assert not entries and stats["merged_event_count"] == 0
+
+
+def test_mixed_layout_does_not_merge_distinct_languages_into_the_global_bank():
     with pytest.raises(ValueError, match="混合布局"):
         build_voice_compatibility_entries([
-            source("global", {1: 111}), source("local", {2: 222}, filename=PREFIX + "chinese\\local.bnk"),
+            source("global", {1: 111}),
+            source("cn", {2: 222}, filename=PREFIX + "chinese\\local.bnk"),
+            source("en", {2: 999}, filename=PREFIX + "english(uk)\\local.bnk"),
+        ])
+
+
+def test_mixed_layout_does_not_copy_a_different_language_vanilla_fallback_into_the_global_bank():
+    localized = DbSource("local", (
+        *source("local", {2: 222}, filename=PREFIX + "english(uk)\\local.bnk").entries,
+        *source("local", {2: 222}, filename=PREFIX + "chinese\\local.bnk").entries,
+    ))
+    with pytest.raises(ValueError, match="混合布局"):
+        build_voice_compatibility_entries([
+            source("global", {1: 111}), localized,
+            source("en_base", {3: 300}, role="vanilla", filename=BASE_NAME),
+            source("cn_base", {3: 333}, role="vanilla", filename=PREFIX + "chinese\\campaign_vo__core.bnk"),
         ])
 
 
@@ -231,15 +294,31 @@ def test_cache_tampering_source_content_order_playset_and_stale_cleanup(tmp_path
 def test_auto_movie_participates_but_disabled_normal_mod_and_old_runtime_do_not(tmp_path):
     data, assets = prepare(tmp_path)
     movie = write_pack(data / "movie.pack", byte_mask=4,
-                       entries=[(PREFIX + "movie.bnk", bank([event({3: 333})]))])
+                       entries=[(PREFIX + "english(uk)\\movie.bnk", bank([event({3: 333})]))])
     generated = ensure(tmp_path, data, assets, ids=["high"])
     assert generated["stats"]["voice_pack_count"] == 2
+    merged, = merged_events([entry for entry in read_pack_entries(Path(generated["path"]))
+                             if entry.name.endswith(".bnk")])
+    assert event_paths(merged) == {(1,): (111, 50, 100), (2,): (20, 50, 100), (3,): (333, 50, 100)}
     stale = write_pack(data / "renamed_old_runtime.pack", byte_mask=4,
                        entries=[(VOICE_RUNTIME_MARKER, b"{}"), (PREFIX + "stale.bnk", bank([event({4: 444})]))])
     assert ensure(tmp_path, data, assets, ids=["high"])["fingerprint"] == generated["fingerprint"]
     movie.unlink()
     assert ensure(tmp_path, data, assets, ids=["high"])["status"] == "zero_modification"
     assert stale.is_file()
+
+
+def test_builder_upgrade_rebuilds_the_cached_voice_patch(tmp_path, monkeypatch):
+    from backend import voice_patch_state
+
+    data, assets = prepare(tmp_path)
+    current_version = voice_patch_state.BUILDER_VERSION
+    monkeypatch.setattr(voice_patch_state, "BUILDER_VERSION", current_version - 1)
+    previous = ensure(tmp_path, data, assets)
+    monkeypatch.setattr(voice_patch_state, "BUILDER_VERSION", current_version)
+    current = ensure(tmp_path, data, assets)
+    assert current["status"] == "generated" and current["fingerprint"] != previous["fingerprint"]
+    assert ensure(tmp_path, data, assets)["status"] == "reused"
 
 
 def test_unused_language_banks_need_not_be_installed(tmp_path):

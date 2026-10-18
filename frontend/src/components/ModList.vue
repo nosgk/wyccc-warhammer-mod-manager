@@ -89,7 +89,7 @@ const displayGroups = computed(() => {
   const searching = props.searchTokens.length > 0 || props.searchActive || props.warningsOnly
   const folders = props.folderFilter === UNGROUPED_FOLDER ? []
     : props.folders.filter(folder => !props.folderFilter || folder.id === props.folderFilter)
-  const groups = buildFolderGroups(props.mods, folders, props.folderLayout, searching)
+  const groups = buildFolderGroups(props.mods, folders, props.folderLayout)
   return groups.map(group => {
     const collapsed = Boolean(group.folder?.[props.active ? 'collapsed_active' : 'collapsed_inactive'])
     const expanded = !collapsed || searching || group.mods.some(mod => mod.id === props.searchFocusId)
@@ -506,6 +506,7 @@ watch(
             <span class="mod-folder-chevron" aria-hidden="true">{{ group.expanded ? '▾' : '▸' }}</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h7l2 3h9v11H3z" /></svg>
             <span class="mod-folder-name" :title="group.folder.name">{{ group.folder.name }}</span>
+            <span class="count-badge">{{ folderCount(group, active ? 'active' : 'inactive') }}</span>
           </button>
           <button type="button" class="icon-button mod-folder-enable"
             :disabled="busy || !folderCount(group, 'inactive')"
@@ -517,7 +518,6 @@ watch(
             :data-testid="`disable-folder-${group.folder.id}`"
             :title="t('folders.disableAll')" :aria-label="t('folders.disableAll')"
             @click="emit('disable-folder', group.folder.id)">−</button>
-          <span class="count-badge">{{ group.mods.length }}</span>
           <button type="button" class="icon-button" :disabled="busy"
             :title="t('folders.rename')" :aria-label="t('folders.rename')"
             @click="emit('rename-folder', group.folder)">✎</button>
