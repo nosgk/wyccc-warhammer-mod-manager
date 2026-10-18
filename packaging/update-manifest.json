@@ -1,25 +1,34 @@
 {
   "schema_version": 1,
   "app": "Wyccc's Mod Manager",
-  "version": "1.2.7",
-  "published_at": "2026-10-17",
+  "version": "1.2.8",
+  "published_at": "2026-10-18",
   "download": {
-    "url": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.7/Wyccc's%20Mod%20Manager.exe",
+    "url": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.8/Wyccc's%20Mod%20Manager.exe",
     "mirrors": {
-      "gitee": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.7/Wyccc's%20Mod%20Manager.exe",
-      "github": "https://github.com/scnjwyc/wyccc-warhammer-mod-manager/releases/download/1.2.7/Wyccc.s.Mod.Manager.exe?v=1.2.7"
+      "gitee": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.8/Wyccc's%20Mod%20Manager.exe",
+      "github": "https://github.com/scnjwyc/wyccc-warhammer-mod-manager/releases/download/1.2.8/Wyccc.s.Mod.Manager.exe?v=1.2.8"
     },
     "filename": "Wyccc's Mod Manager.exe",
-    "sha256": "78D54340F08D0964545615D9E77E3C93B5D2E5E8DF993C6160144EB9F1F3390F",
-    "size": 65618507
+    "sha256": "8D254F9601F6EEB03F4C5A9916D70DFC475EDB528D31FB38EA9AB27054A556AF",
+    "size": 65620181
   },
   "changelog": [
     {
-      "title": "新增",
+      "title": "修复",
       "changes": [
         {
-          "type": "feature",
-          "text": "兼容补丁-动态语音兼容， 由于原版的限制，各个增加了新语音的MOD，会互相冲突，只有一个能生效，所以我制作了这个功能，能让各个MOD的语音动态兼容"
+          "type": "fix",
+          "text": "动态语音兼容功能存在的问题"
+        }
+      ]
+    },
+    {
+      "title": "调整",
+      "changes": [
+        {
+          "type": "improvement",
+          "text": "空文件夹现在将自动隐藏"
         }
       ]
     }
