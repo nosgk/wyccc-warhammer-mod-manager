@@ -1206,6 +1206,7 @@ class API:
                                 **custom,
                                 "published_workshop_id": published_workshop_id,
                             }
+                published_assets: list[ModAsset] = []
                 for mod in scan_result.mods:
                     custom = user_data.get(mod.id, {})
                     if not custom:
@@ -1226,6 +1227,7 @@ class API:
                             "https://steamcommunity.com/sharedfiles/filedetails/"
                             f"?id={mod.workshop_id}"
                         )
+                        published_assets.append(mod)
                     published_workshop_id = str(custom.get("published_workshop_id") or "").strip()
                     if (
                         published_workshop_id
@@ -1246,6 +1248,18 @@ class API:
                         if isinstance(raw_ignored_warning_codes, list)
                         else []
                     )
+                if published_assets:
+                    # These links are restored after the scanner reads Workshop metadata.
+                    # Restore ownership from the same cache, including after an online refresh.
+                    published_metadata = self.workshop_service.get_many(
+                        list(dict.fromkeys(mod.workshop_id for mod in published_assets)),
+                        str(settings.get("language") or DEFAULT_LANGUAGE),
+                        app_id=int(paths.game_definition.app_id),
+                    )
+                    for mod in published_assets:
+                        mod.creator_id = str(
+                            published_metadata.get(mod.workshop_id, {}).get("creator_id") or ""
+                        )
                 self._assets = {mod.id: mod for mod in scan_result.mods}
                 self._asset_aliases = {
                     alias: mod.id
@@ -3143,6 +3157,7 @@ class API:
                     workshop_id=workshop_id,
                     language=steam_language,
                     app_id=int(self._active_game().app_id),
+                    game_executable=self.settings_service.resolve_game_paths().executable_path,
                 )
         except SteamworksBridgeError as exc:
             logger.warning("Workshop publish failed: %s", exc)

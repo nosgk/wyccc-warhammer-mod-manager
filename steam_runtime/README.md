@@ -12,6 +12,14 @@
 流程会将构建时检测到的 `node.exe` 一并放入 PyInstaller 单文件程序，不要求发布版用户
 另行安装 Node.js。
 
+WH3 上传与更新都会在同一次 Steam 内容提交中写入 `pack_name` 和 `game_version`
+键值标签。Pack 名从实际上传目录取得，游戏版本读取当前游戏 EXE 的 `FileVersionMS`。
+更新旧条目时也会补齐或替换这两项，并处理原有键名的大小写变体；提交后关闭查询缓存回读，
+确认成功才返回发布完成。其它游戏沿用其原有字段规则。
+`repair_workshop_identification` 可只补齐自有条目的这两项字段，不提交标题、描述、分类、
+封面或内容。现场修复及原版查询结果见
+[2026-10-22 验证记录](../docs/validation/2026-10-22-workshop-ca-identification.md)。
+
 `steamworks/` 中的原生模块来自本项目研究使用的 WH3-Mod-Manager 本地版本，其上游为
 [steamworks.js](https://github.com/ceifa/steamworks.js)，许可证见
 `../licenses/steamworks.js-LICENSE.txt`。本项目为语言化 Workshop 更新添加的最小原生补丁及

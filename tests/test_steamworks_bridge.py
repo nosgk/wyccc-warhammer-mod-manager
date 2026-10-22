@@ -339,6 +339,7 @@ module.exports = {
             node.write_bytes(b"node fixture")
             content = root / "content"
             content.mkdir()
+            (content / "example.pack").write_bytes(b"Pack fixture")
             preview = root / "preview.png"
             preview.write_bytes(b"preview")
             payload = {
@@ -362,6 +363,7 @@ module.exports = {
             with (
                 patch("backend.steamworks_bridge.find_node_executable", return_value=node),
                 patch("backend.steamworks_bridge.subprocess.run", return_value=completed) as run,
+                patch("backend.steamworks_bridge.read_game_file_version", return_value=589824),
             ):
                 result = publish_workshop_item(
                     content_path=content,
@@ -374,6 +376,7 @@ module.exports = {
                     workshop_id="123",
                     language="schinese",
                     app_id=1142710,
+                    game_executable=root / "Warhammer3.exe",
                     root=root,
                 )
 
@@ -387,6 +390,8 @@ module.exports = {
         self.assertEqual(request["tags"], ["mod", "ui"])
         self.assertEqual(request["visibility"], 3)
         self.assertEqual(request["language"], "schinese")
+        self.assertEqual(request["caPackName"], "example.pack")
+        self.assertEqual(request["caGameVersion"], 589824)
 
 
 if __name__ == "__main__":

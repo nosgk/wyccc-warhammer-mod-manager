@@ -9,6 +9,13 @@ SUPPORTED_CHANGELOG_LANGUAGES = frozenset({"zh-CN", "en-US", "ko-KR", "ru-RU", "
 
 CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
     {
+        "version": "1.2.9",
+        "date": "2026-10-22",
+        "entries": (
+            ("v129_fixed_title", (("fix", "v129_legacy_launcher"), ("fix", "v129_owned_mod_update"))),
+        ),
+    },
+    {
         "version": "1.2.8",
         "date": "2026-10-18",
         "entries": (
@@ -742,6 +749,9 @@ CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
 
 CHANGELOG_TEXT: dict[str, dict[str, str]] = {
     "zh-CN": {
+        "v129_fixed_title": "修复",
+        "v129_legacy_launcher": "修复-启动器上传的MOD，在官方老启动器中无法看到的问题",
+        "v129_owned_mod_update": "修复-有时候无法上传更新自己的MOD的问题",
         "v128_fixed_title": "修复",
         "v128_voice_fix": "动态语音兼容功能存在的问题",
         "v128_adjusted_title": "调整",
@@ -1007,6 +1017,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。",
     },
     "en-US": {
+        "v129_fixed_title": "Fixed",
+        "v129_legacy_launcher": "Fixed - MODs uploaded through this launcher were not visible in the official legacy launcher.",
+        "v129_owned_mod_update": "Fixed - Sometimes being unable to upload or update your own MODs.",
         "v128_fixed_title": "Fixed",
         "v128_voice_fix": "Issues with dynamic voice compatibility.",
         "v128_adjusted_title": "Changed",
@@ -1272,6 +1285,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog.",
     },
     "ko-KR": {
+        "v129_fixed_title": "수정",
+        "v129_legacy_launcher": "수정 - 이 런처로 업로드한 MOD가 공식 구형 런처에 표시되지 않던 문제.",
+        "v129_owned_mod_update": "수정 - 자신의 MOD를 업로드하거나 업데이트하지 못하는 경우가 있던 문제.",
         "v128_fixed_title": "수정",
         "v128_voice_fix": "동적 음성 호환 기능의 문제를 수정했습니다.",
         "v128_adjusted_title": "조정",
@@ -1537,6 +1553,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다.",
     },
     "ru-RU": {
+        "v129_fixed_title": "Исправлено",
+        "v129_legacy_launcher": "Исправлено — MOD, загруженные через этот лаунчер, не отображались в старом официальном лаунчере.",
+        "v129_owned_mod_update": "Исправлено — иногда не удавалось загрузить или обновить собственные MOD.",
         "v128_fixed_title": "Исправлено",
         "v128_voice_fix": "Исправлены проблемы динамической совместимости озвучки.",
         "v128_adjusted_title": "Изменено",
@@ -1802,6 +1821,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении.",
     },
     "ja-JP": {
+        "v129_fixed_title": "修正",
+        "v129_legacy_launcher": "修正 - このランチャーからアップロードしたMODが公式の旧ランチャーに表示されない問題。",
+        "v129_owned_mod_update": "修正 - 自分のMODをアップロードまたは更新できないことがある問題。",
         "v128_fixed_title": "修正",
         "v128_voice_fix": "動的音声互換機能の問題を修正。",
         "v128_adjusted_title": "調整",
@@ -2067,6 +2089,9 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。",
     },
     "es-ES": {
+        "v129_fixed_title": "Corregido",
+        "v129_legacy_launcher": "Corregido - Los MOD subidos desde este lanzador no aparecían en el lanzador oficial antiguo.",
+        "v129_owned_mod_update": "Corregido - A veces no se podían subir o actualizar los MOD propios.",
         "v128_fixed_title": "Corregido",
         "v128_voice_fix": "Corregidos problemas de la compatibilidad dinámica de voces.",
         "v128_adjusted_title": "Ajustado",

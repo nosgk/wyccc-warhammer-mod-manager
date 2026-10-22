@@ -33,6 +33,63 @@ const readRequest = async () => {
 
 const wait = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
+const caIdentification = request => {
+  const packName = String(request.caPackName || "");
+  const gameVersion = Number(request.caGameVersion);
+  if (!packName || /[\\/\0]/.test(packName) || !packName.toLowerCase().endsWith(".pack")
+      || Buffer.byteLength(packName, "utf8") > 255) {
+    throw new Error("Invalid CA Workshop Pack filename");
+  }
+  if (!Number.isInteger(gameVersion) || gameVersion <= 0 || gameVersion > 0xffffffff) {
+    throw new Error("Invalid CA Workshop game FileVersionMS");
+  }
+  return [
+    { key: "pack_name", value: packName.toLowerCase() },
+    { key: "game_version", value: String(gameVersion) },
+  ];
+};
+
+const requireKeyValueSupport = workshop => {
+  if (typeof workshop.supportsKeyValueTags !== "function" || !workshop.supportsKeyValueTags()) {
+    throw new Error("The bundled Steamworks bridge does not support CA Workshop identification");
+  }
+};
+
+const caUpdateFields = (item, expected) => ({
+  removeKeyValueTags: [...new Set([
+    "pack_name", "game_version",
+    ...(item?.keyValueTags || []).map(tag => String(tag.key))
+      .filter(key => ["pack_name", "game_version"].includes(key.toLowerCase())),
+  ])],
+  keyValueTags: expected,
+});
+
+const readCaItem = async (workshop, itemId) => {
+  const details = await workshop.getItems([itemId], {
+    includeLongDescription: false, includeKeyValueTags: true, cachedResponseMaxAge: 0,
+  });
+  const item = details?.items?.find(value => value?.publishedFileId?.toString() === itemId.toString());
+  if (!item) throw new Error(`Workshop item ${itemId.toString()} was not found`);
+  if (Number(item.creatorAppId) !== 1142710 || Number(item.consumerAppId) !== 1142710) {
+    throw new Error(`Workshop item ${itemId.toString()} does not belong to WH3`);
+  }
+  return item;
+};
+
+const caFieldsMatch = (item, expected) => expected.every(wanted => {
+  const matches = (item.keyValueTags || []).filter(tag => tag.key.toLowerCase() === wanted.key);
+  return matches.length === 1 && matches[0].value === wanted.value;
+});
+
+const verifyCaIdentification = async (workshop, itemId, expected) => {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const item = await readCaItem(workshop, itemId);
+    if (caFieldsMatch(item, expected)) return;
+    if (attempt < 2) await wait(500);
+  }
+  throw new Error(`Workshop item ${itemId.toString()} was submitted, but CA identification readback failed`);
+};
+
 const directorySize = root => {
   if (!root || !fs.existsSync(root)) return 0n;
   const pending = [root];
@@ -273,6 +330,28 @@ const main = async () => {
     ? require("./steamworks_dependencies")
     : require("./steamworks");
   const client = steamworks.init(appId);
+  if (operation === "repair_ca_metadata") {
+    if (appId !== 1142710) throw new Error("CA identification repair is limited to WH3");
+    const id = String(request.id || "");
+    if (!/^\d+$/.test(id)) throw new Error("Invalid Workshop ID");
+    requireKeyValueSupport(client.workshop);
+    const expected = caIdentification(request);
+    const itemId = BigInt(id);
+    const item = await readCaItem(client.workshop, itemId);
+    const ownerId = client.localplayer.getSteamId().steamId64.toString();
+    if (item.owner?.steamId64?.toString() !== ownerId) {
+      throw new Error("The current Steam account does not own this Workshop item");
+    }
+    const repaired = !caFieldsMatch(item, expected);
+    if (repaired && !request.dryRun) await client.workshop.updateItem(itemId, caUpdateFields(item, expected), appId);
+    if (!request.dryRun) await verifyCaIdentification(client.workshop, itemId, expected);
+    writeResultAndExit({ ok: true, result: {
+      workshop_id: id, repaired: repaired && !request.dryRun, needs_repair: repaired,
+      verified: !request.dryRun, key_value_tags: expected,
+      previous_key_value_tags: item.keyValueTags,
+    } }, 0);
+    return;
+  }
   if (operation === "get_current_user") {
     const steamId = client.localplayer.getSteamId()?.steamId64?.toString?.() || "";
     if (!/^\d+$/.test(steamId)) throw new Error("Current Steam user is unavailable");
@@ -364,6 +443,15 @@ const main = async () => {
     if (!title) throw new Error("Workshop title is required");
     if (!Number.isInteger(visibility) || visibility < 0 || visibility > 3) throw new Error("Invalid visibility");
     if (!/^[a-z]+$/.test(language)) throw new Error("Invalid Workshop language");
+    const caExpected = appId === 1142710 ? caIdentification(request) : null;
+    if (caExpected) {
+      requireKeyValueSupport(client.workshop);
+      const packs = fs.readdirSync(contentPath, { withFileTypes: true })
+        .filter(entry => entry.isFile() && entry.name.toLowerCase().endsWith(".pack"));
+      if (packs.length !== 1 || packs[0].name.toLowerCase() !== caExpected[0].value) {
+        throw new Error("CA Workshop filename does not match the upload content");
+      }
+    }
     if (
       typeof client.workshop.supportsUpdateLanguage !== "function"
       || !client.workshop.supportsUpdateLanguage()
@@ -377,9 +465,11 @@ const main = async () => {
     let itemId = requestedId ? BigInt(requestedId) : null;
     let created = false;
     let needsToAcceptAgreement = false;
+    let existingItem = null;
     if (itemId) {
-      const details = await client.workshop.getItems([itemId], { includeLongDescription: false });
-      const item = (details?.items || []).find(Boolean);
+      const details = caExpected ? null : await client.workshop.getItems([itemId], { includeLongDescription: false });
+      const item = caExpected ? await readCaItem(client.workshop, itemId) : (details?.items || []).find(Boolean);
+      existingItem = item;
       if (!item) throw new Error(`Workshop item ${requestedId} was not found`);
       const itemOwnerId = item.owner?.steamId64?.toString?.() || "";
       if (itemOwnerId !== ownerId) throw new Error("The current Steam account does not own this Workshop item");
@@ -408,6 +498,7 @@ const main = async () => {
         language,
       };
       if (tags !== null || created) update.tags = tags?.length ? tags : ["mod"];
+      if (caExpected) Object.assign(update, caUpdateFields(existingItem, caExpected));
       const updatedItem = await client.workshop.updateItem(itemId, update, appId);
       needsToAcceptAgreement = needsToAcceptAgreement || Boolean(updatedItem.needsToAcceptAgreement);
     } catch (error) {
@@ -416,6 +507,7 @@ const main = async () => {
       }
       throw error;
     }
+    if (caExpected) await verifyCaIdentification(client.workshop, itemId, caExpected);
     const subscriptionAdded = await ensureWorkshopSubscription(client.workshop, itemId);
     writeResultAndExit({
       ok: true,
@@ -429,6 +521,7 @@ const main = async () => {
         language,
         subscribed: true,
         subscription_added: subscriptionAdded,
+        ca_identification_verified: Boolean(caExpected),
       },
     }, 0);
     return;

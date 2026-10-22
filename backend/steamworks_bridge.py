@@ -9,6 +9,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from .workshop_metadata import read_game_file_version
+
 
 RESULT_PREFIX = "WMM_WORKSHOP_RESULT="
 logger = logging.getLogger(__name__)
@@ -388,6 +390,7 @@ def publish_workshop_item(
     workshop_id: str = "",
     language: str = "english",
     app_id: int | str = 1_142_710,
+    game_executable: str | Path | None = None,
     root: Path | None = None,
     timeout_seconds: int = 900,
 ) -> dict[str, Any]:
@@ -406,6 +409,17 @@ def publish_workshop_item(
         "visibility": int(visibility),
         "language": str(language or "english").strip() or "english",
     }
+    if int(app_id) == 1_142_710:
+        packs = [item for item in Path(content_path).iterdir() if item.is_file() and item.suffix.lower() == ".pack"]
+        if len(packs) != 1:
+            raise SteamworksBridgeError("WH3 Workshop content must contain exactly one Pack")
+        if not game_executable:
+            raise SteamworksBridgeError("The WH3 game executable is required for Workshop identification")
+        try:
+            request["caGameVersion"] = read_game_file_version(game_executable)
+        except (OSError, ValueError) as exc:
+            raise SteamworksBridgeError(str(exc)) from exc
+        request["caPackName"] = packs[0].name
     # An omitted tags field leaves an existing Workshop item's tags untouched.
     if tags is not None:
         request["tags"] = list(dict.fromkeys(str(item) for item in tags if str(item)))
@@ -417,6 +431,33 @@ def publish_workshop_item(
     result = payload.get("result")
     if not isinstance(result, dict):
         raise SteamworksBridgeError("Steamworks bridge result has no publishing data")
+    return dict(result)
+
+
+def repair_workshop_identification(
+    workshop_id: str,
+    pack_name: str,
+    game_executable: str | Path,
+    *,
+    root: Path | None = None,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Repair only CA's two key-value tags on an owned WH3 item."""
+    try:
+        game_version = read_game_file_version(game_executable)
+    except (OSError, ValueError) as exc:
+        raise SteamworksBridgeError(str(exc)) from exc
+    payload = _run_bridge_request({
+        "operation": "repair_ca_metadata",
+        "appId": 1_142_710,
+        "id": str(workshop_id),
+        "caPackName": str(pack_name),
+        "caGameVersion": game_version,
+        "dryRun": bool(dry_run),
+    }, root=root, timeout_seconds=120)
+    result = payload.get("result")
+    if not isinstance(result, dict):
+        raise SteamworksBridgeError("Steamworks bridge result has no identification repair data")
     return dict(result)
 
 
