@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
   "app": "Wyccc's Mod Manager",
-  "version": "1.2.8",
-  "published_at": "2026-10-18",
+  "version": "1.2.9",
+  "published_at": "2026-10-22",
   "download": {
-    "url": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.8/Wyccc's%20Mod%20Manager.exe",
+    "url": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.9/Wyccc's%20Mod%20Manager.exe",
     "mirrors": {
-      "gitee": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.8/Wyccc's%20Mod%20Manager.exe",
-      "github": "https://github.com/scnjwyc/wyccc-warhammer-mod-manager/releases/download/1.2.8/Wyccc.s.Mod.Manager.exe?v=1.2.8"
+      "gitee": "https://gitee.com/wyccc2018/wyccc-warhammer-mod-manager/releases/download/1.2.9/Wyccc's%20Mod%20Manager.exe",
+      "github": "https://github.com/scnjwyc/wyccc-warhammer-mod-manager/releases/download/1.2.9/Wyccc.s.Mod.Manager.exe?v=1.2.9"
     },
     "filename": "Wyccc's Mod Manager.exe",
-    "sha256": "8D254F9601F6EEB03F4C5A9916D70DFC475EDB528D31FB38EA9AB27054A556AF",
-    "size": 65620181
+    "sha256": "C8BE181CDDD88A14AFC1F5D70024C176DC9F052E6A9BB3F49BED65C1512F9F8B",
+    "size": 65648150
   },
   "changelog": [
     {
@@ -19,16 +19,11 @@
       "changes": [
         {
           "type": "fix",
-          "text": "动态语音兼容功能存在的问题"
-        }
-      ]
-    },
-    {
-      "title": "调整",
-      "changes": [
+          "text": "修复-启动器上传的MOD，在官方老启动器中无法看到的问题"
+        },
         {
-          "type": "improvement",
-          "text": "空文件夹现在将自动隐藏"
+          "type": "fix",
+          "text": "修复-有时候无法上传更新自己的MOD的问题"
         }
       ]
     }
