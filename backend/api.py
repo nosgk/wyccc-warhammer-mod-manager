@@ -193,6 +193,19 @@ def _stage_workshop_upload_file(source: Path, target: Path) -> None:
         shutil.copy2(source, target)
 
 
+def _explorer_select_command(path: Path) -> str:
+    """Build Explorer's /select command without interpolating a raw path.
+
+    Explorer parses /select from its raw command line, so the path still needs
+    to be quoted after the comma. ``list2cmdline`` performs the Windows quoting
+    and escaping instead of string concatenation.
+    """
+    resolved = path.resolve(strict=False)
+    if '"' in str(resolved):
+        raise ValueError("路径包含不支持的引号")
+    return f"explorer.exe /select,{subprocess.list2cmdline([str(resolved)])}"
+
+
 class API:
     """Application services behind an explicit RPC allowlist."""
 
@@ -3658,6 +3671,6 @@ class API:
             # Explorer parses /select from the raw command line rather than via
             # the normal argv rules. Keeping the quotes after the comma avoids
             # falling back to the user's Documents folder for paths with spaces.
-            subprocess.Popen(f'explorer.exe /select,"{resolved}"')
+            subprocess.Popen(_explorer_select_command(resolved))
             return
         API._open_path(resolved.parent)
