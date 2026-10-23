@@ -86,7 +86,7 @@ $env:WMM_OUTPUT_DIR = "D:\WMM-Release"
 安装 Python 开发依赖：
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager
+cd <项目根目录>
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -U pip
@@ -96,21 +96,21 @@ python -m pip install -e ".[dev]"
 安装前端依赖：
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager\frontend
+cd <项目根目录>\frontend
 pnpm install
 ```
 
 开发时使用两个终端。先启动 Vite：
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager\frontend
+cd <项目根目录>\frontend
 pnpm dev
 ```
 
 再启动 pywebview，并指向 Vite 地址：
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager
+cd <项目根目录>
 .\.venv\Scripts\Activate.ps1
 python main.py --dev-url http://127.0.0.1:5173
 ```
@@ -122,7 +122,7 @@ python main.py --dev-url http://127.0.0.1:5173
 分别运行后端与前端测试：
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager
+cd <项目根目录>
 python -m pytest
 
 cd frontend
@@ -132,7 +132,7 @@ pnpm test
 项目构建入口会执行检查并生成前端生产资源：
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager
+cd <项目根目录>
 python scripts/build.py
 ```
 

@@ -86,7 +86,7 @@ $env:WMM_OUTPUT_DIR = "D:\WMM-Release"
 Install Python development dependencies:
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager
+cd <repository root>
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -U pip
@@ -96,21 +96,21 @@ python -m pip install -e ".[dev]"
 Install frontend dependencies:
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager\frontend
+cd <repository root>\frontend
 pnpm install
 ```
 
 Use two terminals during development. Start Vite first:
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager\frontend
+cd <repository root>\frontend
 pnpm dev
 ```
 
 Then start pywebview and point it to the Vite URL:
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager
+cd <repository root>
 .\.venv\Scripts\Activate.ps1
 python main.py --dev-url http://127.0.0.1:5173
 ```
@@ -122,7 +122,7 @@ Use `--data-dir <directory>` to temporarily override the application data direct
 Run backend and frontend tests separately:
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager
+cd <repository root>
 python -m pytest
 
 cd frontend
@@ -132,7 +132,7 @@ pnpm test
 The project build entry point performs checks and generates production frontend assets:
 
 ```powershell
-cd G:\git\wyccc-warhammer-mod-manager
+cd <repository root>
 python scripts/build.py
 ```
 
