@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import tempfile
 import unittest
@@ -1465,7 +1466,13 @@ class ApiContractTests(unittest.TestCase):
             with (
                 # Exercise real Unicode-path staging without leaving a real
                 # SUBST mapping behind after this temporary directory is removed.
-                patch.object(api.launch_path_aliases, "_create_alias", return_value="X:\\"),
+                # Return the real root instead of a fake drive letter so the
+                # mapped path is usable on machines where X: is not mounted.
+                patch.object(
+                    api.launch_path_aliases,
+                    "_create_alias",
+                    return_value=f"{root}{os.sep}",
+                ),
                 patch(
                     "backend.api.query_workshop_subscription_status",
                     return_value=self._feature_statuses(),
