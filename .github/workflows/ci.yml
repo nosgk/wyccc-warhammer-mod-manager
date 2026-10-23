@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: backend (${{ matrix.os }}, py${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Ruff
+        run: python -m ruff check backend tests scripts
+      - name: Pytest (Windows)
+        if: runner.os == 'Windows'
+        run: python -m pytest -q
+      - name: Pytest (non-Windows, skip GUI bridge)
+        if: runner.os != 'Windows'
+        run: python -m pytest -q --ignore=tests/test_desktop_bridge.py
+
+  frontend:
+    name: frontend (node 22)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+      - name: Vitest
+        working-directory: frontend
+        run: pnpm test
+      - name: Production build
+        working-directory: frontend
+        run: pnpm build
+
+  harness:
+    name: harness checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Version sources
+        run: python scripts/check_versions.py
+      - name: i18n catalogs
+        run: python scripts/check_i18n.py
+      - name: Documentation links
+        run: python scripts/check_docs.py
+      - name: RPC contract
+        run: python scripts/check_rpc_contract.py
+      - name: Metrics snapshot
+        run: python scripts/harness_metrics.py > /dev/null
