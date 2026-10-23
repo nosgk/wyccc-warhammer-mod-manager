@@ -55,6 +55,7 @@ from .file_operations import (
     execute_delete_preview,
     workshop_item_directory,
 )
+from .fsutil import atomic_copy
 from .diagnostics_api import ModDiagnosticsService
 from .game_data_patch_state import (
     ensure_game_data_patch,
@@ -3462,19 +3463,7 @@ class API:
 
     @staticmethod
     def _atomic_copy(source: Path, target: Path) -> None:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        handle, temporary_name = tempfile.mkstemp(
-            prefix=f".{target.name}.",
-            suffix=".tmp",
-            dir=target.parent,
-        )
-        os.close(handle)
-        temporary = Path(temporary_name)
-        try:
-            shutil.copy2(source, temporary)
-            os.replace(temporary, target)
-        finally:
-            temporary.unlink(missing_ok=True)
+        atomic_copy(source, target)
 
     @staticmethod
     def _workshop_source_path(asset: ModAsset, workshop_root: Path) -> Path | None:

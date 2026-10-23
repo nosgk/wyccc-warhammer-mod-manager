@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import json
-import os
 import threading
 import time
 from copy import deepcopy
 from pathlib import Path
 from typing import Any, Callable
+
+from .fsutil import write_json
 
 
 class AtomicJsonStore:
@@ -37,14 +38,7 @@ class AtomicJsonStore:
 
     def save(self, payload: dict[str, Any]) -> None:
         with self._lock:
-            self.path.parent.mkdir(parents=True, exist_ok=True)
-            temp_path = self.path.with_name(f".{self.path.name}.{os.getpid()}.tmp")
-            data = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True)
-            with temp_path.open("w", encoding="utf-8", newline="\n") as stream:
-                stream.write(data)
-                stream.flush()
-                os.fsync(stream.fileno())
-            os.replace(temp_path, self.path)
+            write_json(self.path, payload)
 
     def update(self, changes: dict[str, Any]) -> dict[str, Any]:
         with self._lock:

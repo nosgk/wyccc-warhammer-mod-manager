@@ -5,7 +5,6 @@ import os
 import re
 import shutil
 import tempfile
-import threading
 import time
 import uuid
 from collections.abc import Callable
@@ -13,6 +12,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from .constants import SOURCE_DATA
+from .fsutil import atomic_write_text
 from .models import LaunchPlan, ModAsset
 
 _MOD_LINE_RE = re.compile(r'^\s*mod\s+"([^"]+)"\s*;', re.IGNORECASE | re.MULTILINE)
@@ -213,21 +213,4 @@ class LoadOrderService:
 
     @staticmethod
     def _atomic_write(path: Path, content: str, *, encoding: str = "utf-8") -> Path:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        unique = f"{os.getpid()}.{threading.get_ident()}.{uuid.uuid4().hex}"
-        temp = path.with_name(f".{path.name}.{unique}.tmp")
-        data = content.encode(encoding)
-        try:
-            with temp.open("wb") as stream:
-                stream.write(data)
-                stream.flush()
-                os.fsync(stream.fileno())
-            os.replace(temp, path)
-            if path.read_bytes() != data:
-                raise OSError(f"写入后校验失败：{path}")
-        finally:
-            try:
-                temp.unlink(missing_ok=True)
-            except OSError:
-                pass
-        return path
+        return atomic_write_text(path, content, encoding=encoding, verify=True)

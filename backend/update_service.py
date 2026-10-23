@@ -14,6 +14,7 @@ from typing import Any
 from urllib import parse, request
 
 from .app_settings import SettingsService
+from .fsutil import write_json
 from .constants import (
     APP_NAME,
     APP_SLUG,
@@ -463,9 +464,7 @@ class UpdateService:
             "downloaded_at": int(time.time()),
         }
         metadata_path = target.with_suffix(".json")
-        temporary = metadata_path.with_suffix(".json.tmp")
-        temporary.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
-        os.replace(temporary, metadata_path)
+        write_json(metadata_path, metadata)
 
     def _write_installer_script(self, current: Path, downloaded: Path) -> Path:
         self.update_dir.mkdir(parents=True, exist_ok=True)

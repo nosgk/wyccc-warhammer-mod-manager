@@ -5,7 +5,6 @@ import lzma
 import math
 import os
 import struct
-import tempfile
 import zlib
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -13,6 +12,7 @@ from functools import partial
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
+from .fsutil import atomic_write_bytes
 from .constants import (
     GAME_DATA_FEATURE_WORKSHOP_ITEMS,
     PACK_TYPE_MOVIE,
@@ -429,18 +429,7 @@ def write_pfh5_pack(
             *(entry.payload for entry in normalized),
         )
     )
-    path.parent.mkdir(parents=True, exist_ok=True)
-    handle, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
-    temporary = Path(temporary_name)
-    try:
-        with os.fdopen(handle, "wb") as stream:
-            stream.write(content)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(temporary, path)
-    finally:
-        temporary.unlink(missing_ok=True)
-    return path
+    return atomic_write_bytes(path, content)
 
 
 def _effective_game_data_settings(

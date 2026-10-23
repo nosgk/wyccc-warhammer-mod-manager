@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import gzip
 import json
-import os
 import re
-import tempfile
 from pathlib import Path
 from urllib.error import URLError
 from urllib.request import Request, urlopen
+
+from .fsutil import atomic_write_bytes, write_json
 
 SCHEMA_NAMES = {
     "warhammer3": "wh3",
@@ -178,15 +178,8 @@ def load_latest_schema(game_id: str, cache_dir: Path, *, prefer_bundled: bool = 
                 raise ValueError("schemaUpdate.invalidSchema")
             schemas = parse_schema(raw.decode("utf-8"))
             cache_dir.mkdir(parents=True, exist_ok=True)
-            handle, temporary_name = tempfile.mkstemp(dir=cache_dir, suffix=".tmp")
-            temporary = Path(temporary_name)
-            try:
-                with os.fdopen(handle, "wb") as stream:
-                    stream.write(raw)
-                os.replace(temporary, path)
-            finally:
-                temporary.unlink(missing_ok=True)
-            metadata_path.write_text(json.dumps({"etag": response.headers.get("ETag", "")}), encoding="utf-8")
+            atomic_write_bytes(path, raw)
+            write_json(metadata_path, {"etag": response.headers.get("ETag", "")})
             return schemas, {"source_url": SCHEMA_BASE_URL + name, "cached": False}
     except (URLError, OSError) as exc:
         # 304 means a verified current cache. Network failures mean an explicitly
