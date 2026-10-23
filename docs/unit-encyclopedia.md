@@ -32,15 +32,15 @@
 - 前端：33 个测试文件、263 项测试通过。首次全量并行运行时旧单位编辑器的 2,050 行分页测试超过 5 秒；单文件复跑与限制为 2 个 worker 的全量运行均通过。
 - Vite 生产构建通过。保留已有的 bundle 大小提示；未运行 EXE 打包和发布流程。
 
-无版本头兼容修复另用当前源码启动器的配置验证：11 个启用 MOD、12 个来源、28 个派系、3,077 个单位，图鉴及图片 RPC 成功。`!mystandalone.pack` 与 `longersfo639949.pack` 的旧版能力关联表在修复前触发同一个 `KeyError`，修复后按 v0 正常读取。新增真实 Pack 读取回归覆盖无版本头、仅 GUID 头、新旧表并存和空表；图鉴、通用数据读取、单位编辑和三国单位编辑共 80 项测试、19 个子用例通过。该验证使用当前配置的隔离副本，未更改原配置或游戏 Pack。详情见 [兼容修复运行记录](validation/unit-encyclopedia-20260927/versionless-fix.json)。
+无版本头兼容修复另用当前源码启动器的配置验证：11 个启用 MOD、12 个来源、28 个派系、3,077 个单位，图鉴及图片 RPC 成功。`!mystandalone.pack` 与 `longersfo639949.pack` 的旧版能力关联表在修复前触发同一个 `KeyError`，修复后按 v0 正常读取。新增真实 Pack 读取回归覆盖无版本头、仅 GUID 头、新旧表并存和空表；图鉴、通用数据读取、单位编辑和三国单位编辑共 80 项测试、19 个子用例通过。该验证使用当前配置的隔离副本，未更改原配置或游戏 Pack。相关运行记录未随仓库提供。
 
-全屏与修改入口验证使用生产构建和配置副本：1920×1080、1024×768 下图鉴均从 `(0, 0)` 填满窗口，无横向溢出。真实 RPC 打开 `wh_main_emp_inf_swordsmen` 时编辑器仅显示该单位；在副本中将近战攻击从 30 保存为 31，返回图鉴后显示 31，选择和搜索条件保留，取消编辑也正常返回。图鉴、编辑器及多语言共 56 项前端测试通过，包含订阅提示和游戏运行限制；生产构建通过。测试修改仅写入临时配置及临时补丁，完成后清理。详见 [全屏与修改运行记录](validation/unit-encyclopedia-20260927/fullscreen-edit-check.json)。
+全屏与修改入口验证使用生产构建和配置副本：1920×1080、1024×768 下图鉴均从 `(0, 0)` 填满窗口，无横向溢出。真实 RPC 打开 `wh_main_emp_inf_swordsmen` 时编辑器仅显示该单位；在副本中将近战攻击从 30 保存为 31，返回图鉴后显示 31，选择和搜索条件保留，取消编辑也正常返回。图鉴、编辑器及多语言共 56 项前端测试通过，包含订阅提示和游戏运行限制；生产构建通过。测试修改仅写入临时配置及临时补丁，完成后清理。相关运行记录未随仓库提供。
 
-派系徽记修复前，原版 28 个分组中有 18 个缺少图标。修复后原版 28 个分组的徽记均可读取；使用当前 13 个启用 MOD 的隔离配置副本、生产构建和真实 RPC，3,297 个单位对应的 28 张派系卡片全部加载徽记，没有页面、RPC 或图片加载错误。图鉴定向回归 21 项测试、5 个子用例通过，覆盖旗帜目录重定向、代表派系选择、尺寸回退、混沌矮人占位规避、MOD 覆盖和通用图标。详见 [徽记修复运行记录](validation/unit-encyclopedia-20260927/faction-crests-check.json)。
+派系徽记修复前，原版 28 个分组中有 18 个缺少图标。修复后原版 28 个分组的徽记均可读取；使用当前 13 个启用 MOD 的隔离配置副本、生产构建和真实 RPC，3,297 个单位对应的 28 张派系卡片全部加载徽记，没有页面、RPC 或图片加载错误。图鉴定向回归 21 项测试、5 个子用例通过，覆盖旗帜目录重定向、代表派系选择、尺寸回退、混沌矮人占位规避、MOD 覆盖和通用图标。相关运行记录未随仓库提供。
 
 两页列表、远程详情和修改入口提速验证使用本次当前配置的隔离副本。3,145 个可见单位中，震旦的 109 个领主与英雄、41 个普通单位分别完整展示在两页，滚动高度大于可视高度；1920×1200 与 1024×768 下无横向溢出。原版白银之路贼寇显示「先锋部署」、基础射击间隔 11 秒、弹丸数 1。当前 MOD 中另有 `emp_huangdiweidui` 未提供可读取名称，仍保留原始 Key。
 
-修改前连续两次打开单位编辑数据分别耗时 5.62 秒、5.62 秒；复用图鉴数据后为 0.124 秒、0.115 秒。生产界面点击修改至显示所选单位，实测 0.249 秒、0.237 秒，每次只传输一行，无需手动搜索；页面及 RPC 无错误。保存后图鉴仍会重新读取数据，这组耗时衡量打开编辑器，不包含保存补丁及图鉴刷新。详见 [修改前计时](validation/unit-encyclopedia-20260927/details-performance-baseline.json) 与 [功能和计时记录](validation/unit-encyclopedia-20260927/details-performance-check.json)。
+修改前连续两次打开单位编辑数据分别耗时 5.62 秒、5.62 秒；复用图鉴数据后为 0.124 秒、0.115 秒。生产界面点击修改至显示所选单位，实测 0.249 秒、0.237 秒，每次只传输一行，无需手动搜索；页面及 RPC 无错误。保存后图鉴仍会重新读取数据，这组耗时衡量打开编辑器，不包含保存补丁及图鉴刷新。相关计时记录未随仓库提供。
 
 本轮后端相关回归 69 项测试、22 个子用例通过；图鉴、修改界面和多语言前端 58 项测试通过，生产构建通过。覆盖单单位修改时保留其他编辑、扩展搜索时保留草稿、过期响应、MOD 顺序/文件/Movie Pack/语言/保存数据变化时缓存失效。扩展 API 检查中的 4 个工坊强制更新用例被环境的游戏运行检测提前拦截；隔离该检测后 4 项均通过，与本轮修改无关。
 
@@ -51,22 +51,7 @@ node node_modules/vitest/vitest.mjs run --maxWorkers=2
 node node_modules/vite/bin/vite.js build
 ```
 
-截图和运行记录位于 [validation/unit-encyclopedia-20260927](validation/unit-encyclopedia-20260927/)：
-
-- [派系页](validation/unit-encyclopedia-20260927/factions.png)
-- [帝国单位列表](validation/unit-encyclopedia-20260927/empire.png)
-- [剑士数据面板](validation/unit-encyclopedia-20260927/swordsmen.png)
-- [1024×768 震旦页面](validation/unit-encyclopedia-20260927/cathay-1024.png)
-- [启动器入口布局](validation/unit-encyclopedia-20260927/launcher-entry.png)
-- [运行记录](validation/unit-encyclopedia-20260927/runtime-check.json)
-- [全屏派系页](validation/unit-encyclopedia-20260927/fullscreen-factions.png)
-- [徽记修复后的派系页](validation/unit-encyclopedia-20260927/faction-crests-fixed.png)
-- [全屏单位面板及修改按钮](validation/unit-encyclopedia-20260927/fullscreen-unit.png)
-- [定位当前单位的编辑器](validation/unit-encyclopedia-20260927/unit-editor-selected.png)
-- [1024×768 全屏单位面板](validation/unit-encyclopedia-20260927/fullscreen-unit-1024.png)
-- [领主与英雄页](validation/unit-encyclopedia-20260927/two-pages-characters.png)
-- [普通单位页与远程详情](validation/unit-encyclopedia-20260927/two-pages-ranged.png)
-- [1024×768 两页布局](validation/unit-encyclopedia-20260927/two-pages-1024.png)
+截图和运行记录未随仓库提供；本节保留当时的验证结论，便于追溯。
 
 ## 角色头像修复验证（2026-10-12）
 
