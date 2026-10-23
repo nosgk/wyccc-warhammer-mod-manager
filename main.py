@@ -6,6 +6,7 @@ import logging
 import os
 import sys
 import threading
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from backend import APP_NAME
@@ -133,11 +134,20 @@ def resolve_runtime_data_dir(override: str = "") -> Path:
     return default_data_dir()
 
 
+LOG_MAX_BYTES = 5 * 1024 * 1024
+LOG_BACKUP_COUNT = 5
+
+
 def configure_logging(data_dir: Path) -> None:
     log_dir = data_dir / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     handlers: list[logging.Handler] = [
-        logging.FileHandler(log_dir / "app.log", encoding="utf-8")
+        RotatingFileHandler(
+            log_dir / "app.log",
+            maxBytes=LOG_MAX_BYTES,
+            backupCount=LOG_BACKUP_COUNT,
+            encoding="utf-8",
+        )
     ]
     if sys.stderr:
         handlers.append(logging.StreamHandler())
