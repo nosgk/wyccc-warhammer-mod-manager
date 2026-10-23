@@ -1,0 +1,25 @@
+# Optional local hooks. CI is the hard gate.
+# Install with: pre-commit install
+repos:
+  - repo: local
+    hooks:
+      - id: check-versions
+        name: version sources
+        entry: python scripts/check_versions.py
+        language: system
+        pass_filenames: false
+      - id: check-i18n
+        name: i18n catalogs
+        entry: python scripts/check_i18n.py
+        language: system
+        pass_filenames: false
+      - id: check-docs
+        name: documentation links
+        entry: python scripts/check_docs.py
+        language: system
+        pass_filenames: false
+      - id: check-rpc-contract
+        name: RPC contract
+        entry: python scripts/check_rpc_contract.py
+        language: system
+        pass_filenames: false
