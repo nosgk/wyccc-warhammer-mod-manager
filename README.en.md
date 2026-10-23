@@ -129,6 +129,18 @@ cd frontend
 pnpm test
 ```
 
+The unified local check entry validates version sources, all six language catalogs, documentation links, and the frontend/backend RPC contract, then runs ruff, pytest, and vitest when the dependencies are available:
+
+```powershell
+cd <repository root>
+python scripts/check.py
+
+# Also run the frontend production build
+python scripts/check.py --full
+```
+
+Missing local dependencies are reported as `SKIP` with setup commands; the script never installs anything.
+
 The project build entry point performs checks and generates production frontend assets:
 
 ```powershell

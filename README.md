@@ -129,6 +129,18 @@ cd frontend
 pnpm test
 ```
 
+统一的本地检查入口会依次校验版本号、六语言词条、文档链接、前后端 RPC 契约，并在依赖可用时运行 ruff、pytest 与 vitest：
+
+```powershell
+cd <项目根目录>
+python scripts/check.py
+
+# 额外执行前端生产构建
+python scripts/check.py --full
+```
+
+缺少本地依赖时，脚本会明确标记 `SKIP` 并给出安装命令，不会自动安装任何软件。
+
 项目构建入口会执行检查并生成前端生产资源：
 
 ```powershell
