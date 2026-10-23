@@ -1998,6 +1998,63 @@ textarea {
   padding-inline: 6px;
 }
 
+.multiplayer-mode-toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  min-height: 33px;
+  color: var(--text-soft);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.multiplayer-mode-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.multiplayer-mode-track {
+  width: 28px;
+  height: 16px;
+  padding: 2px;
+  border: 1px solid #68514b;
+  border-radius: 10px;
+  background: #312622;
+}
+
+.multiplayer-mode-track::after {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #bca99f;
+  content: '';
+  transition: transform 0.15s;
+}
+
+.multiplayer-mode-toggle input:checked + .multiplayer-mode-track {
+  border-color: var(--gold);
+  background: #69402a;
+}
+
+.multiplayer-mode-toggle input:checked + .multiplayer-mode-track::after {
+  background: var(--gold);
+  transform: translateX(12px);
+}
+
+.multiplayer-mode-toggle input:focus-visible + .multiplayer-mode-track {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.multiplayer-mode-toggle:has(input:disabled) {
+  cursor: default;
+  opacity: 0.5;
+}
+
 .launch-comparison-summary {
   margin: 0;
   padding: 18px 20px 0;
@@ -3836,6 +3893,17 @@ button.context-menu-item {
   border-color: #74383b;
   background: #2d1517;
   color: #ecb7b7;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  user-select: text;
+  max-width: min(560px, calc(100vw - 44px));
+  max-height: calc(100vh - 130px);
+  overflow-y: auto;
+}
+
+.toast-dismiss {
+  float: right;
+  margin-left: 8px;
 }
 
 .toast.warning {

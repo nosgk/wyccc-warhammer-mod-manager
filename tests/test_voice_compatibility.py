@@ -233,6 +233,71 @@ def test_rejects_incompatible_versions_and_argument_structures():
         build_voice_compatibility_entries([source("one", {1: 111}), source("two", {2: 222}, arguments=(456,))])
 
 
+@pytest.mark.parametrize("difference", ["order", "count", "type"])
+def test_argument_conflict_identifies_both_packs_banks_and_exact_definitions(difference):
+    first = event({1: {2: 111}}, event_id=165328208, arguments=(123, 456))
+    other = replace(first, arguments=(456, 123)) if difference == "order" else (
+        event({2: 222}, event_id=165328208) if difference == "count"
+        else replace(first, argument_types=b"\1\0")
+    )
+    sources = [DbSource(name, (GameDataEntry(PREFIX + name + ".bnk", bank([definition])),))
+               for name, definition in [("one.pack", first), ("two.pack", other)]]
+    with pytest.raises(ValueError) as caught:
+        build_voice_compatibility_entries(sources)
+    assert "165328208" in str(caught.value)
+    for name in ["one.pack", "two.pack"]:
+        assert name in str(caught.value)
+        assert PREFIX + name + ".bnk" in str(caught.value)
+    details = caught.value.details
+    assert details["reason"] == "argumentMismatch"
+    assert {tuple(item["arguments"]) for item in details["sources"]} == {first.arguments, other.arguments}
+    assert {tuple(item["argument_types"]) for item in details["sources"]} == {
+        tuple(first.argument_types), tuple(other.argument_types),
+    }
+
+
+def test_argument_conflict_marks_the_actual_vanilla_baseline():
+    with pytest.raises(ValueError) as caught:
+        build_voice_compatibility_entries([
+            source("one.pack", {1: 111}), source("two.pack", {2: 222}),
+            source("audio_en_bnk.pack", {1: 10}, arguments=(456,), role="vanilla", filename=BASE_NAME),
+        ])
+    assert "audio_en_bnk.pack" in str(caught.value)
+    baseline, = [item for item in caught.value.details["sources"] if item["role"] == "vanilla"]
+    assert baseline["bank"] == BASE_NAME
+
+
+def test_argument_conflict_in_an_unselected_testing_copy_is_not_overwritten():
+    high = DbSource("broken.pack", (
+        *source("high", {1: 111}, filename=PREFIX + "author_for_merging.bnk").entries,
+        *source("high", {2: 222}, arguments=(456,), filename=PREFIX + "copy_for_testing.bnk").entries,
+    ))
+    with pytest.raises(ValueError, match="broken.pack") as caught:
+        build_voice_compatibility_entries([high, source("other.pack", {3: 333})])
+    assert "copy_for_testing.bnk" in str(caught.value)
+    assert "author_for_merging.bnk" in str(caught.value)
+
+
+def test_different_authoring_banks_in_one_mod_do_not_silently_lose_branches():
+    high = DbSource("split.pack", (
+        *source("high", {1: 111}, filename=PREFIX + "a_for_merging.bnk").entries,
+        *source("high", {2: 222}, filename=PREFIX + "b_for_merging.bnk").entries,
+    ))
+    with pytest.raises(ValueError, match="split.pack") as caught:
+        build_voice_compatibility_entries([high, source("other.pack", {3: 333})])
+    assert caught.value.details["reason"] == "ambiguousCopies"
+
+
+def test_tree_shape_conflict_names_the_sources():
+    with pytest.raises(ValueError) as caught:
+        build_voice_compatibility_entries([
+            source("branch.pack", {1: {2: 111}}, arguments=(123, 456)),
+            source("leaf.pack", {1: 222}, arguments=(123, 456)),
+        ])
+    assert "branch.pack" in str(caught.value) and "leaf.pack" in str(caught.value)
+    assert caught.value.details["reason"] == "treeMismatch"
+
+
 def test_rejects_invalid_tree_ranges_duplicate_keys_and_overflow():
     valid = encode_dialogue_event(event({1: 111, 2: 222}))
     for index, value in [(14, 99999), (23, 0), (43, 1)]:
@@ -289,6 +354,18 @@ def test_cache_tampering_source_content_order_playset_and_stale_cleanup(tmp_path
     assert ensure(tmp_path, data, assets)["path"]
     assert ensure(tmp_path, data, assets, enabled="false")["reason"] == "disabled"
     assert not output.exists()
+
+
+def test_conflict_uses_the_visible_mod_name_pack_and_workshop_id(tmp_path):
+    data, assets = prepare(tmp_path)
+    assets["low"].display_name = "Example Voice"
+    assets["low"].workshop_id = "123456789"
+    write_pack(Path(assets["low"].path), byte_mask=3,
+               entries=[(PREFIX + "low.bnk", bank([event({2: 222}, arguments=(456,))]))])
+    with pytest.raises(ValueError) as caught:
+        ensure(tmp_path, data, assets)
+    assert "Example Voice [low.pack] (Workshop 123456789)" in str(caught.value)
+    assert not (tmp_path / "runtime" / VOICE_COMPATIBILITY_PATCH_NAME).exists()
 
 
 def test_auto_movie_participates_but_disabled_normal_mod_and_old_runtime_do_not(tmp_path):
@@ -393,6 +470,41 @@ def test_mock_launch_stages_hidden_patch_before_mods_then_removes_it(tmp_path, m
         assert launch["data"]["launch_plan"]["ordered_mod_ids"] == ids
         assert not (data / VOICE_COMPATIBILITY_PATCH_NAME).exists()
         assert not (api.data_dir / "runtime" / VOICE_COMPATIBILITY_PATCH_NAME).exists()
+    finally:
+        api.close()
+
+
+def test_mock_launch_returns_voice_conflict_details_and_never_starts_the_game(tmp_path, monkeypatch):
+    from unittest.mock import Mock
+
+    from backend import api as api_module
+    from tests.test_storage_and_api import ApiContractTests
+
+    api, _ = ApiContractTests._prepare_launch_api(tmp_path)
+    try:
+        monkeypatch.setattr(api_module, "get_subscribed_workshop_items",
+                            lambda **kwargs: [api_module.VOICE_FEATURE_WORKSHOP_ID])
+        monkeypatch.setattr(api_module, "is_game_running", lambda *args, **kwargs: False)
+        launch_game = Mock()
+        monkeypatch.setattr(api_module, "launch_game", launch_game)
+        data = tmp_path / "Total War WARHAMMER III/data"
+        fixture_data, assets = prepare(tmp_path / "fixtures")
+        (data / "audio_en_bnk.pack").write_bytes((fixture_data / "audio_en_bnk.pack").read_bytes())
+        for asset in assets.values():
+            (data / asset.pack_name).write_bytes(Path(asset.path).read_bytes())
+        write_pack(data / "low.pack", byte_mask=3,
+                   entries=[(PREFIX + "low.bnk", bank([event({2: 222}, arguments=(456,))]))])
+        scan = api.call("scan_mods", [False])
+        assert scan["ok"], scan
+        ids = [mod["id"] for mod in scan["data"]["mods"] if mod["pack_name"] in {"high.pack", "low.pack"}]
+        assert api.call("save_compatibility_patch_settings", [{"voice_compatibility_patch_enabled": True}])["ok"]
+        result = api.call("launch_game", [ids, scan["data"]["order_token"]])
+        assert not result["ok"]
+        assert result["error"]["voice_compatibility"]["reason"] == "argumentMismatch"
+        assert "audio_en_bnk.pack" in result["error"]["message"] and "low.pack" in result["error"]["message"]
+        assert "high.pack" not in result["error"]["message"]
+        launch_game.assert_not_called()
+        assert not (data / VOICE_COMPATIBILITY_PATCH_NAME).exists()
     finally:
         api.close()
 

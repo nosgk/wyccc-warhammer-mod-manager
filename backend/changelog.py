@@ -9,6 +9,14 @@ SUPPORTED_CHANGELOG_LANGUAGES = frozenset({"zh-CN", "en-US", "ko-KR", "ru-RU", "
 
 CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
     {
+        "version": "1.3.0",
+        "date": "2026-10-23",
+        "entries": (
+            ("v130_added_title", (("feature", "v130_multiplayer_mode"),)),
+            ("v130_adjusted_title", (("improvement", "v130_voice_errors"),)),
+        ),
+    },
+    {
         "version": "1.2.9",
         "date": "2026-10-22",
         "entries": (
@@ -749,6 +757,10 @@ CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
 
 CHANGELOG_TEXT: dict[str, dict[str, str]] = {
     "zh-CN": {
+        "v130_added_title": "新增",
+        "v130_adjusted_title": "调整",
+        "v130_multiplayer_mode": "新增-联机模式，勾选后将禁用启动器自带的各种PACK，以提高联机的兼容性",
+        "v130_voice_errors": "调整-语音兼容补丁的错误提示，现在会说明具体是哪些MOD不兼容，可以将发现的不兼容MOD反馈给我，我来研究如何兼容",
         "v129_fixed_title": "修复",
         "v129_legacy_launcher": "修复-启动器上传的MOD，在官方老启动器中无法看到的问题",
         "v129_owned_mod_update": "修复-有时候无法上传更新自己的MOD的问题",
@@ -1017,6 +1029,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。",
     },
     "en-US": {
+        "v130_added_title": "Added",
+        "v130_adjusted_title": "Changed",
+        "v130_multiplayer_mode": "Added - Multiplayer mode. When checked, it disables the launcher's built-in Packs to improve multiplayer compatibility.",
+        "v130_voice_errors": "Changed - Voice compatibility patch error messages now identify exactly which MODs are incompatible. Report any incompatible MODs you find to me so I can investigate how to make them compatible.",
         "v129_fixed_title": "Fixed",
         "v129_legacy_launcher": "Fixed - MODs uploaded through this launcher were not visible in the official legacy launcher.",
         "v129_owned_mod_update": "Fixed - Sometimes being unable to upload or update your own MODs.",
@@ -1285,6 +1301,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog.",
     },
     "ko-KR": {
+        "v130_added_title": "추가",
+        "v130_adjusted_title": "조정",
+        "v130_multiplayer_mode": "추가 - 멀티플레이 모드. 체크하면 런처에 내장된 각종 Pack을 비활성화하여 멀티플레이 호환성을 높입니다.",
+        "v130_voice_errors": "조정 - 음성 호환 패치의 오류 메시지에 호환되지 않는 MOD가 구체적으로 표시됩니다. 발견한 비호환 MOD를 제게 알려 주시면 호환 방법을 연구하겠습니다.",
         "v129_fixed_title": "수정",
         "v129_legacy_launcher": "수정 - 이 런처로 업로드한 MOD가 공식 구형 런처에 표시되지 않던 문제.",
         "v129_owned_mod_update": "수정 - 자신의 MOD를 업로드하거나 업데이트하지 못하는 경우가 있던 문제.",
@@ -1553,6 +1573,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다.",
     },
     "ru-RU": {
+        "v130_added_title": "Добавлено",
+        "v130_adjusted_title": "Изменено",
+        "v130_multiplayer_mode": "Добавлено — режим сетевой игры. При включении отключает все встроенные Pack лаунчера для улучшения совместимости в сетевой игре.",
+        "v130_voice_errors": "Изменено — сообщения об ошибках патча совместимости озвучки теперь указывают, какие именно MOD несовместимы. Сообщайте мне о найденных несовместимых MOD, и я изучу, как обеспечить их совместимость.",
         "v129_fixed_title": "Исправлено",
         "v129_legacy_launcher": "Исправлено — MOD, загруженные через этот лаунчер, не отображались в старом официальном лаунчере.",
         "v129_owned_mod_update": "Исправлено — иногда не удавалось загрузить или обновить собственные MOD.",
@@ -1821,6 +1845,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении.",
     },
     "ja-JP": {
+        "v130_added_title": "追加",
+        "v130_adjusted_title": "調整",
+        "v130_multiplayer_mode": "追加 - マルチプレイモード。チェックするとランチャー内蔵の各種Packを無効にし、マルチプレイの互換性を高めます。",
+        "v130_voice_errors": "調整 - 音声互換パッチのエラー表示で、互換性のないMODが具体的に分かるようになりました。見つけた非互換MODを私に報告していただければ、互換性を確保する方法を調べます。",
         "v129_fixed_title": "修正",
         "v129_legacy_launcher": "修正 - このランチャーからアップロードしたMODが公式の旧ランチャーに表示されない問題。",
         "v129_owned_mod_update": "修正 - 自分のMODをアップロードまたは更新できないことがある問題。",
@@ -2089,6 +2117,10 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。",
     },
     "es-ES": {
+        "v130_added_title": "Añadido",
+        "v130_adjusted_title": "Ajustado",
+        "v130_multiplayer_mode": "Añadido - Modo multijugador. Al marcarlo, se desactivan los Pack incluidos en el lanzador para mejorar la compatibilidad multijugador.",
+        "v130_voice_errors": "Ajustado - Los mensajes de error del parche de compatibilidad de voces ahora indican exactamente qué MOD son incompatibles. Puedes comunicarme los MOD incompatibles que encuentres para que investigue cómo hacerlos compatibles.",
         "v129_fixed_title": "Corregido",
         "v129_legacy_launcher": "Corregido - Los MOD subidos desde este lanzador no aparecían en el lanzador oficial antiguo.",
         "v129_owned_mod_update": "Corregido - A veces no se podían subir o actualizar los MOD propios.",

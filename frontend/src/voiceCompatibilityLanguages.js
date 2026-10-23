@@ -1,4 +1,65 @@
 export const voiceCompatibilityEntries = {
+  'voiceError.title': [
+    '语音兼容失败：{reason}', 'Voice compatibility failed: {reason}', '음성 호환 실패: {reason}',
+    'Ошибка совместимости озвучки: {reason}', '音声互換処理に失敗：{reason}', 'Error de compatibilidad de voces: {reason}',
+  ],
+  'voiceError.eventTitle': [
+    '语音事件 {event} 无法合并：{reason}', 'Cannot merge voice event {event}: {reason}',
+    '음성 이벤트 {event} 병합 불가: {reason}', 'Невозможно объединить событие озвучки {event}: {reason}',
+    '音声イベント {event} を統合できません：{reason}', 'No se puede combinar el evento de voz {event}: {reason}',
+  ],
+  'voiceError.source': [
+    '{role}：{name}；音库：{bank}', '{role}: {name}; bank: {bank}', '{role}: {name}; 뱅크: {bank}',
+    '{role}: {name}; банк: {bank}', '{role}：{name}；バンク：{bank}', '{role}: {name}; banco: {bank}',
+  ],
+  'voiceError.mod': ['MOD', 'MOD', 'MOD', 'MOD', 'MOD', 'MOD'],
+  'voiceError.vanilla': ['游戏原版', 'Base game', '기본 게임', 'Базовая игра', 'ゲーム本体', 'Juego base'],
+  'voiceError.argumentMismatch': [
+    '参数个数、顺序、ID 或类型不同', 'Argument count, order, IDs or types differ',
+    '인수 개수, 순서, ID 또는 형식이 다릅니다', 'Различаются количество, порядок, ID или типы аргументов',
+    '引数の数、順序、ID、または型が異なります', 'Difieren la cantidad, el orden, los ID o los tipos de argumentos',
+  ],
+  'voiceError.ambiguousCopies': [
+    '同一 MOD 的多份同优先级语音定义不同', 'The same MOD contains different voice definitions at equal priority',
+    '같은 MOD에 우선순위가 같지만 서로 다른 음성 정의가 있습니다',
+    'В одном MOD есть разные определения озвучки с одинаковым приоритетом',
+    '同じ MOD に同じ優先順位で異なる音声定義があります',
+    'El mismo MOD contiene definiciones de voz distintas con igual prioridad',
+  ],
+  'voiceError.treeMismatch': [
+    '决策树层级不一致', 'Decision-tree levels differ', '결정 트리의 계층이 다릅니다',
+    'Различается структура уровней дерева решений', '決定木の階層が異なります', 'Difieren los niveles del árbol de decisiones',
+  ],
+  'voiceError.mixedLayout': [
+    '通用目录与多个语言目录的语音不同', 'Global and localized banks contain different voices',
+    '공용 폴더와 언어별 폴더의 음성이 다릅니다', 'Общие и языковые банки содержат разную озвучку',
+    '共通フォルダーと各言語フォルダーの音声が異なります', 'Los bancos generales y de idiomas contienen voces distintas',
+  ],
+  'voiceError.bankConflict': [
+    '同名音库的播放对象或音频资源冲突', 'Playback objects or audio resources conflict in banks with the same name',
+    '같은 이름의 뱅크에서 재생 객체 또는 오디오 리소스가 충돌합니다',
+    'Конфликт объектов воспроизведения или аудиоресурсов в одноимённых банках',
+    '同名バンクの再生オブジェクトまたは音声リソースが競合しています',
+    'Conflicto de objetos de reproducción o recursos de audio en bancos con el mismo nombre',
+  ],
+  'voiceError.invalidBank': [
+    '音库损坏或格式不受支持', 'The bank is damaged or its format is unsupported',
+    '뱅크가 손상되었거나 지원되지 않는 형식입니다', 'Банк повреждён или его формат не поддерживается',
+    'バンクが破損しているか、形式が未対応です', 'El banco está dañado o su formato no es compatible',
+  ],
+  'voiceError.encodeFailed': [
+    '合并后的决策树无法写入或回读', 'The merged decision tree could not be written or verified',
+    '병합된 결정 트리를 기록하거나 검증할 수 없습니다', 'Не удалось записать или проверить объединённое дерево решений',
+    '統合後の決定木を書き込みまたは検証できません', 'No se pudo escribir o verificar el árbol de decisiones combinado',
+  ],
+  'voiceError.help': [
+    '请核对上述 MOD 的版本与配套兼容补丁。详细差异已记录到启动器日志。',
+    'Check the versions and compatibility patches of the listed MODs. Detailed differences are in the launcher log.',
+    '위 MOD의 버전과 호환 패치를 확인하세요. 자세한 차이는 런처 로그에 기록되어 있습니다.',
+    'Проверьте версии указанных MOD и их патчи совместимости. Подробности записаны в журнал запуска.',
+    '上記 MOD のバージョンと互換パッチを確認してください。詳細な差分はランチャーログに記録されています。',
+    'Comprueba las versiones y los parches de compatibilidad de los MOD indicados. Los detalles están en el registro del gestor.',
+  ],
   'compatibilityPatch.voiceTitle': [
     '动态语音兼容', 'Dynamic voice compatibility', '동적 음성 호환',
     'Динамическая совместимость озвучки', '動的音声互換', 'Compatibilidad dinámica de voces',

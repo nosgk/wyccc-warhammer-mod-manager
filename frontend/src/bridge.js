@@ -1,4 +1,5 @@
 import { localizeBackendMessage, t } from './languages'
+import { formatVoiceCompatibilityError } from './voiceCompatibilityErrors'
 
 const waitForDesktopBridge = () => new Promise((resolve, reject) => {
   if (window.pywebview?.api?.call) {
@@ -20,7 +21,10 @@ export async function invoke(method, ...args) {
   const api = await waitForDesktopBridge()
   const response = await api.call(method, args, {})
   if (!response?.ok) {
-    throw new Error(localizeBackendMessage(response?.error?.message, 'common.backendFailure'))
+    const voiceMessage = formatVoiceCompatibilityError(response?.error?.voice_compatibility)
+    const error = new Error(voiceMessage || localizeBackendMessage(response?.error?.message, 'common.backendFailure'))
+    if (voiceMessage) error.voiceCompatibility = response.error.voice_compatibility
+    throw error
   }
   return response.data
 }

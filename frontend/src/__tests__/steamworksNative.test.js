@@ -317,7 +317,15 @@ describe('bundled Steamworks native bridge', () => {
           },
           workshop: {
             supportsUpdateLanguage: () => true,
+            supportsKeyValueTags: () => true,
             getSubscribedItems: () => [],
+            getItems: async () => ({ items: [{
+              publishedFileId: 123n, creatorAppId: 1142710, consumerAppId: 1142710,
+              keyValueTags: [
+                { key: 'pack_name', value: 'example.pack' },
+                { key: 'game_version', value: '589824' },
+              ],
+            }] }),
             createItem: async () => ({
               itemId: 123n,
               needsToAcceptAgreement: false,
@@ -345,6 +353,8 @@ describe('bundled Steamworks native bridge', () => {
             input: JSON.stringify({
               operation: 'publish_item',
               appId: 1142710,
+              caPackName: 'example.pack',
+              caGameVersion: 589824,
               contentPath: content,
               previewPath: preview,
               title: 'Example MOD',

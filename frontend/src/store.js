@@ -91,7 +91,7 @@ const sameListState = (left, right) => (
 export const useAppStore = defineStore('app', {
   state: () => ({
     appName: "Wyccc's Mod Manager",
-    appVersion: '1.2.9',
+    appVersion: '1.3.0',
     settings: {},
     paths: {},
     gameContextRevision: 0,
@@ -389,11 +389,13 @@ export const useAppStore = defineStore('app', {
         mod.warnings = warnings
       }
     },
-    notify(message, type = 'success') {
-      this.toast = { message, type, id: Date.now() }
+    notify(message, type = 'success', duration = 3200) {
+      this.toast = { message, type, id: Date.now(), persistent: duration === 0 }
+      if (duration === 0) return
+      const toast = this.toast
       window.setTimeout(() => {
-        if (this.toast?.message === message) this.toast = null
-      }, 3200)
+        if (this.toast === toast) this.toast = null
+      }, duration)
     },
     async withBusy(label, task) {
       if (this.busy) throw new Error(t('busy.alreadyRunning', { task: this.busy }))
@@ -401,7 +403,7 @@ export const useAppStore = defineStore('app', {
       try {
         return await task()
       } catch (error) {
-        this.notify(error.message || String(error), 'error')
+        this.notify(error.message || String(error), 'error', error.voiceCompatibility ? 0 : 3200)
         throw error
       } finally {
         this.busy = ''
@@ -1109,6 +1111,13 @@ export const useAppStore = defineStore('app', {
         : { running: true }
       if (data.backup) this.backups.unshift(data.backup)
       return data
+    },
+    async setMultiplayerMode(enabled) {
+      return this.withBusy(t('busy.saveSettings'), async () => {
+        const data = await invoke('set_multiplayer_mode', enabled)
+        this.settings = data.settings
+        return data
+      })
     },
     async launch() {
       await this.flushPlaysetUpdates()

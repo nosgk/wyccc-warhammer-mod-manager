@@ -91,6 +91,8 @@ const entries = {
   'app.saveList': ['存档列表', 'Save list', '저장 목록', 'Список сохранений', 'セーブ一覧'],
   'app.continueGame': ['继续游戏', 'Continue game', '게임 계속', 'Продолжить игру', 'ゲームを続ける'],
   'app.launchGame': ['启动游戏', 'Launch game', '게임 실행', 'Запустить игру', 'ゲームを起動'],
+  'app.multiplayerMode': ['联机模式', 'Multiplayer mode', '멀티플레이 모드', 'Сетевая игра', 'マルチプレイ', 'Modo multijugador'],
+  'app.multiplayerModeHelp': ['开启后只加载已启用的 MOD，禁用所有启动器自带和生成的 Pack。关闭后恢复原有启动设置。', 'Load only enabled MODs and disable all built-in and generated launcher Packs. Turn off to restore your usual launch settings.', '활성 MOD만 불러오고 런처 내장 및 생성 Pack을 모두 비활성화합니다. 끄면 기존 실행 설정이 복원됩니다.', 'Загружать только включённые MOD, отключив все встроенные и созданные лаунчером Pack. Выключите, чтобы вернуть обычные настройки запуска.', '有効なMODのみを読み込み、ランチャー内蔵・生成Packをすべて無効にします。オフにすると通常の起動設定に戻ります。', 'Carga solo los MODs activos y desactiva todos los Pack incluidos y generados por el lanzador. Desactívalo para restaurar los ajustes de inicio habituales.'],
   'app.terminateGame': ['结束游戏进程', 'End game process', '게임 프로세스 종료', 'Завершить процесс игры', 'ゲームプロセスを終了'],
   'app.gameRunningShort': ['游戏运行中', 'Game running', '게임 실행 중', 'Игра запущена', 'ゲーム実行中'],
   'app.confirmTerminateGame': ['确定要强制结束游戏进程吗？未保存的游戏进度将丢失。', 'Force-end the game process? Any unsaved game progress will be lost.', '게임 프로세스를 강제 종료할까요? 저장하지 않은 진행 상황은 손실됩니다.', 'Принудительно завершить процесс игры? Несохранённый прогресс будет потерян.', 'ゲームプロセスを強制終了しますか？保存していない進行状況は失われます。'],
@@ -1524,6 +1526,8 @@ const spanishEntries = {
 // Product terms such as playsets, share codes, and the Steam Workshop need
 // deliberate Spanish wording rather than literal sentence-level translation.
 Object.assign(spanishEntries, {
+  'app.multiplayerMode': entries['app.multiplayerMode'][5],
+  'app.multiplayerModeHelp': entries['app.multiplayerModeHelp'][5],
   'settings.showHiddenMods': 'Mostrar MODs ocultos',
   'settings.showHiddenModsHelp': 'Desactivado de forma predeterminada. Al activarlo, los MODs ocultos aparecen en ambas listas.',
   'language.enUS': 'Inglés',

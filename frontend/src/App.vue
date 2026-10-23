@@ -923,6 +923,13 @@ const launchSave = async saveName => {
   } catch { /* shared toast */ }
 }
 
+const setMultiplayerMode = async event => {
+  try {
+    await store.setMultiplayerMode(event.target.checked)
+  } catch { /* shared toast */ }
+  event.target.checked = !!store.settings.multiplayer_mode
+}
+
 const launchOrTerminateGame = async () => {
   try {
     if (store.runtime.running) {
@@ -1348,6 +1355,22 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="footer-actions">
+        <label
+          v-if="supportsPackActions"
+          class="multiplayer-mode-toggle"
+          :title="t('app.multiplayerModeHelp')"
+        >
+          <input
+            type="checkbox"
+            role="switch"
+            :checked="!!store.settings.multiplayer_mode"
+            :disabled="!!store.busy || store.runtime.running"
+            data-testid="multiplayer-mode-toggle"
+            @change="setMultiplayerMode"
+          />
+          <span class="multiplayer-mode-track" aria-hidden="true"></span>
+          <span>{{ t('app.multiplayerMode') }}</span>
+        </label>
         <button
           v-if="supportsPackActions"
           type="button"
@@ -1615,7 +1638,9 @@ onBeforeUnmount(() => {
 
     <transition name="toast">
       <div v-if="store.toast" class="toast" :class="store.toast.type">
-        {{ store.toast.message }}
+        <button v-if="store.toast.persistent" type="button" class="icon-button toast-dismiss"
+          :aria-label="t('common.close')" @click="store.toast = null">×</button>
+        <span>{{ store.toast.message }}</span>
       </div>
     </transition>
   </div>

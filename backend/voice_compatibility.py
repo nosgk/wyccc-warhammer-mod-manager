@@ -48,6 +48,46 @@ class DialogueEvent:
     suffix: bytes
 
 
+@dataclass(frozen=True)
+class EventDefinition:
+    priority: int
+    source: str
+    role: str
+    bank: str
+    event: DialogueEvent
+
+    def diagnostic(self):
+        return {"source": self.source, "role": self.role, "bank": self.bank,
+                "arguments": list(self.event.arguments), "argument_types": list(self.event.argument_types)}
+
+
+class VoiceCompatibilityError(ValueError):
+    """Keep provenance across the desktop bridge as well as in the launch log."""
+
+    def __init__(self, reason: str, sources: list[dict], event_id: int | None = None, detail: str = ""):
+        self.details = {"reason": reason, "event_id": event_id, "sources": sources, "detail": detail}
+        descriptions = {
+            "argumentMismatch": "参数结构不一致，无法合并",
+            "ambiguousCopies": "同一 MOD 的多份同优先级语音定义不同，无法确定合并来源",
+            "treeMismatch": "决策树层级不一致，无法合并",
+            "mixedLayout": "通用目录与多个语言目录的语音不同，暂不支持这种混合布局",
+            "bankConflict": "同名语音库包含冲突的播放对象或音频资源，无法仅合并对话事件",
+            "invalidBank": "语音库损坏或格式不受支持",
+            "encodeFailed": "合并后的语音决策树无法写入或回读",
+        }
+        label = f"语音事件 {event_id}" if event_id is not None else "语音兼容"
+        lines = [f"{label}：{descriptions[reason]}"]
+        for item in sources:
+            role = "原版" if item["role"] == "vanilla" else "MOD"
+            line = f"{role}：{item['source']} / {item['bank']}"
+            if reason == "argumentMismatch":
+                line += f"；参数={item['arguments']}；类型={item['argument_types']}"
+            lines.append(line)
+        if detail:
+            lines.append(detail)
+        super().__init__("\n".join(lines))
+
+
 def parse_dialogue_event(payload: bytes) -> DialogueEvent:
     def invalid():
         raise ValueError("语音对话事件的决策树损坏或格式不受支持")
@@ -226,10 +266,13 @@ def _overlay(current: DecisionNode, incoming: DecisionNode, baseline: DecisionNo
 def _source_events(items):
     # Prefer explicit authoring trees over their pre-merged testing copies.
     selected = {}
-    for priority, name, event in sorted(items, key=lambda item: (
-        item[0], "_for_merging" not in item[1], item[1],
+    for item in sorted(items, key=lambda item: (
+        item.priority, "_for_merging" not in item.bank, item.bank,
     )):
-        selected.setdefault(priority, (name, event))
+        previous = selected.setdefault(item.priority, item)
+        if ("_for_merging" in previous.bank) == ("_for_merging" in item.bank) and previous.event != item.event:
+            raise VoiceCompatibilityError("ambiguousCopies", [previous.diagnostic(), item.diagnostic()],
+                                          item.event.event_id)
     return selected
 
 
@@ -242,9 +285,10 @@ def _baseline_event(base, key):
 def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list[GameDataEntry], dict]:
     """Sources are ordered from highest to lowest Pack priority; vanilla is fallback."""
     banks = []
-    base: dict[tuple[str, int], DialogueEvent] = {}
+    base: dict[tuple[str, int], EventDefinition] = {}
     effective_banks: dict[str, SoundBank] = {}
     effective_events: dict[str, dict[int, DialogueEvent]] = {}
+    bank_origins = {}
     candidates = defaultdict(list)
     for priority, source in enumerate(sources):
         for entry in sorted(source.entries, key=lambda item: normalized_name(item.name)):
@@ -255,15 +299,19 @@ def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list
                 bank = parse_soundbank(entry.payload)
                 events = bank.dialogues()
             except ValueError as exc:
-                raise ValueError(f"语音兼容：{source.name} / {entry.name}：{exc}") from exc
+                raise VoiceCompatibilityError("invalidBank", [
+                    {"source": source.name, "role": source.role, "bank": entry.name},
+                ], detail=str(exc)) from exc
             scope = bank_scope(name)
             if source.role == "vanilla":
                 for event_id, event in events.items():
-                    base.setdefault((scope, event_id), event)
+                    base.setdefault((scope, event_id),
+                                    EventDefinition(priority, source.name, source.role, name, event))
                 continue
             winner = effective_banks.get(name)
             if winner is None:
                 effective_banks[name] = bank
+                bank_origins[name] = {"source": source.name, "role": source.role, "bank": entry.name}
                 effective_events[name] = dict(events)
                 banks.append((entry, bank, effective_events[name], scope))
             elif events:
@@ -275,16 +323,17 @@ def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list
                        for kind, payload in bank.objects if kind != 15) or any(
                     tag in {b"DATA", b"DIDX"} and (tag, data) not in winner.chunks for tag, data in bank.chunks
                 ):
-                    raise ValueError(f"同名语音库 {entry.name} 还包含冲突的播放对象或音频资源，无法仅合并对话事件")
+                    raise VoiceCompatibilityError("bankConflict", [bank_origins[name],
+                        {"source": source.name, "role": source.role, "bank": entry.name}])
                 for event_id, event in events.items():
                     effective_events[name].setdefault(event_id, event)
             for event_id, event in events.items():
-                candidates[(scope, event_id)].append((priority, name, event))
+                candidates[(scope, event_id)].append(EventDefinition(priority, source.name, source.role, name, event))
 
     replacements = {}
     stats = {"voice_pack_count": 0, "merged_event_count": 0, "merged_path_count": 0,
              "conflicting_path_count": 0, "patched_bank_count": 0}
-    voice_sources = {priority for items in candidates.values() for priority, _, _ in items}
+    voice_sources = {item.priority for items in candidates.values() for item in items}
     stats["voice_pack_count"] = len(voice_sources)
     event_keys = defaultdict(list)
     for key in candidates:
@@ -299,37 +348,58 @@ def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list
         else:
             merge_groups.extend((key, [key], candidates[key]) for key in keys)
     for key, target_keys, items in merge_groups:
-        if len({priority for priority, _, _ in items}) < 2:
+        if len({item.priority for item in items}) < 2:
             continue
         event_id = key[1]
+        # Validate every copy that will be replaced, including discarded testing
+        # copies. Replacing an incompatible copy used to conceal broken inputs.
+        baseline_definition = _baseline_event(base, key)
+        definitions = [*items, *([baseline_definition] if baseline_definition else [])]
+        expected = baseline_definition or items[0]
+        for item in definitions:
+            if (item.event.arguments, item.event.argument_types) != (
+                expected.event.arguments, expected.event.argument_types
+            ):
+                raise VoiceCompatibilityError("argumentMismatch", [expected.diagnostic(), item.diagnostic()], event_id)
         localized = [key for key in target_keys if key[0]]
         if len(localized) > 1:
-            signatures = [({priority: event for priority, (_, event) in _source_events(candidates[key]).items()},
-                           _baseline_event(base, key)) for key in localized]
+            signatures = [({priority: item.event for priority, item in _source_events(candidates[key]).items()},
+                           baseline.event if (baseline := _baseline_event(base, key)) else None) for key in localized]
             if any(signature != signatures[0] for signature in signatures[1:]):
-                raise ValueError(f"语音事件 {event_id} 同时使用通用目录和语言目录，暂不支持这种混合布局")
-        baseline = _baseline_event(base, key)
+                involved = [*items, *(baseline for target in localized
+                                      if (baseline := _baseline_event(base, target)))]
+                raise VoiceCompatibilityError("mixedLayout", [item.diagnostic() for item in involved], event_id)
+        baseline = baseline_definition.event if baseline_definition else None
         by_source = _source_events(items)
         selected = [by_source[priority] for priority in sorted(by_source, reverse=True)]
-        prototype = selected[-1][1]
-        for event in [*(event for _, event in selected), *([baseline] if baseline else [])]:
-            if (event.arguments, event.argument_types) != (prototype.arguments, prototype.argument_types):
-                raise ValueError(f"语音事件 {event_id} 的参数结构不一致，无法合并")
-        root = baseline.root if baseline else selected[0][1].root
+        prototype = selected[-1].event
+        root = baseline.root if baseline else selected[0].event.root
         edited_paths = {}
         baseline_paths = event_paths(baseline) if baseline else {}
-        for name, event in selected:
-            explicit = "_for_merging" in name
+        applied = [baseline_definition] if baseline_definition else [selected[0]]
+        for item in selected:
+            event = item.event
+            explicit = "_for_merging" in item.bank
             for path, value in event_paths(event).items():
                 if explicit or baseline_paths.get(path) != value:
                     if path in edited_paths and edited_paths[path] != value:
                         stats["conflicting_path_count"] += 1
                     edited_paths[path] = value
-            root = _overlay(root, event.root, None if explicit else (baseline.root if baseline else None))
+            try:
+                root = _overlay(root, event.root, None if explicit else (baseline.root if baseline else None))
+            except ValueError as exc:
+                raise VoiceCompatibilityError("treeMismatch", [origin.diagnostic() for origin in [*applied, item]],
+                                              event_id) from exc
+            if item not in applied:
+                applied.append(item)
         merged = replace(prototype, root=root)
-        payload = encode_dialogue_event(merged)
-        if parse_dialogue_event(payload) != merged:
-            raise ValueError(f"语音事件 {event_id} 合并回读失败")
+        try:
+            payload = encode_dialogue_event(merged)
+            if parse_dialogue_event(payload) != merged:
+                raise ValueError(f"语音事件 {event_id} 合并回读失败")
+        except ValueError as exc:
+            raise VoiceCompatibilityError("encodeFailed", [item.diagnostic() for item in selected],
+                                          event_id, str(exc)) from exc
         replacements.update(dict.fromkeys(target_keys, payload))
         stats["merged_event_count"] += 1
         stats["merged_path_count"] += len(event_paths(merged))

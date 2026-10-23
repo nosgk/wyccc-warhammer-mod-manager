@@ -67,6 +67,7 @@ from .launch_paths import LaunchPathAliases
 from .load_order import LoadOrderService, current_order_path, file_token
 from .games import GameDefinition
 from .models import GamePaths, ModAsset
+from .multiplayer import restore_launcher_packs, suspend_launcher_packs
 from .mod_types import workshop_category_for_mod_types
 from .mod_profiles import existing_profile_directory, parse_mod_profile
 from .mod_watcher import ModChangeMonitor
@@ -99,6 +100,7 @@ from .variant_selector_patch_state import ensure_variant_selector_compatibility_
 from .tier5_feature import tier5_feature_status
 from .tier5_patch_state import ensure_tier5_compatibility_patch
 from .voice_patch_state import ensure_voice_compatibility_patch
+from .voice_compatibility import VoiceCompatibilityError
 from .unit_data import (
     _display_source_name,
     build_unit_table_snapshot,
@@ -287,6 +289,7 @@ class API:
             "preview_load_order": self._preview_load_order,
             "save_load_order": self._save_load_order,
             "launch_game": self._launch_game,
+            "set_multiplayer_mode": self._set_multiplayer_mode,
             "terminate_game": self._terminate_game,
             "continue_game": self._continue_game,
             "list_save_games": self._list_save_games,
@@ -424,9 +427,12 @@ class API:
                 data = handler(*(args or []), **(kwargs or {}))
             return {"ok": True, "data": data}
         except (ValueError, OSError) as exc:
+            error = {"code": exc.__class__.__name__.upper(), "message": str(exc)}
+            if isinstance(exc, VoiceCompatibilityError):
+                error["voice_compatibility"] = exc.details
             return {
                 "ok": False,
-                "error": {"code": exc.__class__.__name__.upper(), "message": str(exc)},
+                "error": error,
             }
         except Exception as exc:
             traceback.print_exc()
@@ -752,6 +758,11 @@ class API:
             "paths": paths.to_dict(),
             "path_health": self._path_health(paths),
         }
+
+    @_requires_idle_game
+    def _set_multiplayer_mode(self, enabled: bool) -> dict[str, Any]:
+        self.settings_service.save({"multiplayer_mode": bool(enabled)})
+        return {"settings": self.settings_service.get_public()}
 
     def _set_search_highlight_mode(self, enabled: bool, list_name: str = "") -> dict[str, Any]:
         mode = bool(enabled)
@@ -1599,6 +1610,10 @@ class API:
             if save_name and not self._active_game().supports_save_games:
                 raise ValueError("当前游戏不支持从管理器直接载入存档")
             selected_save = self.save_games.require(save_name) if save_name else None
+            paths = self.settings_service.resolve_game_paths()
+            restored_names: set[str] = set()
+            if paths.game_definition.uses_mod_list and paths.game_path and paths.data_path:
+                restored_names = restore_launcher_packs(paths.data_path)
             saved = self._save_load_order_locked(ordered_mod_ids, expected_token)
             saved["mod_snapshot"] = [
                 {"id": asset.id, "pack_name": asset.pack_name, "effective_name": asset.effective_name,
@@ -1607,12 +1622,37 @@ class API:
                 if (asset := self._assets.get(mod_id)) is not None
             ]
             saved["launch_playset_name"] = self.state_repository.get_current_playset(self._active_game().id)["name"]
-            paths = self.settings_service.resolve_game_paths()
             path_map = self.launch_path_aliases.prepare(
                 paths.game_path,
                 paths.workshop_path,
             )
             settings = self.settings_service.get()
+            if settings.get("multiplayer_mode") and paths.game_definition.uses_mod_list:
+                excluded_names = suspend_launcher_packs(
+                    paths.data_path, paths.game_id, self._assets.values(), restored_names,
+                )
+                selected_ids = [
+                    mod_id for mod_id in saved["plan"]["ordered_mod_ids"]
+                    if self._assets[mod_id].pack_name.casefold() not in excluded_names
+                ]
+                plan = self.load_order.build_plan(
+                    paths.game_path, paths.data_path, self._assets, selected_ids,
+                    target_name="wyccc_launch_mods.txt", path_mapper=path_map.map_path,
+                )
+                self.load_order._atomic_write(
+                    Path(plan.target_path), plan.content, encoding=paths.game_definition.mod_list_encoding,
+                )
+                saved["plan"] = plan.to_dict()
+                saved["mod_snapshot"] = [mod for mod in saved["mod_snapshot"] if mod["id"] in selected_ids]
+                result = self._launch_game_without_runtime_packs(paths, saved, selected_save)
+                result["multiplayer_mode"] = True
+                for key in (
+                    "unit_data_patch", "game_data_patch", "dynamic_ror_compatibility_patch",
+                    "variant_selector_compatibility_patch", "tier5_compatibility_patch",
+                    "voice_compatibility_patch", "runtime_options",
+                ):
+                    result[key] = {"status": "disabled_multiplayer", "path": "", "entry_count": 0, "options": []}
+                return result
             if not paths.game_definition.supports_unit_data_modification:
                 return self._launch_game_without_runtime_packs(
                     paths,

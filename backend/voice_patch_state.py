@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from collections.abc import Mapping, Sequence
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -20,7 +21,7 @@ from .voice_compatibility import (
     normalized_name,
 )
 
-BUILDER_VERSION = 2
+BUILDER_VERSION = 3
 MANIFEST_NAME = "!!!!wyccc_voice_compatibility.json"
 _LANGUAGE_PACKS = {
     "english(uk)": "audio_en_bnk.pack", "chinese": "audio_cn_bnk.pack",
@@ -79,6 +80,14 @@ def _snapshot(data_path, assets, active_ids):
         except (OSError, ValueError) as exc:
             raise ValueError(f"语音兼容无法读取 {spec.path.name}：{exc}") from exc
         if source is not None:
+            if spec.asset is not None:
+                asset = spec.asset
+                label = asset.effective_name
+                if label != spec.path.name:
+                    label += f" [{spec.path.name}]"
+                if asset.workshop_id:
+                    label += f" (Workshop {asset.workshop_id})"
+                source = replace(source, name=label)
             sources.append(source)
             records.append(record)
     scopes = {bank_scope(entry.name) for source in sources for entry in source.entries}
