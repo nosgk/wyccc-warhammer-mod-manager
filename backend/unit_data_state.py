@@ -7,6 +7,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+from .fsutil import sha256_file as _sha256_file
 from .json_store import AtomicJsonStore
 from .models import ModAsset
 from .start_options import (
@@ -164,14 +165,6 @@ def fingerprint_unit_data_inputs(inputs: Mapping[str, Any]) -> str:
         separators=(",", ":"),
     )
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
-
-
-def _sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _output_record(path: Path) -> dict[str, Any]:

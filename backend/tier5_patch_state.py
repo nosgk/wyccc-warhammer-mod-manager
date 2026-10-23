@@ -7,6 +7,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+from .fsutil import sha256_file as _sha256_file
 from .json_store import AtomicJsonStore
 from .models import ModAsset
 from .tier5_compatibility import TIER5_SOURCE_PREFIXES
@@ -127,14 +128,6 @@ def _manifest_store(output_dir: Path) -> AtomicJsonStore:
         output_dir / TIER5_COMPATIBILITY_MANIFEST_NAME,
         lambda: {},
     )
-
-
-def _sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _output_record(path: Path) -> dict[str, Any]:

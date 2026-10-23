@@ -14,6 +14,7 @@ from .game_data_settings import (
     normalize_unit_recruitment_capacity_multiplier,
     normalize_unit_scale_multiplier,
 )
+from .fsutil import sha256_file as _sha256_file
 from .json_store import AtomicJsonStore
 from .models import ModAsset
 from .start_options import (
@@ -193,14 +194,6 @@ def _manifest_store(output_dir: Path) -> AtomicJsonStore:
         Path(output_dir) / GAME_DATA_PATCH_MANIFEST_NAME,
         lambda: {},
     )
-
-
-def _sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _output_record(path: Path) -> dict[str, Any]:
