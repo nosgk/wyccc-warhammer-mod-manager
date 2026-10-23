@@ -12,6 +12,29 @@ from .games import DEFAULT_GAME_ID, game_definitions
 PREFIX = "WMM1"
 LEGACY_PREFIXES = ("WWM1", "WWMM1")
 PENDING_WORKSHOP_PREFIX = "pending:steam:"
+MAX_SHARE_CODE_LENGTH = 2 * 1024 * 1024
+MAX_SHARE_PAYLOAD_BYTES = 1024 * 1024
+
+
+def _decompress_share(compressed: bytes) -> bytes:
+    """Decompress a share payload with a hard output limit.
+
+    A short compressed input can expand to an arbitrary size. Limit both the
+    consumed input and the produced output so an imported code cannot exhaust
+    memory.
+    """
+    decompressor = zlib.decompressobj()
+    payload = decompressor.decompress(compressed, MAX_SHARE_PAYLOAD_BYTES + 1)
+    if (
+        len(payload) > MAX_SHARE_PAYLOAD_BYTES
+        or decompressor.unconsumed_tail
+        or not decompressor.eof
+    ):
+        raise ValueError("分享码内容过大")
+    payload += decompressor.flush()
+    if len(payload) > MAX_SHARE_PAYLOAD_BYTES:
+        raise ValueError("分享码内容过大")
+    return payload
 
 
 def export_share(mods: list[ModAsset], game_id: str = DEFAULT_GAME_ID) -> str:
@@ -39,6 +62,8 @@ def export_share(mods: list[ModAsset], game_id: str = DEFAULT_GAME_ID) -> str:
 
 def parse_share(value: str, game_id: str = DEFAULT_GAME_ID) -> list[dict[str, Any]]:
     text = value.strip()
+    if len(text) > MAX_SHARE_CODE_LENGTH:
+        raise ValueError("分享码内容过大")
     matched_prefix = next(
         (
             candidate
@@ -55,10 +80,12 @@ def parse_share(value: str, game_id: str = DEFAULT_GAME_ID) -> list[dict[str, An
         padding = "=" * (-len(encoded) % 4)
         try:
             compressed = base64.urlsafe_b64decode(encoded + padding)
+            if len(compressed) > MAX_SHARE_CODE_LENGTH:
+                raise ValueError("分享码内容过大")
             expected = int(checksum_text, 16)
             if zlib.crc32(compressed) & 0xFFFFFFFF != expected:
                 raise ValueError("分享码校验失败")
-            payload = json.loads(zlib.decompress(compressed).decode("utf-8"))
+            payload = json.loads(_decompress_share(compressed).decode("utf-8"))
         except (ValueError, TypeError, json.JSONDecodeError, zlib.error) as exc:
             raise ValueError(f"无法解析分享码：{exc}") from exc
         if not isinstance(payload, dict):

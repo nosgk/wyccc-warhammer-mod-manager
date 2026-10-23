@@ -10,6 +10,8 @@ from pathlib import Path
 from backend.constants import SOURCE_DATA, SOURCE_WORKSHOP
 from backend.games import game_definitions
 from backend.share import (
+    MAX_SHARE_CODE_LENGTH,
+    MAX_SHARE_PAYLOAD_BYTES,
     PREFIX,
     export_share,
     parse_pending_workshop_mod_id,
@@ -91,6 +93,17 @@ class ShareCodeTests(unittest.TestCase):
             bad_checksum = "FFFFFFFF" if checksum != "FFFFFFFF" else "00000000"
             with self.assertRaisesRegex(ValueError, "校验"):
                 parse_share(f"{prefix}-{bad_checksum}-{payload}")
+
+    def test_rejects_oversized_share_code(self) -> None:
+        with self.assertRaisesRegex(ValueError, "内容过大"):
+            parse_share("WMM1-00000000-" + "A" * (MAX_SHARE_CODE_LENGTH + 1))
+
+    def test_rejects_decompression_bomb(self) -> None:
+        bomb = zlib.compress(b"\0" * (MAX_SHARE_PAYLOAD_BYTES + 1), level=9)
+        encoded = base64.urlsafe_b64encode(bomb).decode().rstrip("=")
+        code = f"WMM1-{zlib.crc32(bomb):08X}-{encoded}"
+        with self.assertRaisesRegex(ValueError, "内容过大"):
+            parse_share(code)
 
     def test_imports_legacy_wh3_manager_order(self) -> None:
         references = parse_share("222;1|111;0|333")
