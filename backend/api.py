@@ -29,6 +29,7 @@ from .app_settings import (
 )
 from .ai_service import generate_mod_user_data, recognize_mod_types, validate_ai_settings
 from .mod_ai_analysis import ModAIAnalysisService
+from .mod_order_analysis import ModOrderAnalysisService
 from .battle_probe import MEMREADER_PLUS_WORKSHOP_ID, memreader_plus_enabled
 from .changelog import get_all_changelogs
 from .constants import (
@@ -250,12 +251,19 @@ class API:
         self._last_order_token = "missing"
         self.diagnostics = ModDiagnosticsService(self)
         self.mod_ai_analysis = ModAIAnalysisService(self.data_dir / "mod_ai_analysis_cache")
+        self.mod_order_analysis = ModOrderAnalysisService(
+            self.data_dir / "mod_order_analysis_cache"
+        )
         self.launch_history = LaunchHistoryService(self)
         self._rpc: dict[str, Callable[..., Any]] = {
             "get_crash_diagnosis": self.diagnostics.diagnosis,
             "start_mod_ai_analysis": self._start_mod_ai_analysis,
             "get_mod_ai_analysis": self.mod_ai_analysis.status,
             "cancel_mod_ai_analysis": self.mod_ai_analysis.cancel,
+            "start_mod_order_analysis": self._start_mod_order_analysis,
+            "get_mod_order_analysis": self.mod_order_analysis.status,
+            "cancel_mod_order_analysis": self.mod_order_analysis.cancel,
+            "apply_mod_order_analysis": self._apply_mod_order_analysis,
             "dismiss_crash_diagnosis": self.diagnostics.dismiss,
             "start_mod_diagnostics": self.diagnostics.start,
             "get_mod_diagnostics": self.diagnostics.status,
@@ -395,6 +403,7 @@ class API:
 
     def close(self) -> None:
         self.mod_ai_analysis.close()
+        self.mod_order_analysis.close()
         self.diagnostics.session.close()
         self.mod_monitor.stop()
         self._exit_low_consumption_callback = None
@@ -1388,6 +1397,50 @@ class API:
             assets = [self._require_asset(value) for value in dict.fromkeys(canonical_ids)]
             game = self._active_game()
             return self.mod_ai_analysis.start(assets, self.settings_service.get(), game.id, int(game.app_id))
+
+    def _start_mod_order_analysis(self, mod_ids: list[str] | None = None) -> dict[str, Any]:
+        if mod_ids is None:
+            mod_ids = []
+        if not isinstance(mod_ids, list) or any(not isinstance(value, str) for value in mod_ids):
+            raise ValueError("aiOrder.invalidSelection")
+        with self._context_lock:
+            selected_ids = self._canonicalize_mod_ids(mod_ids) if mod_ids else self._current_enabled_mod_ids()
+            assets = [self._require_asset(value) for value in dict.fromkeys(selected_ids)]
+            if not assets:
+                raise ValueError("aiOrder.noMods")
+            game = self._active_game()
+            paths = self.settings_service.resolve_game_paths()
+            selected = {asset.id for asset in assets}
+            current_order = [mod_id for mod_id in self._current_enabled_mod_ids() if mod_id in selected]
+            current_order.extend(asset.id for asset in assets if asset.id not in current_order)
+            token = (
+                file_token(self._active_order_path(paths.game_path))
+                if paths.game_path
+                else ""
+            )
+            return self.mod_order_analysis.start(
+                assets,
+                self.settings_service.get(),
+                game_id=game.id,
+                app_id=int(game.app_id),
+                current_order=current_order,
+                expected_token=token,
+                workshop_service=self.workshop_service,
+            )
+
+    def _apply_mod_order_analysis(self, session_id: str) -> dict[str, Any]:
+        ordered_mod_ids = self.mod_order_analysis.apply(session_id)
+        state = self.mod_order_analysis.status(session_id)
+        saved = self._save_load_order(
+            ordered_mod_ids,
+            str(state.get("expected_token") or ""),
+        )
+        return {
+            "ordered_mod_ids": list(saved.get("plan", {}).get("ordered_mod_ids") or ordered_mod_ids),
+            "plan": saved.get("plan", {}),
+            "backup": saved.get("backup"),
+            "order_token": saved.get("order_token", ""),
+        }
 
     def _reorder_mod_types(self, type_ids: list[str]) -> dict[str, Any]:
         return {"items": self.state_repository.reorder_mod_types(type_ids)}
