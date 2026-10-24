@@ -21,7 +21,7 @@ from .voice_compatibility import (
     normalized_name,
 )
 
-BUILDER_VERSION = 3
+BUILDER_VERSION = 4
 MANIFEST_NAME = "!!!!wyccc_voice_compatibility.json"
 _LANGUAGE_PACKS = {
     "english(uk)": "audio_en_bnk.pack", "chinese": "audio_cn_bnk.pack",

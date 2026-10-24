@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { flushPromises, shallowMount } from '@vue/test-utils'
+import { flushPromises, mount, shallowMount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -11,6 +11,7 @@ vi.mock('../bridge', () => ({ invoke: invokeMock }))
 import { useAppStore } from '../store'
 import App from '../App.vue'
 import ModList from '../components/ModList.vue'
+import ModContextMenu from '../components/ModContextMenu.vue'
 
 const emptyScan = revision => ({
   mods: [],
@@ -232,16 +233,16 @@ describe('live MOD detection', () => {
 
     const first = store.refreshWorkshopUpdateEligibility(['first'])
     const second = store.refreshWorkshopUpdateEligibility(['second'])
-    resolveSecond({ eligible_mod_ids: ['second'] })
+    resolveSecond({ eligible_mod_ids: ['second'], checked_mod_ids: ['second'] })
     await second
-    resolveFirst({ eligible_mod_ids: ['first'] })
+    resolveFirst({ eligible_mod_ids: ['first'], checked_mod_ids: ['first'] })
     await first
 
     expect([...store.workshopUpdateEligibility]).toEqual(['second'])
   })
 
   it('reuses a successful Workshop ownership response for repeated menu openings', async () => {
-    invokeMock.mockResolvedValue({ eligible_mod_ids: ['owned'] })
+    invokeMock.mockResolvedValue({ eligible_mod_ids: ['owned'], checked_mod_ids: ['owned'] })
     const store = useAppStore()
 
     await store.refreshWorkshopUpdateEligibility(['owned'])
@@ -249,5 +250,94 @@ describe('live MOD detection', () => {
 
     expect(invokeMock).toHaveBeenCalledTimes(1)
     expect([...store.workshopUpdateEligibility]).toEqual(['owned'])
+  })
+
+  it('shows update for owned MODs at positions 526, 528 and 529 in a 658-item scan', async () => {
+    const mods = Array.from({ length: 658 }, (_, index) => ({
+      id: `steam:${index + 1}:own.pack`,
+      workshop_id: String(index + 1),
+      source: 'workshop',
+    }))
+    const owned = [mods[525], mods[527], mods[528]]
+    const ownedIds = new Set(owned.map(mod => mod.id))
+    invokeMock.mockImplementation(async (method, ids) => {
+      expect(method).toBe('get_workshop_update_eligibility')
+      const checked = ids.slice(0, 500)
+      return { checked_mod_ids: checked, eligible_mod_ids: checked.filter(id => ownedIds.has(id)) }
+    })
+    const store = useAppStore()
+    store.mods = mods
+    await store.refreshWorkshopUpdateEligibility(mods.map(mod => mod.id))
+
+    for (const mod of owned) {
+      await store.refreshWorkshopUpdateEligibility([mod.id])
+      const wrapper = mount(ModContextMenu, {
+        props: { open: true, mod, selectedModIds: [mod.id], eligibleUpdateIds: [...store.workshopUpdateEligibility] },
+      })
+      expect(wrapper.find('[data-testid="context-publish-update"]').exists()).toBe(true)
+      wrapper.unmount()
+    }
+    expect(invokeMock.mock.calls.map(([, ids]) => ids.length)).toEqual([500, 158])
+    expect(store.workshopEligibilityKnownIds.size).toBe(658)
+  })
+
+  it('retries a MOD that the backend did not actually check', async () => {
+    invokeMock.mockResolvedValueOnce({ checked_mod_ids: ['other'], eligible_mod_ids: [] })
+      .mockResolvedValueOnce({ checked_mod_ids: ['owned'], eligible_mod_ids: ['owned'] })
+    const store = useAppStore()
+    await store.refreshWorkshopUpdateEligibility(['other', 'owned'])
+    expect(store.workshopEligibilityKnownIds.has('owned')).toBe(false)
+    await store.refreshWorkshopUpdateEligibility(['owned'])
+    expect([...store.workshopUpdateEligibility]).toEqual(['owned'])
+    expect(invokeMock).toHaveBeenCalledTimes(2)
+  })
+
+  it.each([500, 501, 1001])('checks all %i MODs across the batch boundary', async count => {
+    const ids = Array.from({ length: count }, (_, index) => `mod:${index}`)
+    invokeMock.mockImplementation(async (method, requested) => ({
+      checked_mod_ids: requested.slice(0, 500),
+      eligible_mod_ids: requested.slice(0, 500),
+    }))
+    const store = useAppStore()
+    expect(await store.refreshWorkshopUpdateEligibility(ids)).toEqual(ids)
+    expect(invokeMock).toHaveBeenCalledTimes(Math.ceil(count / 500))
+    expect(store.workshopEligibilityKnownIds.size).toBe(count)
+  })
+
+  it('keeps update available when a large-library MOD switches between Data and Workshop copies', async () => {
+    const mods = Array.from({ length: 658 }, (_, index) => ({
+      id: `steam:${index + 1}:mod.pack`, workshop_id: String(index + 1), source: 'workshop',
+    }))
+    const workshopMod = mods[525]
+    const dataMod = { ...workshopMod, id: 'local:data:own', source: 'data', sources: ['data', 'workshop'] }
+    const merged = mods.map(mod => mod.id === workshopMod.id ? dataMod : mod)
+    const owned = new Set([workshopMod.id, dataMod.id])
+    invokeMock.mockImplementation(async (method, requested) => {
+      const checked = requested.slice(0, 500)
+      return { checked_mod_ids: checked, eligible_mod_ids: checked.filter(id => owned.has(id)) }
+    })
+    const store = useAppStore()
+    vi.spyOn(store, 'loadPreview').mockResolvedValue()
+    vi.spyOn(store, 'loadThumbnails').mockResolvedValue()
+    store.mods = merged
+    await store.refreshWorkshopUpdateEligibility(merged.map(mod => mod.id))
+    for (const snapshot of [merged, mods, merged]) {
+      await store.applyExternalScan({ mods: snapshot })
+      const selected = snapshot[525].id
+      await store.refreshWorkshopUpdateEligibility([selected])
+      expect(store.workshopUpdateEligibility.has(selected)).toBe(true)
+    }
+  })
+
+  it('keeps a failed later batch retryable without losing the checked first batch', async () => {
+    const ids = Array.from({ length: 501 }, (_, index) => `mod:${index}`)
+    invokeMock.mockResolvedValueOnce({ checked_mod_ids: ids.slice(0, 500), eligible_mod_ids: [] })
+      .mockRejectedValueOnce(new Error('Steam offline'))
+      .mockResolvedValueOnce({ checked_mod_ids: [ids[500]], eligible_mod_ids: [ids[500]] })
+    const store = useAppStore()
+    await store.refreshWorkshopUpdateEligibility(ids)
+    expect(store.workshopEligibilityKnownIds.size).toBe(500)
+    expect(store.workshopEligibilityKnownIds.has(ids[500])).toBe(false)
+    expect(await store.refreshWorkshopUpdateEligibility([ids[500]])).toEqual([ids[500]])
   })
 })

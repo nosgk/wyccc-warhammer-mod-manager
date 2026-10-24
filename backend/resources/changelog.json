@@ -1,6 +1,25 @@
 {
   "structure": [
     {
+      "version": "1.3.1",
+      "date": "2026-10-24",
+      "entries": [
+        [
+          "v131_fixed_title",
+          [
+            [
+              "fix",
+              "v131_many_mods_upload"
+            ],
+            [
+              "fix",
+              "v131_voice_compatibility"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
       "version": "1.3.0",
       "date": "2026-10-23",
       "entries": [
@@ -1378,6 +1397,9 @@
   ],
   "text": {
     "zh-CN": {
+      "v131_fixed_title": "修复",
+      "v131_many_mods_upload": "修复-MOD过多的情况下出现上传不了MOD的问题",
+      "v131_voice_compatibility": "修复-语音兼容补丁存在的问题，大幅缓解了不兼容的情况",
       "v130_added_title": "新增",
       "v130_adjusted_title": "调整",
       "v130_multiplayer_mode": "新增-联机模式，勾选后将禁用启动器自带的各种PACK，以提高联机的兼容性",
@@ -1650,6 +1672,9 @@
       "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。"
     },
     "en-US": {
+      "v131_fixed_title": "Fixed",
+      "v131_many_mods_upload": "Fixed - Being unable to upload MODs when too many MODs are installed.",
+      "v131_voice_compatibility": "Fixed - Issues with the voice compatibility patch, greatly reducing incompatibility.",
       "v130_added_title": "Added",
       "v130_adjusted_title": "Changed",
       "v130_multiplayer_mode": "Added - Multiplayer mode. When checked, it disables the launcher's built-in Packs to improve multiplayer compatibility.",
@@ -1922,6 +1947,9 @@
       "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog."
     },
     "ko-KR": {
+      "v131_fixed_title": "수정",
+      "v131_many_mods_upload": "수정 - MOD가 너무 많을 때 MOD를 업로드할 수 없던 문제.",
+      "v131_voice_compatibility": "수정 - 음성 호환 패치의 문제를 수정하여 비호환 현상을 크게 줄였습니다.",
       "v130_added_title": "추가",
       "v130_adjusted_title": "조정",
       "v130_multiplayer_mode": "추가 - 멀티플레이 모드. 체크하면 런처에 내장된 각종 Pack을 비활성화하여 멀티플레이 호환성을 높입니다.",
@@ -2194,6 +2222,9 @@
       "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다."
     },
     "ru-RU": {
+      "v131_fixed_title": "Исправлено",
+      "v131_many_mods_upload": "Исправлено — невозможность загрузить MOD при слишком большом количестве установленных MOD.",
+      "v131_voice_compatibility": "Исправлено — проблемы патча совместимости озвучки; число случаев несовместимости значительно сокращено.",
       "v130_added_title": "Добавлено",
       "v130_adjusted_title": "Изменено",
       "v130_multiplayer_mode": "Добавлено — режим сетевой игры. При включении отключает все встроенные Pack лаунчера для улучшения совместимости в сетевой игре.",
@@ -2466,6 +2497,9 @@
       "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении."
     },
     "ja-JP": {
+      "v131_fixed_title": "修正",
+      "v131_many_mods_upload": "修正 - MODの数が多すぎる場合にMODをアップロードできない問題。",
+      "v131_voice_compatibility": "修正 - 音声互換パッチの問題を修正し、互換性の問題を大幅に軽減しました。",
       "v130_added_title": "追加",
       "v130_adjusted_title": "調整",
       "v130_multiplayer_mode": "追加 - マルチプレイモード。チェックするとランチャー内蔵の各種Packを無効にし、マルチプレイの互換性を高めます。",
@@ -2738,6 +2772,9 @@
       "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。"
     },
     "es-ES": {
+      "v131_fixed_title": "Corregido",
+      "v131_many_mods_upload": "Corregido - No se podían subir MOD cuando había demasiados instalados.",
+      "v131_voice_compatibility": "Corregido - Problemas del parche de compatibilidad de voces, reduciendo considerablemente las incompatibilidades.",
       "v130_added_title": "Añadido",
       "v130_adjusted_title": "Ajustado",
       "v130_multiplayer_mode": "Añadido - Modo multijugador. Al marcarlo, se desactivan los Pack incluidos en el lanzador para mejorar la compatibilidad multijugador.",

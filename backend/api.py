@@ -3121,7 +3121,7 @@ class API:
 
     def _get_workshop_update_eligibility(self, mod_ids: list[str]) -> dict[str, list[str]]:
         if not isinstance(mod_ids, list):
-            return {"eligible_mod_ids": []}
+            return {"eligible_mod_ids": [], "checked_mod_ids": []}
         candidates: list[ModAsset] = []
         seen: set[str] = set()
         for mod_id in mod_ids[:500]:
@@ -3134,15 +3134,16 @@ class API:
             seen.add(asset.id)
             candidates.append(asset)
         if not candidates:
-            return {"eligible_mod_ids": []}
+            return {"eligible_mod_ids": [], "checked_mod_ids": []}
         try:
             current_user = get_current_user(app_id=int(self._active_game().app_id))
         except SteamworksBridgeError:
-            return {"eligible_mod_ids": []}
+            return {"eligible_mod_ids": [], "checked_mod_ids": []}
         steam_id = str(current_user.get("steam_id") or "").strip()
         if not steam_id.isdigit():
-            return {"eligible_mod_ids": []}
+            return {"eligible_mod_ids": [], "checked_mod_ids": []}
         return {
+            "checked_mod_ids": [asset.id for asset in candidates],
             "eligible_mod_ids": [
                 asset.id
                 for asset in candidates

@@ -8,12 +8,13 @@ from backend.changelog import (
     SUPPORTED_CHANGELOG_LANGUAGES,
     get_all_changelogs,
 )
+from backend.constants import APP_VERSION
 
 
 class ChangelogTests(unittest.TestCase):
     def test_default_changelog_starts_with_current_release(self) -> None:
         releases = get_all_changelogs()
-        self.assertEqual(releases[0]["version"], "1.3.0")
+        self.assertEqual(releases[0]["version"], APP_VERSION)
         self.assertTrue(releases[0]["entries"])
         for release in releases:
             self.assertIn("version", release)

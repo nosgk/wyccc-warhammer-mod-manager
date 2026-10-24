@@ -7,7 +7,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 from backend.api import API
+from backend.models import ModAsset
 from backend.scanner import _asset_id
+from backend.steamworks_bridge import SteamworksBridgeError
 from tests.helpers import write_pack
 
 
@@ -120,6 +122,47 @@ class WorkshopUpdateEligibilityTests(unittest.TestCase):
                 self.cache_owner(owner, app_id=app_id)
                 self.current_user.return_value = {"steam_id": current}
                 self.scan_and_check_eligibility(eligible=False)
+
+    def test_batch_reports_only_the_ids_actually_checked(self) -> None:
+        for count in (500, 501, 658):
+            with self.subTest(count=count):
+                assets = [
+                    ModAsset(
+                        id=f"steam:{index}:own.pack",
+                        pack_name="own.pack",
+                        display_name="Owned MOD",
+                        path="unused.pack",
+                        directory="",
+                        source="workshop",
+                        workshop_id=str(index),
+                        creator_id="765",
+                    )
+                    for index in range(1, count + 1)
+                ]
+                self.api._assets = {asset.id: asset for asset in assets}
+                ids = [asset.id for asset in assets]
+                result = self.api.call("get_workshop_update_eligibility", [ids])
+                self.assertTrue(result["ok"], result)
+                self.assertEqual(result["data"]["eligible_mod_ids"], ids[:500])
+                self.assertEqual(result["data"].get("checked_mod_ids"), ids[:500])
+                if count > 500:
+                    tail = self.api.call("get_workshop_update_eligibility", [ids[500:]])
+                    self.assertEqual(tail["data"]["eligible_mod_ids"], ids[500:])
+                    self.assertEqual(tail["data"]["checked_mod_ids"], ids[500:])
+
+    def test_unavailable_steam_identity_leaves_the_mod_unchecked(self) -> None:
+        pack = write_pack(self.workshop / "123" / "own.pack")
+        self.cache_owner("765")
+        self.scan_and_check_eligibility()
+        mod_id = _asset_id("workshop", pack, "123")
+        for identity in (SteamworksBridgeError("Steam offline"), {"steam_id": ""}):
+            with self.subTest(identity=type(identity).__name__):
+                self.current_user.side_effect = identity if isinstance(identity, Exception) else None
+                self.current_user.return_value = identity if isinstance(identity, dict) else {}
+                result = self.api.call("get_workshop_update_eligibility", [[mod_id]])
+                self.assertTrue(result["ok"], result)
+                self.assertEqual(result["data"]["eligible_mod_ids"], [])
+                self.assertEqual(result["data"].get("checked_mod_ids"), [])
 
 
 if __name__ == "__main__":
