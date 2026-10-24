@@ -7,6 +7,7 @@
 
 | 文档 | 内容 |
 | --- | --- |
+| [features/ai-mod-order.md](features/ai-mod-order.md) | AI 智能排序：数据来源、使用方式、规则与限制 |
 | [features/exception-probe.md](features/exception-probe.md) | 异常探针功能说明 |
 | [unit-encyclopedia.md](unit-encyclopedia.md) | 单位百科数据与界面说明 |
 
