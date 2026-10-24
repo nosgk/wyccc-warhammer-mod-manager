@@ -35,17 +35,20 @@ def run(command: list[str], *, cwd: Path = ROOT) -> None:
     subprocess.run(command, cwd=cwd, check=True)
 
 
-def find_pnpm() -> str:
+def find_pnpm() -> list[str]:
     override = os.environ.get("WMM_PNPM", "").strip()
     if override:
         if not Path(override).is_file():
             raise SystemExit(f"WMM_PNPM 文件不存在：{override}")
-        return override
+        return [override]
     names = ("pnpm.cmd", "pnpm") if os.name == "nt" else ("pnpm",)
     for name in names:
         candidate = shutil.which(name)
         if candidate:
-            return candidate
+            return [candidate]
+    corepack = shutil.which("corepack.cmd") or shutil.which("corepack")
+    if corepack:
+        return [corepack, "pnpm"]
     raise SystemExit("找不到 pnpm；请先安装 Node.js 22+ 与 pnpm 11+，并加入 PATH。")
 
 
@@ -105,12 +108,12 @@ def find_node_for_packaging() -> Path | None:
 
 def build_frontend(*, install: bool, tests: bool) -> None:
     pnpm = find_pnpm()
-    command = [pnpm]
-    if Path(pnpm).suffix.lower() in {".cjs", ".mjs", ".js"}:
+    command = list(pnpm)
+    if Path(pnpm[-1]).suffix.lower() in {".cjs", ".mjs", ".js"}:
         node = find_node_for_packaging()
         if node is None:
             raise SystemExit("找不到运行项目 pnpm 所需的 Node.js 22+。")
-        command = [str(node), pnpm]
+        command = [str(node), *pnpm]
     if install:
         install_command = [*command, "install"]
         if (FRONTEND / "pnpm-lock.yaml").is_file():

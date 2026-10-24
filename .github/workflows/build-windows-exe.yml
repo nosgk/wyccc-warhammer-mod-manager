@@ -41,8 +41,29 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: pnpm install --frozen-lockfile
+      - name: Toolchain
+        shell: pwsh
+        run: |
+          python --version
+          node --version
+          pnpm --version
+          where.exe pnpm
       - name: Build single-file executable
-        run: python scripts/build.py --package --output-dir dist/release --skip-install --skip-tests
+        shell: pwsh
+        run: |
+          python scripts/build.py --package --output-dir dist/release --skip-install --skip-tests 2>&1 | Tee-Object -FilePath build-exe.log
+          $code = $LASTEXITCODE
+          if ($code -ne 0) {
+            Get-Content build-exe.log -Tail 60 | ForEach-Object { Write-Host "::error::$_" }
+            exit $code
+          }
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe-build-log
+          path: build-exe.log
+          if-no-files-found: ignore
       - name: Record SHA-256
         shell: pwsh
         run: |
