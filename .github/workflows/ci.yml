@@ -35,11 +35,20 @@ jobs:
           python -m pip install -e ".[dev]"
       - name: Ruff
         run: python -m ruff check backend tests scripts
+      - name: Pytest with coverage (Linux, py3.13)
+        if: runner.os == 'Linux' && matrix.python == '3.13'
+        run: python -m pytest -q --ignore=tests/test_desktop_bridge.py --cov=backend --cov-report=term-missing --cov-report=xml
+      - name: Upload backend coverage
+        if: runner.os == 'Linux' && matrix.python == '3.13'
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: coverage.xml
       - name: Pytest (Windows)
         if: runner.os == 'Windows'
         run: python -m pytest -q
-      - name: Pytest (non-Windows, skip GUI bridge)
-        if: runner.os != 'Windows'
+      - name: Pytest (non-Windows, no coverage)
+        if: runner.os != 'Windows' && !(runner.os == 'Linux' && matrix.python == '3.13')
         run: python -m pytest -q --ignore=tests/test_desktop_bridge.py
 
   frontend:

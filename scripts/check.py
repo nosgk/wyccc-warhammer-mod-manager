@@ -68,6 +68,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--full", action="store_true", help="Also run the frontend production build")
     parser.add_argument("--ci", action="store_true", help="Fail when a check is skipped")
+    parser.add_argument("--coverage", action="store_true", help="Run pytest with backend coverage")
     args = parser.parse_args(argv)
 
     results: list[Result] = []
@@ -88,7 +89,13 @@ def main(argv: list[str] | None = None) -> int:
 
     backend_ready, backend_detail = _backend_deps_ready()
     if backend_ready:
-        results.append(_run("pytest", [PYTHON, "-m", "pytest", "-q"]))
+        pytest_command = [PYTHON, "-m", "pytest", "-q"]
+        if args.coverage:
+            if _has_module("pytest_cov"):
+                pytest_command.extend(["--cov=backend", "--cov-report=term-missing"])
+            else:
+                results.append(Result("coverage", "skip", "pytest-cov is not installed"))
+        results.append(_run("pytest", pytest_command))
     else:
         results.append(Result("pytest", "skip", backend_detail))
 

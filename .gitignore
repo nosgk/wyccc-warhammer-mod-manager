@@ -21,3 +21,8 @@ data/
 .idea/
 .vscode/
 .worktrees/
+
+# Coverage artifacts
+coverage.xml
+.coverage
+htmlcov/
