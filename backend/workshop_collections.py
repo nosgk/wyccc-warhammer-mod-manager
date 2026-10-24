@@ -6,6 +6,7 @@ import urllib.request
 from typing import Any
 
 from .constants import APP_VERSION
+from .httputil import request_json
 
 
 COLLECTION_DETAILS_ENDPOINT = (
@@ -48,8 +49,13 @@ def fetch_workshop_collection(value: str, *, app_id: int | str) -> dict[str, Any
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=20) as response:
-            result = json.loads(response.read().decode("utf-8"))
+        result = request_json(
+            request,
+            timeout=20,
+            retries=2,
+            backoff=0.5,
+            urlopen_func=urllib.request.urlopen,
+        )
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"无法读取 Steam 创意工坊合集：{exc}") from exc
 

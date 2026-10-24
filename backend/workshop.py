@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import logging
 import socket
 import time
@@ -13,6 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
+from .httputil import request_json
 from .json_store import AtomicJsonStore
 from .steam_friends import (
     SteamFriendsError,
@@ -580,8 +580,13 @@ class WorkshopMetadataService:
                 },
                 method="POST",
             )
-            with urllib.request.urlopen(request, timeout=20) as response:
-                result = json.loads(response.read().decode("utf-8"))
+            result = request_json(
+                request,
+                timeout=20,
+                retries=2,
+                backoff=0.5,
+                urlopen_func=urllib.request.urlopen,
+            )
             details = result.get("response", {}).get("publishedfiledetails", [])
             fetched_at = int(time.time() * 1000)
             for detail in details:
