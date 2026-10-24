@@ -3887,6 +3887,7 @@ button.context-menu-item {
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
   color: #e3d6c4;
   font-size: 11px;
+  overflow-wrap: anywhere;
 }
 
 .toast.error {
