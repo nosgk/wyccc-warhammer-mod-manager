@@ -171,6 +171,7 @@ def package_desktop(output_dir: Path) -> Path:
     bridge_script = STEAM_RUNTIME / "workshop_bridge.js"
     schema_path = ROOT / "backend" / "wh3_db_schema.json"
     bundled_schemas = ROOT / "backend" / "schemas"
+    changelog_path = ROOT / "backend" / "resources" / "changelog.json"
     native_binding = (
         STEAM_RUNTIME
         / "steamworks"
@@ -198,6 +199,8 @@ def package_desktop(output_dir: Path) -> Path:
         raise SystemExit("Steamworks 工坊查询运行时不完整，无法打包。")
     if not schema_path.is_file():
         raise SystemExit("缺少战锤 3 DB 架构资源，无法打包。")
+    if not changelog_path.is_file():
+        raise SystemExit("缺少更新日志资源，无法打包。")
     if not all(
         (bundled_schemas / name).is_file()
         for name in ("LICENSE.txt", "manifest.json", *(f"schema_{game}.ron.gz" for game in SCHEMA_NAMES.values()))
@@ -229,6 +232,8 @@ def package_desktop(output_dir: Path) -> Path:
             f"{bundled_schemas}{separator}backend/schemas",
             "--add-data",
             f"{ROOT / 'backend' / 'resources' / 'battle_probe'}{separator}backend/resources/battle_probe",
+            "--add-data",
+            f"{changelog_path}{separator}backend/resources",
             "--add-data",
             f"{STEAM_RUNTIME}{separator}steam_runtime",
             "--add-binary",

@@ -723,6 +723,9 @@ class PackagedRuntimeTests(unittest.TestCase):
             (packaging / "version_info.txt").write_text("fixture", encoding="utf-8")
             schema_path = backend / "wh3_db_schema.json"
             schema_path.write_text("{}", encoding="utf-8")
+            changelog_path = backend / "resources" / "changelog.json"
+            changelog_path.parent.mkdir(parents=True)
+            changelog_path.write_text("{}", encoding="utf-8")
             bundled_schemas = backend / "schemas"
             bundled_schemas.mkdir()
             for name in ("LICENSE.txt", "manifest.json", *(f"schema_{game}.ron.gz" for game in SCHEMA_NAMES.values())):
@@ -777,6 +780,7 @@ class PackagedRuntimeTests(unittest.TestCase):
             separator = ";" if os.name == "nt" else ":"
             self.assertIn(f"{schema_path}{separator}backend", pyinstaller_command)
             self.assertIn(f"{bundled_schemas}{separator}backend/schemas", pyinstaller_command)
+            self.assertIn(f"{changelog_path}{separator}backend/resources", pyinstaller_command)
 
 
 if __name__ == "__main__":
