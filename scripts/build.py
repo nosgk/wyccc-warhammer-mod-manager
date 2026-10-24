@@ -120,8 +120,9 @@ def build_frontend(*, install: bool, tests: bool) -> None:
             install_command.append("--frozen-lockfile")
         run(install_command, cwd=FRONTEND)
     if tests:
-        # Bound test workers so packaging alongside a running game stays stable.
-        run([*command, "test", "--maxWorkers=2"], cwd=FRONTEND)
+        # frontend/package.json already bounds test workers so packaging
+        # alongside a running game stays stable.
+        run([*command, "test"], cwd=FRONTEND)
     run([*command, "build"], cwd=FRONTEND)
 
 
