@@ -57,7 +57,7 @@ class DependencyTests(unittest.TestCase):
         ]
         result = evaluate_order(items, ["a", "b"])
         self.assertEqual(result.recommended_order, ["b", "a"])
-        self.assertTrue(any(relation.kind == HARD for relation in result.relations))
+        self.assertTrue(any(relation.kind == SOFT for relation in result.relations))
 
     def test_pack_dependency_moves_dependency_first(self) -> None:
         items = [
@@ -66,11 +66,34 @@ class DependencyTests(unittest.TestCase):
         ]
         result = evaluate_order(items, ["a", "b"])
         self.assertEqual(result.recommended_order, ["b", "a"])
+        self.assertTrue(any(relation.kind == HARD for relation in result.relations))
 
-    def test_missing_dependency_is_reported(self) -> None:
+    def test_missing_dependency_is_reported_without_subscribing(self) -> None:
         items = [evidence("a", required_workshop_items=("999",))]
         result = evaluate_order(items, ["a"])
-        self.assertTrue(any("missing Workshop item" in warning for warning in result.warnings))
+        self.assertTrue(any("not enabled" in warning for warning in result.warnings))
+        self.assertTrue(any("will not subscribe" in warning for warning in result.warnings))
+        self.assertTrue(any("never subscribes" in warning for warning in result.warnings))
+
+    def test_bundled_translation_ignores_workshop_requirement(self) -> None:
+        items = [
+            evidence(
+                "a",
+                description="This translation includes the original mod content.",
+                workshop_id="100",
+                required_workshop_items=("200",),
+            ),
+            evidence("b", workshop_id="200"),
+        ]
+        result = evaluate_order(items, ["a", "b"])
+        self.assertEqual(result.recommended_order, ["a", "b"])
+        self.assertTrue(any("bundled" in warning for warning in result.warnings))
+        self.assertFalse(
+            any(
+                relation.source == "workshop-requirement"
+                for relation in result.relations
+            )
+        )
 
     def test_already_correct_order_is_unchanged(self) -> None:
         items = [

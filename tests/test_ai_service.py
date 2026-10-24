@@ -256,6 +256,20 @@ class ModOrderRelationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "aiOrder.invalidAIResponse"):
                 analyze_mod_order_relations([{"id": "a"}, {"id": "b"}], {})
 
+    def test_order_prompt_forbids_auto_subscribe_and_bundle_assumptions(self) -> None:
+        captured: dict[str, str] = {}
+
+        def fake(settings, system_prompt, user_prompt):
+            captured["system"] = system_prompt
+            return '{"relations":[]}'
+
+        with patch("backend.ai_service._chat_completion", side_effect=fake):
+            analyze_mod_order_relations([{"id": "a"}], {"language": "en-US"})
+
+        self.assertIn("Never recommend subscribing", captured["system"])
+        self.assertIn("bundle the original", captured["system"])
+        self.assertIn("Workshop required items are evidence", captured["system"])
+
 
 if __name__ == "__main__":
     unittest.main()

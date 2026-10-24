@@ -30,6 +30,33 @@ _LANGUAGE_HINTS = ("translation", "localization", "localisation", "汉化", "翻
 _FRAMEWORK_HINTS = ("framework", "library", "core", "base", "framework mod", "框架", "基础")
 _OVERHAUL_HINTS = ("overhaul", "大修", "重做", "全面重制")
 _PATCH_HINTS = ("patch", "compat", "compatibility", "fix", "兼容", "修复", "补丁")
+_BUNDLE_HINTS = (
+    "包含本体",
+    "包含原版",
+    "包含原 mod",
+    "包含原mod",
+    "已包含原",
+    "自带本体",
+    "无需原版",
+    "不需要原版",
+    "includes the original",
+    "includes original",
+    "bundles the original",
+    "standalone",
+    "no original mod required",
+    "does not require the original",
+)
+
+
+def description_bundles_original(description: str) -> bool:
+    """Detect descriptions that say the translation already contains the original.
+
+    Some translation MODs bundle the original content because the source text is
+    hardcoded. In that case a Workshop "required item" pointing at the original
+    MOD is not a real load-order dependency.
+    """
+    text = str(description or "").casefold()
+    return any(hint in text for hint in _BUNDLE_HINTS)
 
 
 @dataclass(frozen=True)
@@ -167,23 +194,43 @@ def build_dependency_relations(
 ) -> tuple[list[OrderRelation], list[str]]:
     relations: list[OrderRelation] = []
     warnings: list[str] = []
-    for item in evidence:
-        for workshop_id in item.required_workshop_items:
-            candidates = [mod_id for mod_id in by_workshop.get(workshop_id, []) if mod_id != item.mod_id]
-            if not candidates:
-                warnings.append(f"{item.label} requires missing Workshop item {workshop_id}")
-                continue
-            for candidate in candidates:
-                relations.append(
-                    OrderRelation(
-                        before=candidate,
-                        after=item.mod_id,
-                        kind=HARD,
-                        reason=f"requires Workshop item {workshop_id}",
-                        confidence=1.0,
-                        source="dependency",
+    items = list(evidence)
+    required_evidence = False
+    for item in items:
+        if item.required_workshop_items:
+            required_evidence = True
+        if item.required_workshop_items and description_bundles_original(item.description):
+            warnings.append(
+                f"{item.label}: description indicates the original content is bundled; "
+                "Workshop required items are not treated as dependencies"
+            )
+        else:
+            for workshop_id in item.required_workshop_items:
+                candidates = [
+                    mod_id for mod_id in by_workshop.get(workshop_id, []) if mod_id != item.mod_id
+                ]
+                if not candidates:
+                    warnings.append(
+                        f"{item.label}: Workshop required item {workshop_id} is not enabled; "
+                        "the analysis will not subscribe it"
                     )
-                )
+                    continue
+                for candidate in candidates:
+                    # Workshop required items are evidence, not commands: translation
+                    # collections may bundle the original MOD. Keep the relation soft.
+                    relations.append(
+                        OrderRelation(
+                            before=candidate,
+                            after=item.mod_id,
+                            kind=SOFT,
+                            reason=(
+                                f"Workshop required item {workshop_id} "
+                                "(verify translation bundle; never auto-subscribed)"
+                            ),
+                            confidence=0.55,
+                            source="workshop-requirement",
+                        )
+                    )
         for pack_name in item.dependencies:
             candidates = [
                 mod_id for mod_id in by_pack.get(pack_name.casefold(), []) if mod_id != item.mod_id
@@ -202,6 +249,11 @@ def build_dependency_relations(
                         source="dependency",
                     )
                 )
+    if required_evidence:
+        warnings.append(
+            "Workshop required items are evidence only; the analysis never subscribes "
+            "or enables extra MODs."
+        )
     return relations, warnings
 
 

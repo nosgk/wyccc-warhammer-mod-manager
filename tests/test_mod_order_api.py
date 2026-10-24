@@ -4,6 +4,7 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from backend.api import API
 from tests.helpers import write_pack
@@ -48,15 +49,17 @@ class ModOrderApiTests(unittest.TestCase):
             a_id = by_pack["a.pack"]
             b_id = by_pack["b.pack"]
 
-            started = api.call("start_mod_order_analysis", [[a_id, b_id]])
-            self.assertTrue(started["ok"], started)
-            state = _wait_for(api, started["data"]["id"])
-            self.assertEqual(state["status"], "ready")
-            self.assertEqual(state["result"]["recommended_order"], [b_id, a_id])
+            with patch("backend.api.subscribe_workshop_items") as subscribe:
+                started = api.call("start_mod_order_analysis", [[a_id, b_id]])
+                self.assertTrue(started["ok"], started)
+                state = _wait_for(api, started["data"]["id"])
+                self.assertEqual(state["status"], "ready")
+                self.assertEqual(state["result"]["recommended_order"], [b_id, a_id])
 
-            applied = api.call("apply_mod_order_analysis", [started["data"]["id"]])
-            self.assertTrue(applied["ok"], applied)
-            self.assertEqual(applied["data"]["ordered_mod_ids"], [b_id, a_id])
+                applied = api.call("apply_mod_order_analysis", [started["data"]["id"]])
+                self.assertTrue(applied["ok"], applied)
+                self.assertEqual(applied["data"]["ordered_mod_ids"], [b_id, a_id])
+            subscribe.assert_not_called()
             content = (game / "used_mods.txt").read_text(encoding="utf-8")
             self.assertLess(content.index('"b.pack"'), content.index('"a.pack"'))
 
