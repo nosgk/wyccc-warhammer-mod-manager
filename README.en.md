@@ -15,7 +15,7 @@ The current version is `1.3.0`. It brings mods, playsets, the Steam Workshop, an
 - Automatic sorting helps new users avoid having to manage load order manually.
 - Playset-based mod lists, similar to Paradox games, let you save different mod combinations. Every enable, disable, or sorting action immediately updates the active playset.
 - Quickly search, filter, and organize mods, and save aliases, notes, and custom categories. AI can also generate mod aliases and summaries automatically.
-- AI load order: reads Workshop descriptions, required items, comments, local metadata, and Pack contents, then suggests a position, reasons, and conflicts for each mod. Nothing is applied to the current playset until you confirm. With AI disabled, local rules still produce a recommendation.
+- AI load order: reads Workshop descriptions, required items, comments, local metadata, and Pack contents, then suggests a position, reasons, and conflicts for each mod. Nothing is applied to the current playset until you confirm. Workshop required items are hints only and are never subscribed automatically; some translation mods already bundle the original mod, so check the Workshop description. With AI disabled, local rules still produce a recommendation.
 - Powerful publishing tools make it easier for modders to publish and update their own mods. Mods maintained in multiple languages no longer risk having one language overwrite another after publishing.
 - Share or import playsets. You can send your current mod list to friends for multiplayer, and they can import it and automatically subscribe to missing mods.
 - Automatically checks for missing dependencies and mod version issues. Unnecessary warnings can be ignored per mod, such as false missing-dependency warnings for translation mods.
@@ -149,6 +149,8 @@ python scripts/check.py --full
 ```
 
 Missing local dependencies are reported as `SKIP` with setup commands; the script never installs anything.
+
+GitHub Actions provides two workflows: `CI` runs tests and static checks; `Build Windows EXE` produces the single-file `Wyccc's Mod Manager.exe` on `main`, version tags, or manual dispatch, and uploads it as a build artifact.
 
 The project build entry point performs checks and generates production frontend assets:
 
