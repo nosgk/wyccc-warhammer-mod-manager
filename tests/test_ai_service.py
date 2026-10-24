@@ -7,7 +7,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
-from backend.ai_service import generate_mod_user_data
+from backend.ai_service import analyze_mod_order_relations, generate_mod_user_data
 from backend.models import ModAsset
 from backend.warhammer_translation import build_mod_translation_prompts
 
@@ -192,6 +192,69 @@ class AiServiceTests(unittest.TestCase):
 
         self.assertIn("目标语言是：西班牙语（es-ES）", system_prompt)
         self.assertIn("目标语言：西班牙语（es-ES）", user_prompt)
+
+
+class ModOrderRelationTests(unittest.TestCase):
+    def test_parses_valid_relations(self) -> None:
+        response = json.dumps(
+            {
+                "relations": [
+                    {
+                        "before": "a",
+                        "after": "b",
+                        "relation": "must_before",
+                        "reason": "requires a",
+                        "confidence": 0.9,
+                    }
+                ]
+            }
+        )
+        with patch("backend.ai_service._chat_completion", return_value=response):
+            relations = analyze_mod_order_relations(
+                [{"id": "a"}, {"id": "b"}], {"language": "en-US"}
+            )
+        self.assertEqual(relations[0]["before"], "a")
+        self.assertEqual(relations[0]["relation"], "must_before")
+
+    def test_empty_relations_are_valid(self) -> None:
+        with patch("backend.ai_service._chat_completion", return_value='{"relations":[]}'):
+            self.assertEqual(analyze_mod_order_relations([{"id": "a"}], {}), [])
+
+    def test_rejects_unknown_ids(self) -> None:
+        response = json.dumps(
+            {
+                "relations": [
+                    {
+                        "before": "missing",
+                        "after": "a",
+                        "relation": "should_before",
+                        "reason": "x",
+                        "confidence": 0.5,
+                    }
+                ]
+            }
+        )
+        with patch("backend.ai_service._chat_completion", return_value=response):
+            with self.assertRaisesRegex(ValueError, "aiOrder.invalidAIResponse"):
+                analyze_mod_order_relations([{"id": "a"}], {})
+
+    def test_rejects_out_of_range_confidence(self) -> None:
+        response = json.dumps(
+            {
+                "relations": [
+                    {
+                        "before": "a",
+                        "after": "b",
+                        "relation": "conflict",
+                        "reason": "x",
+                        "confidence": 1.5,
+                    }
+                ]
+            }
+        )
+        with patch("backend.ai_service._chat_completion", return_value=response):
+            with self.assertRaisesRegex(ValueError, "aiOrder.invalidAIResponse"):
+                analyze_mod_order_relations([{"id": "a"}, {"id": "b"}], {})
 
 
 if __name__ == "__main__":
