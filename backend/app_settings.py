@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import locale
+import logging
 import os
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,7 @@ from .game_data_settings import (
     normalize_unit_scale_multiplier,
 )
 from .json_store import AtomicJsonStore
+from .secrets import protect, unprotect
 from .models import GamePaths
 from .steam_paths import discover_game_paths
 
@@ -210,6 +212,7 @@ def default_settings(language: str = DEFAULT_LANGUAGE) -> dict[str, Any]:
         "ai_enabled": False,
         "ai_base_url": "https://api.openai.com/v1",
         "ai_api_key": "",
+        "encrypt_ai_api_key": False,
         "ai_model": "",
         "ai_temperature": 0.3,
         "custom_battle_all_units_as_lords": False,
@@ -265,6 +268,12 @@ class SettingsService:
             stored_version = 0
         payload = default_settings()
         payload.update(stored)
+        if payload.get("ai_api_key"):
+            try:
+                payload["ai_api_key"] = unprotect(str(payload["ai_api_key"]))
+            except (OSError, ValueError):
+                logging.getLogger(__name__).warning("Unable to decrypt the stored AI API key")
+                payload["ai_api_key"] = ""
         if search_highlight_modes_missing:
             legacy_highlight_mode = bool(payload.get("search_highlight_mode"))
             for key in ("active_search_highlight_mode", "inactive_search_highlight_mode"):
@@ -323,7 +332,15 @@ class SettingsService:
 
     def save(self, changes: dict[str, Any]) -> dict[str, Any]:
         normalized = self.normalize_changes(changes)
-        self.store.save(normalized)
+        stored = dict(normalized)
+        if stored.get("encrypt_ai_api_key") and stored.get("ai_api_key"):
+            try:
+                stored["ai_api_key"] = protect(str(stored["ai_api_key"]))
+            except OSError:
+                logging.getLogger(__name__).warning(
+                    "Unable to encrypt the AI API key; storing it unchanged"
+                )
+        self.store.save(stored)
         return normalized
 
     def selected_game_definition(self) -> GameDefinition:
@@ -472,6 +489,7 @@ class SettingsService:
             "inactive_search_highlight_mode",
             "show_hidden_mods",
             "ai_enabled",
+            "encrypt_ai_api_key",
             "custom_battle_all_units_as_lords",
             "enable_script_logging",
             "enable_exception_probe",

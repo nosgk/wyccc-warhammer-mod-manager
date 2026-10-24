@@ -509,5 +509,45 @@ class SettingsMigrationTests(unittest.TestCase):
             self.assertEqual(service.get()["unit_model_multiplier"], 1)
 
 
+class ApiKeyProtectionTests(unittest.TestCase):
+    def test_encrypted_key_is_stored_protected_and_read_back_plain(self) -> None:
+        from backend.secrets import is_supported
+
+        with tempfile.TemporaryDirectory() as temporary:
+            service = SettingsService(Path(temporary))
+            service.save(
+                {
+                    "ai_enabled": True,
+                    "ai_base_url": "https://example.invalid/v1",
+                    "ai_model": "example-model",
+                    "ai_api_key": "sk-test-value",
+                    "encrypt_ai_api_key": True,
+                }
+            )
+            stored = service.store.load()
+            if is_supported():
+                self.assertTrue(stored["ai_api_key"].startswith("dpapi:"))
+            else:
+                self.assertEqual(stored["ai_api_key"], "sk-test-value")
+            self.assertEqual(service.get()["ai_api_key"], "sk-test-value")
+            self.assertEqual(service.get_public()["ai_api_key"], "")
+            self.assertTrue(service.get_public()["ai_api_key_configured"])
+
+    def test_disabling_encryption_returns_to_plaintext(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            service = SettingsService(Path(temporary))
+            service.save(
+                {
+                    "ai_enabled": True,
+                    "ai_base_url": "https://example.invalid/v1",
+                    "ai_model": "example-model",
+                    "ai_api_key": "sk-test-value",
+                    "encrypt_ai_api_key": True,
+                }
+            )
+            service.save({"encrypt_ai_api_key": False})
+            self.assertEqual(service.store.load()["ai_api_key"], "sk-test-value")
+
+
 if __name__ == "__main__":
     unittest.main()
