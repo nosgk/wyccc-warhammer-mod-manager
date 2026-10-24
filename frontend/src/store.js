@@ -1143,6 +1143,29 @@ export const useAppStore = defineStore('app', {
     async cancelModAIAnalysis(sessionId) {
       return invoke('cancel_mod_ai_analysis', sessionId)
     },
+    async startModOrderAnalysis(modIds = null) {
+      const ids = Array.isArray(modIds) && modIds.length ? modIds : [...this.activeIds]
+      return invoke('start_mod_order_analysis', ids)
+    },
+    async getModOrderAnalysis(sessionId = '') {
+      return invoke('get_mod_order_analysis', sessionId)
+    },
+    async cancelModOrderAnalysis(sessionId) {
+      return invoke('cancel_mod_order_analysis', sessionId)
+    },
+    async applyModOrderAnalysis(sessionId) {
+      const data = await invoke('apply_mod_order_analysis', sessionId)
+      const order = Array.isArray(data.ordered_mod_ids) ? data.ordered_mod_ids : []
+      this.activeIds = order
+      this.orderToken = data.order_token || this.orderToken
+      this.dirty = false
+      const playsetId = this.currentPlaysetId
+      this.playsets = this.playsets.map(playset => (
+        playset.id === playsetId ? { ...playset, mod_ids: order } : playset
+      ))
+      if (data.backup) this.backups.unshift(data.backup)
+      return data
+    },
     async getCrashDiagnosis() {
       return invoke('get_crash_diagnosis')
     },
