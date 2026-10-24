@@ -370,7 +370,7 @@ describe('bundled Steamworks native bridge', () => {
           },
         )
       } catch (error) {
-        throw new Error(`${error.stdout || ''}${error.stderr || ''}`)
+        throw new Error(`${error.stdout || ''}${error.stderr || ''}`, { cause: error })
       }
       const payload = JSON.parse(
         output.split('\n').find(line => line.startsWith('WMM_WORKSHOP_RESULT=')).slice(20),

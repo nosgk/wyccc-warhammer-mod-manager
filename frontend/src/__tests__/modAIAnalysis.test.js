@@ -81,7 +81,7 @@ describe('enabled MOD Workshop AI analysis', () => {
     const diagnosticsIndex = footer.findIndex(button => button.attributes('data-testid') === 'mod-diagnostics-button')
     expect(footer[diagnosticsIndex + 1].attributes('data-testid')).toBe('ai-analysis-button')
     expect(wrapper.get('.footer-analysis-actions').findAll('button').map(button => button.attributes('data-testid')))
-      .toEqual(['mod-diagnostics-button', 'ai-analysis-button'])
+      .toEqual(['mod-diagnostics-button', 'ai-analysis-button', 'ai-order-button'])
     store.activeSearch = 'does not match'
     await wrapper.get('[data-testid="ai-analysis-button"]').trigger('click')
     await flushPromises()

@@ -56,7 +56,7 @@ describe('live MOD detection', () => {
         author: 'Steam author',
       }],
     }
-    invokeMock.mockImplementation(async (method, refreshWorkshop) => {
+    invokeMock.mockImplementation(async (method, _refreshWorkshop) => {
       if (method === 'get_runtime_status') return { running: false, mod_revision: 3 }
       if (method === 'scan_mods') return withoutMetadata
       if (method === 'refresh_workshop_metadata') return withMetadata
