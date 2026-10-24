@@ -150,7 +150,7 @@ python scripts/check.py --full
 
 缺少本地依赖时，脚本会明确标记 `SKIP` 并给出安装命令，不会自动安装任何软件。
 
-GitHub Actions 提供一个**手动触发**的工作流 `CI and Windows EXE`：先运行后端/前端测试与静态检查，全部通过后再生成单文件 `Wyccc's Mod Manager.exe`，并上传为构建产物（artifact）。推送不会自动触发。
+GitHub Actions 只提供一个**手动触发**的工作流 `Build Windows x64`：直接生成单文件 `Wyccc's Mod Manager.exe` 并上传为构建产物（artifact），不运行 CI/测试流水线。推送不会自动触发。
 
 项目构建入口会执行检查并生成前端生产资源：
 
