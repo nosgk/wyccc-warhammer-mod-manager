@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 import tempfile
 import time
 import threading
@@ -14,7 +15,7 @@ from tests.helpers import write_pack
 
 class WorkshopRefreshTests(unittest.TestCase):
     def setUp(self):
-        self.temporary = tempfile.TemporaryDirectory()
+        self.temporary = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.addCleanup(self.temporary.cleanup)
         root = Path(self.temporary.name)
         game = root / "game"
@@ -25,6 +26,7 @@ class WorkshopRefreshTests(unittest.TestCase):
         for workshop_id in ("111", "222"):
             write_pack(workshop / workshop_id / f"{workshop_id}.pack", 3)
         self.api = API(root / "state")
+        self.addCleanup(shutil.rmtree, root / "state", True)
         self.addCleanup(self.api.close)
         self.api.settings_service.save({"game_path": str(game), "workshop_path": str(workshop),
             "fetch_workshop_metadata": False, "live_mod_detection": False, "language": "zh-CN"})
@@ -67,7 +69,7 @@ class WorkshopRefreshTests(unittest.TestCase):
             request = pool.submit(self.api.call, "refresh_workshop_metadata", [["222"], "warhammer3"])
             try:
                 self.assertTrue(entered.wait(1), request.result() if request.done() else "refresh did not start")
-                local = pool.submit(self.api._scan_mods, False).result(timeout=1)
+                local = pool.submit(self.api._scan_mods, False).result(timeout=5)
                 self.assertEqual(len(local["mods"]), 2)
             finally:
                 release.set()

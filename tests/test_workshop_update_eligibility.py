@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -12,7 +13,7 @@ from tests.helpers import write_pack
 
 class WorkshopUpdateEligibilityTests(unittest.TestCase):
     def setUp(self) -> None:
-        temporary = tempfile.TemporaryDirectory()
+        temporary = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
         game = root / "game"
@@ -21,6 +22,8 @@ class WorkshopUpdateEligibilityTests(unittest.TestCase):
         (game / "Warhammer3.exe").write_bytes(b"")
         self.workshop = root / "workshop"
         self.api = API(root / "state")
+        # SQLite may leave WAL files briefly after the last connection closes.
+        self.addCleanup(shutil.rmtree, root / "state", True)
         self.addCleanup(self.api.close)
         self.api.settings_service.save({
             "game_path": str(game),

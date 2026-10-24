@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -20,7 +21,7 @@ class WorkshopPublishTagTests(unittest.TestCase):
         node = find_node_executable()
         if node is None:
             self.skipTest("Node.js runtime is unavailable")
-        temporary = tempfile.TemporaryDirectory(prefix="wmm-publish-tags-")
+        temporary = tempfile.TemporaryDirectory(prefix="wmm-publish-tags-", ignore_cleanup_errors=True)
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
         runtime = self.root / "steam_runtime"
@@ -73,6 +74,8 @@ module.exports.init = () => ({
         pack.with_suffix(".png").write_bytes(b"cover fixture")
         self.asset = make_asset(pack, "local", "data", workshop_id="123")
         self.api = API(self.root / "state")
+        self.addCleanup(shutil.rmtree, self.root / "state", True)
+        self.addCleanup(self.api.close)
         self.api._assets = {self.asset.id: self.asset}
         self.payload = {"mode": "update", "title": "Fixture MOD", "language": "en-US"}
 
