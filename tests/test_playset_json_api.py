@@ -47,9 +47,12 @@ class PlaysetJsonApiTests(unittest.TestCase):
             exported = api.call("export_playset_json", [True, str(target)])
             self.assertTrue(exported["ok"], exported)
             self.assertTrue(exported["data"]["exported"])
+            self.assertGreater(exported["data"]["bytes"], 0)
             payload = json.loads(target.read_text(encoding="utf-8"))
             self.assertEqual([mod["id"] for mod in payload["mods"]], [a_id, b_id])
+            self.assertEqual([mod["load_order"] for mod in payload["mods"]], [1, 2])
             self.assertEqual(payload["mods"][0]["description"], "Description A")
+            self.assertEqual(payload["description_mode"], "compact")
             self.assertEqual(payload["playset_name"], "Original")
 
             preview = api.call("preview_import_playset_json", [str(target)])

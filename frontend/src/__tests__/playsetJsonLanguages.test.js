@@ -17,6 +17,7 @@ const playsetJsonKeys = [
   'share.importModeCurrent',
   'share.jsonHelp',
   'share.exportJsonDone',
+  'share.exportJsonDoneLarge',
   'share.importJsonDone',
   'share.importJsonMissing',
   'share.importJsonNoMods',

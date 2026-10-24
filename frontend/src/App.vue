@@ -474,11 +474,27 @@ const importWorkshopCollection = async value => {
   }
 }
 
+const formatFileSize = bytes => {
+  const value = Number(bytes) || 0
+  if (value >= 1024 * 1024) return `${(value / 1024 / 1024).toFixed(1)} MB`
+  if (value >= 1024) return `${Math.round(value / 1024)} KB`
+  return `${value} B`
+}
+
 const exportPlaysetJson = async includeDescriptions => {
   try {
     const data = await store.exportPlaysetJson(includeDescriptions)
     if (data.exported) {
-      store.notify(t('share.exportJsonDone', { count: data.mod_count, path: data.path }))
+      const size = formatFileSize(data.bytes)
+      const large = Number(data.bytes || 0) > 5 * 1024 * 1024
+      store.notify(
+        t(large ? 'share.exportJsonDoneLarge' : 'share.exportJsonDone', {
+          count: data.mod_count,
+          size,
+          path: data.path,
+        }),
+        large ? 'warning' : undefined,
+      )
     }
   } catch {
     // Store actions surface failures through the shared toast.

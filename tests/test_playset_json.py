@@ -7,8 +7,10 @@ from dataclasses import replace
 from pathlib import Path
 
 from backend.playset_json import (
+    DESCRIPTION_LIMIT,
     MAX_FILE_BYTES,
     build_export_payload,
+    compact_description,
     parse_import_payload,
     read_import_file,
     safe_export_name,
@@ -38,8 +40,11 @@ class PlaysetJsonTests(unittest.TestCase):
                 include_descriptions=True,
             )
             self.assertEqual([mod["id"] for mod in payload["mods"]], ["b", "a"])
+            self.assertEqual([mod["load_order"] for mod in payload["mods"]], [1, 2])
             self.assertEqual(payload["mods"][0]["workshop_url"], "https://steamcommunity.com/sharedfiles/filedetails/?id=222")
             self.assertEqual(payload["mods"][1]["description"], "Workshop description A")
+            self.assertEqual(payload["description_mode"], "compact")
+            self.assertEqual(payload["description_limit"], DESCRIPTION_LIMIT)
 
             parsed = parse_import_payload(json.dumps(payload))
             self.assertEqual(parsed["game"], "warhammer3")
@@ -54,7 +59,7 @@ class PlaysetJsonTests(unittest.TestCase):
             assets={},
         )
         self.assertEqual(payload["mods"][0]["id"], "missing")
-        self.assertNotIn("position", payload["mods"][0])
+        self.assertEqual(payload["mods"][0]["load_order"], 1)
 
     def test_missing_pending_workshop_mod_keeps_its_link(self) -> None:
         pending = pending_workshop_mod_id(
@@ -67,6 +72,7 @@ class PlaysetJsonTests(unittest.TestCase):
             assets={},
         )
         item = payload["mods"][0]
+        self.assertEqual(item["load_order"], 1)
         self.assertEqual(item["workshop_id"], "333")
         self.assertEqual(item["pack_name"], "c.pack")
         self.assertEqual(
@@ -85,6 +91,46 @@ class PlaysetJsonTests(unittest.TestCase):
                 include_descriptions=False,
             )
             self.assertNotIn("description", payload["mods"][0])
+            self.assertNotIn("description_mode", payload)
+            self.assertNotIn("description_limit", payload)
+
+    def test_compact_description_strips_images_links_and_markup(self) -> None:
+        compacted, truncated = compact_description(
+            "[b]Hello[/b] [img]https://example.com/a.png[/img] "
+            "[url=https://example.com]Link[/url] [list][*]A[*]B[/list] "
+            "<br>https://example.com/bare"
+        )
+        self.assertFalse(truncated)
+        self.assertEqual(compacted, "Hello Link A B")
+
+    def test_compact_description_limits_length(self) -> None:
+        compacted, truncated = compact_description("x" * (DESCRIPTION_LIMIT + 50))
+        self.assertTrue(truncated)
+        self.assertEqual(len(compacted), DESCRIPTION_LIMIT + 1)
+        self.assertTrue(compacted.endswith("…"))
+
+    def test_export_compacts_long_descriptions(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            asset = replace(
+                make_asset(
+                    write_pack(Path(temporary) / "a.pack"), "a", "data", "111"
+                ),
+                description=(
+                    "[img]https://example.com/a.png[/img] "
+                    + ("x" * (DESCRIPTION_LIMIT + 10))
+                ),
+            )
+            payload = build_export_payload(
+                game_id="warhammer3",
+                playset_name="x",
+                ordered_ids=[asset.id],
+                assets={asset.id: asset},
+                include_descriptions=True,
+            )
+            item = payload["mods"][0]
+            self.assertTrue(item["description_truncated"])
+            self.assertLessEqual(len(item["description"]), DESCRIPTION_LIMIT + 1)
+            self.assertNotIn("[img]", item["description"])
 
     def test_rejects_wrong_type_schema_and_empty_mods(self) -> None:
         valid = {
@@ -123,13 +169,13 @@ class PlaysetJsonTests(unittest.TestCase):
         )
         self.assertEqual(parsed["mods"][0]["source"], "")
 
-    def test_import_uses_array_order_not_position(self) -> None:
+    def test_import_uses_array_order_not_load_order(self) -> None:
         parsed = parse_import_payload(
             json.dumps(
                 {
                     "mods": [
-                        {"id": "b", "position": 9},
-                        {"id": "a", "position": 0},
+                        {"id": "b", "load_order": 9},
+                        {"id": "a", "load_order": 1},
                     ]
                 }
             )

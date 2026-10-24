@@ -2762,6 +2762,7 @@ class API:
                     "exported": False,
                     "path": "",
                     "mod_count": 0,
+                    "bytes": 0,
                     "include_descriptions": bool(include_descriptions),
                 }
         written = write_export_file(target, payload)
@@ -2769,6 +2770,7 @@ class API:
             "exported": True,
             "path": str(written),
             "mod_count": len(payload["mods"]),
+            "bytes": written.stat().st_size,
             "include_descriptions": bool(include_descriptions),
         }
 

@@ -1,11 +1,13 @@
 """Import and export a playset as a portable JSON file.
 
 The export is intentionally human-readable and keeps the load order in the
-``mods`` array. Workshop URLs are always included when known; Workshop
-descriptions are optional so the file stays small unless the user asks for
-them. The import side is deliberately tolerant of files edited by another AI:
-a bare list, a list of MOD ids, or a payload without the optional metadata is
-still accepted as long as it contains importable MOD references.
+``mods`` array, with a 1-based ``load_order`` on every entry. Workshop URLs are
+always included when known; Workshop descriptions are optional and are
+compacted (images/links removed, length limited) so a long description cannot
+make the file too large for another AI to read. The import side is deliberately
+tolerant of files edited by another AI: a bare list, a list of MOD ids, or a
+payload without the optional metadata is still accepted as long as it contains
+importable MOD references.
 """
 
 from __future__ import annotations
@@ -24,9 +26,17 @@ from .share import parse_pending_workshop_mod_id
 SCHEMA_VERSION = 1
 PAYLOAD_TYPE = "wyccc-mod-manager-playset"
 MAX_FILE_BYTES = 20 * 1024 * 1024
+DESCRIPTION_LIMIT = 2000
 KNOWN_SOURCES = {SOURCE_DATA, SOURCE_WORKSHOP, SOURCE_LOCAL}
 _UNSAFE_FILENAME = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
 _WORKSHOP_ID_IN_URL = re.compile(r"[?&]id=(\d+)")
+_IMAGE_TAG = re.compile(r"\[img\].*?\[/img\]", re.IGNORECASE | re.DOTALL)
+_URL_TAG = re.compile(r"\[url=[^\]]*\](.*?)\[/url\]", re.IGNORECASE | re.DOTALL)
+_BBCODE_TAG = re.compile(r"\[/?[a-zA-Z][^\]]*\]")
+_LIST_ITEM = re.compile(r"\[\*\]")
+_HTML_TAG = re.compile(r"</?[a-zA-Z][^>]*>")
+_BARE_URL = re.compile(r"https?://\S+", re.IGNORECASE)
+_WHITESPACE = re.compile(r"\s+")
 _RESERVED_FILENAMES = {
     "con",
     "prn",
@@ -57,6 +67,30 @@ def _text(item: Mapping[str, Any], key: str) -> str:
     return "" if value is None else str(value).strip()
 
 
+def compact_description(
+    text: str, limit: int = DESCRIPTION_LIMIT
+) -> tuple[str, bool]:
+    """Strip image/link markup and bound a Workshop description.
+
+    Workshop descriptions often contain large BBCode image galleries. Keeping
+    those verbatim can make the exported file too large for another AI's
+    single-file upload limit, so only the readable text is kept.
+    """
+    value = str(text or "")
+    if not value:
+        return "", False
+    value = _IMAGE_TAG.sub(" ", value)
+    value = _URL_TAG.sub(r"\1", value)
+    value = _LIST_ITEM.sub(" ", value)
+    value = _BBCODE_TAG.sub(" ", value)
+    value = _HTML_TAG.sub(" ", value)
+    value = _BARE_URL.sub(" ", value)
+    value = _WHITESPACE.sub(" ", value).strip()
+    if len(value) > limit:
+        return f"{value[:limit].rstrip()}…", True
+    return value, False
+
+
 def build_export_payload(
     *,
     game_id: str,
@@ -66,7 +100,7 @@ def build_export_payload(
     include_descriptions: bool = False,
 ) -> dict[str, Any]:
     mods: list[dict[str, Any]] = []
-    for mod_id in ordered_ids:
+    for index, mod_id in enumerate(ordered_ids):
         raw_id = str(mod_id)
         asset = assets.get(raw_id)
         if asset is None:
@@ -76,6 +110,7 @@ def build_export_payload(
             workshop_id = pending[0] if pending else ""
             mods.append(
                 {
+                    "load_order": index + 1,
                     "id": raw_id,
                     "pack_name": pending[1] if pending else "",
                     "name": "",
@@ -87,6 +122,7 @@ def build_export_payload(
             continue
         workshop_id = asset.workshop_id
         item: dict[str, Any] = {
+            "load_order": index + 1,
             "id": asset.id,
             "pack_name": asset.pack_name,
             "name": asset.effective_name,
@@ -95,9 +131,12 @@ def build_export_payload(
             "workshop_url": asset.workshop_url or _workshop_url(workshop_id),
         }
         if include_descriptions:
-            item["description"] = asset.description or ""
+            description, truncated = compact_description(asset.description or "")
+            item["description"] = description
+            if truncated:
+                item["description_truncated"] = True
         mods.append(item)
-    return {
+    payload: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "type": PAYLOAD_TYPE,
         "app_version": APP_VERSION,
@@ -105,8 +144,12 @@ def build_export_payload(
         "playset_name": str(playset_name or "").strip()[:120],
         "exported_at": int(time.time() * 1000),
         "include_descriptions": bool(include_descriptions),
-        "mods": mods,
     }
+    if include_descriptions:
+        payload["description_mode"] = "compact"
+        payload["description_limit"] = DESCRIPTION_LIMIT
+    payload["mods"] = mods
+    return payload
 
 
 def parse_import_payload(text: str) -> dict[str, Any]:
