@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import os
 import tempfile
 import unittest
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from unittest.mock import patch
 
 from backend.constants import SOURCE_DATA, SOURCE_WORKSHOP
@@ -11,6 +12,7 @@ from tests.helpers import make_asset, write_pack
 
 
 class LoadOrderTests(unittest.TestCase):
+    @unittest.skipUnless(os.name == "nt", "Windows drive aliases")
     def test_build_plan_renders_ascii_aliases_for_unicode_game_and_workshop_paths(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary) / "中文 Steam 库"
@@ -28,9 +30,9 @@ class LoadOrderTests(unittest.TestCase):
             def map_path(path: str | Path) -> str:
                 candidate = Path(path).resolve(strict=False)
                 if candidate.is_relative_to(game_root):
-                    return str(Path("Z:\\") / candidate.relative_to(game_root))
+                    return str(PureWindowsPath("Z:/") / candidate.relative_to(game_root))
                 if candidate.is_relative_to(resolved_workshop_root):
-                    return str(Path("Y:\\") / candidate.relative_to(resolved_workshop_root))
+                    return str(PureWindowsPath("Y:/") / candidate.relative_to(resolved_workshop_root))
                 return str(candidate)
 
             plan = LoadOrderService(root / "backups").build_plan(

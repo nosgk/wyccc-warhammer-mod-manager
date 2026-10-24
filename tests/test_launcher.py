@@ -143,6 +143,7 @@ class LauncherProcessTests(unittest.TestCase):
         ):
             self.assertFalse(is_game_running())
 
+    @unittest.skipUnless(os.name == "nt", "Windows path normalization")
     def test_windows_termination_only_targets_the_configured_game_executable(self) -> None:
         with (
             patch("backend.launcher.os.name", "nt"),

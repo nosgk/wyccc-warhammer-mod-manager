@@ -996,6 +996,7 @@ class ApiContractTests(unittest.TestCase):
     def test_game_data_feature_status_uses_fixed_workshop_subscriptions(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             api = API(Path(temporary) / "state")
+            api.settings_service.save({"language": "zh-CN"})
             items = GAME_DATA_FEATURE_WORKSHOP_ITEMS
             with patch(
                 "backend.api.query_workshop_subscription_status",
@@ -1143,6 +1144,7 @@ class ApiContractTests(unittest.TestCase):
             },
         )
 
+    @unittest.skipUnless(os.name == "nt", "Windows drive aliases")
     def test_launch_uses_ascii_aliases_when_game_and_workshop_paths_are_non_ascii(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary) / "中文 Steam 库"
@@ -2154,6 +2156,7 @@ class ApiContractTests(unittest.TestCase):
             )
             share_code = export_share([exported_asset])
             api = API(root / "state")
+            api.settings_service.save({"language": "zh-CN"})
 
             with patch(
                 "backend.api.query_workshop_subscription_status",

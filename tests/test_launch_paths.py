@@ -8,6 +8,7 @@ from unittest.mock import call, patch
 from backend.launch_paths import LaunchPathAliases
 
 
+@unittest.skipUnless(os.name == "nt", "Windows drive aliases")
 class LaunchPathAliasTests(unittest.TestCase):
     def test_existing_subst_is_reused_across_instances_and_rebinding_is_detected(self) -> None:
         root = r"D:\游戏\Warhammer"

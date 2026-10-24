@@ -41,30 +41,30 @@ class ModWatcherTests(unittest.TestCase):
         workshop_handler = ModEventHandler(lambda: changes.append("workshop"), workshop=True)
 
         data_handler.on_any_event(
-            SimpleNamespace(event_type="created", src_path=r"C:\game\data\new.pack", is_directory=False)
+            SimpleNamespace(event_type="created", src_path="/game/data/new.pack", is_directory=False)
         )
         data_handler.on_any_event(
-            SimpleNamespace(event_type="created", src_path=r"C:\game\data\preview.png", is_directory=False)
+            SimpleNamespace(event_type="created", src_path="/game/data/preview.png", is_directory=False)
         )
         data_handler.on_any_event(
             SimpleNamespace(
                 event_type="created",
-                src_path=rf"C:\game\data\{GAME_DATA_PATCH_NAME}",
+                src_path=f"/game/data/{GAME_DATA_PATCH_NAME}",
                 is_directory=False,
             )
         )
         data_handler.on_any_event(
             SimpleNamespace(
                 event_type="modified",
-                src_path=rf"C:\game\data\{RUNTIME_PACK_NAME}",
+                src_path=f"/game/data/{RUNTIME_PACK_NAME}",
                 is_directory=False,
             )
         )
         workshop_handler.on_any_event(
-            SimpleNamespace(event_type="deleted", src_path=r"C:\workshop\123456", is_directory=True)
+            SimpleNamespace(event_type="deleted", src_path="/workshop/123456", is_directory=True)
         )
         workshop_handler.on_any_event(
-            SimpleNamespace(event_type="modified", src_path=r"C:\workshop\123456\preview.jpg", is_directory=False)
+            SimpleNamespace(event_type="modified", src_path="/workshop/123456/preview.jpg", is_directory=False)
         )
 
         self.assertEqual(changes, ["data", "data", "data", "workshop"])
