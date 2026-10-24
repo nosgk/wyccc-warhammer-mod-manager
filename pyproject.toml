@@ -50,4 +50,4 @@ packages = ["backend"]
 py-modules = ["main"]
 
 [tool.setuptools.package-data]
-backend = ["schemas/*.ron.gz", "schemas/*.json", "schemas/*.txt", "schemas/*.md", "resources/battle_probe/script/battle/mod/*.lua", "resources/battle_probe/script/wyccc_battle_probe/*.lua"]
+backend = ["schemas/*.ron.gz", "schemas/*.json", "schemas/*.txt", "schemas/*.md", "resources/*.json", "resources/battle_probe/script/battle/mod/*.lua", "resources/battle_probe/script/wyccc_battle_probe/*.lua"]

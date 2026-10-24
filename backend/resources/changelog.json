@@ -1,0 +1,3013 @@
+{
+  "structure": [
+    {
+      "version": "1.3.0",
+      "date": "2026-10-23",
+      "entries": [
+        [
+          "v130_added_title",
+          [
+            [
+              "feature",
+              "v130_multiplayer_mode"
+            ]
+          ]
+        ],
+        [
+          "v130_adjusted_title",
+          [
+            [
+              "improvement",
+              "v130_voice_errors"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.9",
+      "date": "2026-10-22",
+      "entries": [
+        [
+          "v129_fixed_title",
+          [
+            [
+              "fix",
+              "v129_legacy_launcher"
+            ],
+            [
+              "fix",
+              "v129_owned_mod_update"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.8",
+      "date": "2026-10-18",
+      "entries": [
+        [
+          "v128_fixed_title",
+          [
+            [
+              "fix",
+              "v128_voice_fix"
+            ]
+          ]
+        ],
+        [
+          "v128_adjusted_title",
+          [
+            [
+              "improvement",
+              "v128_empty_folders"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.7",
+      "date": "2026-10-17",
+      "entries": [
+        [
+          "v127_added_title",
+          [
+            [
+              "feature",
+              "v127_dynamic_voice"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.6",
+      "date": "2026-10-14",
+      "entries": [
+        [
+          "v126_fixed_title",
+          [
+            [
+              "fix",
+              "v126_tk_hidden_mods"
+            ],
+            [
+              "fix",
+              "v126_publish_categories"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.5",
+      "date": "2026-10-11",
+      "entries": [
+        [
+          "v125_added_title",
+          [
+            [
+              "feature",
+              "v125_chinese_profile"
+            ],
+            [
+              "feature",
+              "v125_ai_analysis"
+            ]
+          ]
+        ],
+        [
+          "v125_adjusted_title",
+          [
+            [
+              "improvement",
+              "v125_folder_actions"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.4",
+      "date": "2026-10-09",
+      "entries": [
+        [
+          "v124_adjusted_title",
+          [
+            [
+              "improvement",
+              "v124_patch_compatibility"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.3",
+      "date": "2026-10-08",
+      "entries": [
+        [
+          "v123_added_title",
+          [
+            [
+              "feature",
+              "v123_exception_probe"
+            ],
+            [
+              "feature",
+              "v123_tier5_patch"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.2",
+      "date": "2026-10-06",
+      "entries": [
+        [
+          "v122_fixed_title",
+          [
+            [
+              "fix",
+              "v122_unrecognized_mods"
+            ],
+            [
+              "fix",
+              "v122_stale_permission_table"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.1",
+      "date": "2026-10-04",
+      "entries": [
+        [
+          "v121_adjusted_title",
+          [
+            [
+              "improvement",
+              "v121_folder_sorting"
+            ]
+          ]
+        ],
+        [
+          "v121_adjusted_title",
+          [
+            [
+              "improvement",
+              "v121_folder_playsets"
+            ]
+          ]
+        ],
+        [
+          "v121_added_title",
+          [
+            [
+              "feature",
+              "v121_ai_mod_types"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.2.0",
+      "date": "2026-10-03",
+      "entries": [
+        [
+          "v120_fixed_title",
+          [
+            [
+              "fix",
+              "v120_warning_filter"
+            ]
+          ]
+        ],
+        [
+          "v120_added_title",
+          [
+            [
+              "feature",
+              "v120_launch_history"
+            ]
+          ]
+        ],
+        [
+          "v120_fixed_title",
+          [
+            [
+              "fix",
+              "v120_steam_family_mods"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.1.9",
+      "date": "2026-10-03",
+      "entries": [
+        [
+          "v119_adjusted_title",
+          [
+            [
+              "optimize",
+              "v119_workshop_refresh_speed"
+            ],
+            [
+              "improvement",
+              "v119_table_schema_update"
+            ]
+          ]
+        ],
+        [
+          "v119_fixed_title",
+          [
+            [
+              "fix",
+              "v119_runtime_pack_safety"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.1.8",
+      "date": "2026-10-02",
+      "entries": [
+        [
+          "v118_fixed_title",
+          [
+            [
+              "fix",
+              "v118_mod_diagnostics"
+            ]
+          ]
+        ],
+        [
+          "v118_added_title",
+          [
+            [
+              "feature",
+              "v118_table_schema_update"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.1.7",
+      "date": "2026-09-30",
+      "entries": [
+        [
+          "v117_added_title",
+          [
+            [
+              "feature",
+              "v117_mod_folders"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.1.6",
+      "date": "2026-09-28",
+      "entries": [
+        [
+          "v116_fixed_title",
+          [
+            [
+              "fix",
+              "v116_unit_encyclopedia_compatibility"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.1.5",
+      "date": "2026-09-27",
+      "entries": [
+        [
+          "v115_added_title",
+          [
+            [
+              "feature",
+              "v115_mod_diagnostics"
+            ],
+            [
+              "feature",
+              "v115_unit_encyclopedia"
+            ]
+          ]
+        ],
+        [
+          "v115_fixed_title",
+          [
+            [
+              "fix",
+              "v115_misc_fixes"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.1.1",
+      "date": "2026-09-25",
+      "entries": [
+        [
+          "v111_adjusted_title",
+          [
+            [
+              "improvement",
+              "v111_wh3_90_compatibility"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-09-08",
+      "entries": [
+        [
+          "v110_added_title",
+          [
+            [
+              "feature",
+              "v110_variant_selector_compatibility"
+            ]
+          ]
+        ],
+        [
+          "v110_fixed_title",
+          [
+            [
+              "fix",
+              "v110_save_mods_excludes_vanilla_packs"
+            ],
+            [
+              "fix",
+              "v110_workshop_category_from_mod_type"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.0.9",
+      "date": "2026-08-13",
+      "entries": [
+        [
+          "v109_fixed_title",
+          [
+            [
+              "fix",
+              "v109_unit_data_mod_load_order"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.0.8",
+      "date": "2026-08-12",
+      "entries": [
+        [
+          "v108_adjusted_title",
+          [
+            [
+              "improvement",
+              "v108_unit_data_physical_fields"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.0.7",
+      "date": "2026-08-10",
+      "entries": [
+        [
+          "v107_added_title",
+          [
+            [
+              "feature",
+              "v107_update_outdated_mods"
+            ],
+            [
+              "feature",
+              "v107_warning_button_filter"
+            ]
+          ]
+        ],
+        [
+          "v107_adjusted_title",
+          [
+            [
+              "improvement",
+              "v107_unit_data_anti_bonuses"
+            ]
+          ]
+        ],
+        [
+          "v107_fixed_title",
+          [
+            [
+              "fix",
+              "v107_force_update_reliable"
+            ],
+            [
+              "fix",
+              "v107_ror_patch_generation"
+            ],
+            [
+              "fix",
+              "v107_artillery_missile_damage"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.0.6",
+      "date": "2026-08-09",
+      "entries": [
+        [
+          "v106_added_title",
+          [
+            [
+              "feature",
+              "v106_workshop_update_warning"
+            ]
+          ]
+        ],
+        [
+          "v106_fixed_title",
+          [
+            [
+              "fix",
+              "v106_runtime_patch_load_order"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.0.5",
+      "date": "2026-08-08",
+      "entries": [
+        [
+          "v105_added_title",
+          [
+            [
+              "feature",
+              "v105_launcher_workshop_games"
+            ],
+            [
+              "feature",
+              "v105_unit_data_three_kingdoms"
+            ]
+          ]
+        ],
+        [
+          "v105_adjusted_title",
+          [
+            [
+              "improvement",
+              "v105_unit_data_more_fields"
+            ]
+          ]
+        ],
+        [
+          "v105_fixed_title",
+          [
+            [
+              "fix",
+              "v105_unit_data_db_order"
+            ],
+            [
+              "fix",
+              "v105_disable_unit_recruitment"
+            ],
+            [
+              "fix",
+              "v105_model_count_edit"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.0.1",
+      "date": "2026-08-08",
+      "entries": [
+        [
+          "v101_fixed_title",
+          [
+            [
+              "fix",
+              "v101_unit_data_localization"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-08-07",
+      "entries": [
+        [
+          "v100_added_title",
+          [
+            [
+              "feature",
+              "v100_unit_data_modification"
+            ],
+            [
+              "feature",
+              "v100_compatibility_patch"
+            ]
+          ]
+        ],
+        [
+          "v100_adjusted_title",
+          [
+            [
+              "improvement",
+              "v100_non_chinese_error_messages"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.9",
+      "date": "2026-08-06",
+      "entries": [
+        [
+          "v099_fixed_title",
+          [
+            [
+              "fix",
+              "v099_unit_scale_sfo_compatibility"
+            ],
+            [
+              "fix",
+              "v099_workshop_upload_stability"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.8",
+      "date": "2026-07-31",
+      "entries": [
+        [
+          "v098_adjusted_title",
+          [
+            [
+              "improvement",
+              "v098_rpfm_path_prompt"
+            ],
+            [
+              "improvement",
+              "v098_disable_low_consumption"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.7",
+      "date": "2026-07-30",
+      "entries": [
+        [
+          "v097_added_title",
+          [
+            [
+              "feature",
+              "v097_end_game_process_button"
+            ]
+          ]
+        ],
+        [
+          "v097_adjusted_title",
+          [
+            [
+              "improvement",
+              "v097_confirmation_dialog_ui"
+            ],
+            [
+              "improvement",
+              "v097_error_message_wording"
+            ]
+          ]
+        ],
+        [
+          "v097_fixed_title",
+          [
+            [
+              "fix",
+              "v097_mod_data_compatibility"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.6",
+      "date": "2026-07-26",
+      "entries": [
+        [
+          "v096_added_title",
+          [
+            [
+              "feature",
+              "v096_drag_insert_preview"
+            ]
+          ]
+        ],
+        [
+          "v096_adjusted_title",
+          [
+            [
+              "improvement",
+              "v096_move_hidden_toggle"
+            ],
+            [
+              "improvement",
+              "v096_playset_hidden_settings"
+            ],
+            [
+              "improvement",
+              "v096_error_messages"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.5",
+      "date": "2026-07-25",
+      "entries": [
+        [
+          "v095_fixed_title",
+          [
+            [
+              "fix",
+              "v095_update_mod_styles"
+            ]
+          ]
+        ],
+        [
+          "v095_adjusted_title",
+          [
+            [
+              "improvement",
+              "v095_multi_model_war_machines"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.4",
+      "date": "2026-07-24",
+      "entries": [
+        [
+          "v094_adjusted_title",
+          [
+            [
+              "improvement",
+              "v094_unit_scale_classification"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.3",
+      "date": "2026-07-24",
+      "entries": [
+        [
+          "v093_fixed_title",
+          [
+            [
+              "fix",
+              "v093_three_kingdoms_saves"
+            ],
+            [
+              "fix",
+              "v093_subscription_sort"
+            ]
+          ]
+        ],
+        [
+          "v093_adjusted_title",
+          [
+            [
+              "improvement",
+              "v093_category_unit_rules"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.2",
+      "date": "2026-07-23",
+      "entries": [
+        [
+          "v092_adjusted_title",
+          [
+            [
+              "improvement",
+              "v092_subscription_sort"
+            ],
+            [
+              "improvement",
+              "v092_independent_mod_search"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.9.0",
+      "date": "2026-07-21",
+      "entries": [
+        [
+          "v090_added_title",
+          [
+            [
+              "feature",
+              "v090_open_published_workshop_page"
+            ]
+          ]
+        ],
+        [
+          "v090_adjusted_title",
+          [
+            [
+              "improvement",
+              "v090_save_playset"
+            ]
+          ]
+        ],
+        [
+          "v090_fixed_title",
+          [
+            [
+              "fix",
+              "v090_auto_update"
+            ],
+            [
+              "fix",
+              "v090_fully_custom_garrison"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.8.8",
+      "date": "2026-07-21",
+      "entries": [
+        [
+          "v088_added_title",
+          [
+            [
+              "feature",
+              "v088_dependency_action"
+            ]
+          ]
+        ],
+        [
+          "v088_adjusted_title",
+          [
+            [
+              "improvement",
+              "v088_unit_formation_width"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.8.7",
+      "date": "2026-07-20",
+      "entries": [
+        [
+          "v087_added_title",
+          [
+            [
+              "feature",
+              "v087_type_order"
+            ],
+            [
+              "feature",
+              "v087_type_sort"
+            ],
+            [
+              "feature",
+              "v087_manual_type"
+            ]
+          ]
+        ],
+        [
+          "v087_adjusted_title",
+          [
+            [
+              "improvement",
+              "v087_readability"
+            ]
+          ]
+        ],
+        [
+          "v087_fixed_title",
+          [
+            [
+              "fix",
+              "v087_publish_modal_ui"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.8.6",
+      "date": "2026-07-19",
+      "entries": [
+        [
+          "v086_fixed_title",
+          [
+            [
+              "fix",
+              "v086_playset_dependencies"
+            ],
+            [
+              "fix",
+              "v086_settings_page_ui"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.8.5",
+      "date": "2026-07-19",
+      "entries": [
+        [
+          "v085_fixed_title",
+          [
+            [
+              "fix",
+              "v085_non_ascii_launch_paths"
+            ],
+            [
+              "fix",
+              "v085_game_data_overhauls"
+            ],
+            [
+              "fix",
+              "v085_steam_friends_utf8"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.8.2",
+      "date": "2026-07-19",
+      "entries": [
+        [
+          "v082_added_title",
+          [
+            [
+              "feature",
+              "v082_batch_ai_generation"
+            ],
+            [
+              "feature",
+              "v082_search_highlight"
+            ]
+          ]
+        ],
+        [
+          "v082_fixed_title",
+          [
+            [
+              "fix",
+              "v082_ai_highlight_cache"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.8.1",
+      "date": "2026-07-18",
+      "entries": [
+        [
+          "v081_fixed_title",
+          [
+            [
+              "fix",
+              "v081_friendly_fire"
+            ],
+            [
+              "fix",
+              "v081_game_scoped_playsets"
+            ],
+            [
+              "fix",
+              "v081_update_restart"
+            ],
+            [
+              "fix",
+              "v081_unit_formation"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.8.0",
+      "date": "2026-07-18",
+      "entries": [
+        [
+          "v080_added_title",
+          [
+            [
+              "feature",
+              "v080_three_kingdoms"
+            ],
+            [
+              "feature",
+              "v080_shortcuts"
+            ],
+            [
+              "feature",
+              "v080_workshop_collection_import"
+            ],
+            [
+              "feature",
+              "v080_recruitment_capacity"
+            ]
+          ]
+        ],
+        [
+          "v080_adjusted_title",
+          [
+            [
+              "improvement",
+              "v080_publish_simplified"
+            ],
+            [
+              "improvement",
+              "v080_update_channel"
+            ],
+            [
+              "improvement",
+              "v080_editable_shortcuts"
+            ],
+            [
+              "improvement",
+              "v080_themed_controls"
+            ]
+          ]
+        ],
+        [
+          "v080_fixed_title",
+          [
+            [
+              "fix",
+              "v080_workshop_ownership"
+            ],
+            [
+              "fix",
+              "v080_startup_guidance"
+            ],
+            [
+              "fix",
+              "v080_recycle_button"
+            ],
+            [
+              "fix",
+              "v080_unicode_paths"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.7.0",
+      "date": "2026-07-17",
+      "entries": [
+        [
+          "v070_added_title",
+          [
+            [
+              "feature",
+              "v070_single_entity_unit_rule"
+            ],
+            [
+              "feature",
+              "v070_workshop_cover"
+            ],
+            [
+              "feature",
+              "v070_spanish_language"
+            ]
+          ]
+        ],
+        [
+          "v070_fixed_title",
+          [
+            [
+              "fix",
+              "v070_low_consumption_stability"
+            ],
+            [
+              "fix",
+              "v070_unit_scale_ticks"
+            ],
+            [
+              "fix",
+              "v070_game_data_patch_reliability"
+            ],
+            [
+              "fix",
+              "v070_save_mods"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.6.5",
+      "date": "2026-07-17",
+      "entries": [
+        [
+          "v065_added_title",
+          [
+            [
+              "feature",
+              "v065_auto_patch"
+            ],
+            [
+              "feature",
+              "v065_unit_scale"
+            ],
+            [
+              "feature",
+              "v065_workshop_links"
+            ]
+          ]
+        ],
+        [
+          "v065_adjusted_title",
+          [
+            [
+              "improvement",
+              "v065_game_data_window"
+            ],
+            [
+              "improvement",
+              "v065_author_names"
+            ]
+          ]
+        ],
+        [
+          "v065_fixed_title",
+          [
+            [
+              "fix",
+              "v065_skip_intro"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.6.0",
+      "date": "2026-07-16",
+      "entries": [
+        [
+          "v060_added_title",
+          [
+            [
+              "feature",
+              "v060_low_consumption"
+            ],
+            [
+              "feature",
+              "v060_live_detection"
+            ],
+            [
+              "feature",
+              "v060_game_data_controls"
+            ],
+            [
+              "feature",
+              "v060_unit_multiplier"
+            ],
+            [
+              "feature",
+              "v060_friendly_fire"
+            ],
+            [
+              "feature",
+              "v060_save_actions"
+            ],
+            [
+              "feature",
+              "v060_select_all"
+            ],
+            [
+              "feature",
+              "v060_official_profiles"
+            ],
+            [
+              "feature",
+              "v060_copy_path"
+            ],
+            [
+              "feature",
+              "v060_safe_delete"
+            ]
+          ]
+        ],
+        [
+          "v060_adjusted_title",
+          [
+            [
+              "improvement",
+              "v060_startup_speed"
+            ],
+            [
+              "improvement",
+              "v060_unsubscribe_cleanup"
+            ]
+          ]
+        ],
+        [
+          "v060_fixed_title",
+          [
+            [
+              "fix",
+              "v060_dependency_refresh"
+            ],
+            [
+              "fix",
+              "v060_force_update_wait"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.5.0",
+      "date": "2026-07-15",
+      "entries": [
+        [
+          "v050_added_title",
+          [
+            [
+              "feature",
+              "v050_settings_pages"
+            ],
+            [
+              "feature",
+              "v050_about_page"
+            ],
+            [
+              "feature",
+              "v050_restore_last_order"
+            ],
+            [
+              "feature",
+              "v050_drag_lists"
+            ],
+            [
+              "feature",
+              "v050_publish_language"
+            ],
+            [
+              "feature",
+              "v050_change_note"
+            ],
+            [
+              "feature",
+              "v050_share_subscribe"
+            ],
+            [
+              "feature",
+              "v050_system_language"
+            ],
+            [
+              "feature",
+              "v050_builtin_languages"
+            ]
+          ]
+        ],
+        [
+          "v050_adjusted_title",
+          [
+            [
+              "improvement",
+              "v050_button_style"
+            ],
+            [
+              "improvement",
+              "v050_single_language_ui"
+            ],
+            [
+              "improvement",
+              "v050_enabled_dependency_scope"
+            ],
+            [
+              "improvement",
+              "v050_dependency_cache_warning"
+            ],
+            [
+              "improvement",
+              "v050_readme"
+            ]
+          ]
+        ],
+        [
+          "v050_fixed_title",
+          [
+            [
+              "fix",
+              "v050_outdated_check"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.3.0",
+      "date": "2026-07-15",
+      "entries": [
+        [
+          "v030_added_title",
+          [
+            [
+              "feature",
+              "v030_ignore_issues"
+            ],
+            [
+              "feature",
+              "v030_warning_window"
+            ]
+          ]
+        ],
+        [
+          "v030_fixed_title",
+          [
+            [
+              "fix",
+              "v030_data_location"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.2.0",
+      "date": "2026-07-15",
+      "entries": [
+        [
+          "v020_added_title",
+          [
+            [
+              "feature",
+              "v020_dual_source"
+            ],
+            [
+              "feature",
+              "v020_context_menu"
+            ]
+          ]
+        ],
+        [
+          "v020_fixed_title",
+          [
+            [
+              "fix",
+              "v020_pyinstaller"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-07-15",
+      "entries": [
+        [
+          "v010_added_title",
+          [
+            [
+              "feature",
+              "v010_playsets"
+            ],
+            [
+              "feature",
+              "v010_game_workshop"
+            ],
+            [
+              "feature",
+              "v010_updates"
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "text": {
+    "zh-CN": {
+      "v130_added_title": "新增",
+      "v130_adjusted_title": "调整",
+      "v130_multiplayer_mode": "新增-联机模式，勾选后将禁用启动器自带的各种PACK，以提高联机的兼容性",
+      "v130_voice_errors": "调整-语音兼容补丁的错误提示，现在会说明具体是哪些MOD不兼容，可以将发现的不兼容MOD反馈给我，我来研究如何兼容",
+      "v129_fixed_title": "修复",
+      "v129_legacy_launcher": "修复-启动器上传的MOD，在官方老启动器中无法看到的问题",
+      "v129_owned_mod_update": "修复-有时候无法上传更新自己的MOD的问题",
+      "v128_fixed_title": "修复",
+      "v128_voice_fix": "动态语音兼容功能存在的问题",
+      "v128_adjusted_title": "调整",
+      "v128_empty_folders": "空文件夹现在将自动隐藏",
+      "v127_added_title": "新增",
+      "v127_dynamic_voice": "兼容补丁-动态语音兼容， 由于原版的限制，各个增加了新语音的MOD，会互相冲突，只有一个能生效，所以我制作了这个功能，能让各个MOD的语音动态兼容",
+      "v126_fixed_title": "修复",
+      "v126_tk_hidden_mods": "修复三国全战某些MOD会被错误隐藏的问题",
+      "v126_publish_categories": "修复上传/更新MOD时，分类标签读取错误的问题",
+      "v125_added_title": "新增",
+      "v125_adjusted_title": "调整",
+      "v125_chinese_profile": "启动游戏兼容中文用户目录",
+      "v125_ai_analysis": "AI分析功能，可以使用AI扫描所有当前已启用的MOD，检查这些MOD的评论区有没有BUG反馈",
+      "v125_folder_actions": "优化文件夹功能，支持一键启用/禁用文件夹中的所有MOD，支持将MOD直接拖拽到文件夹或者拖出，支持按照文件夹来筛选",
+      "v124_adjusted_title": "调整",
+      "v124_patch_compatibility": "提高了补丁功能对各种MOD的兼容性",
+      "v123_added_title": "新增",
+      "v123_exception_probe": "异常探针功能，将更详细的内存日志输出到游戏根目录，以便以出现某些难以排查的异常时，获得更多线索",
+      "v123_tier5_patch": "5级小城补丁，当使用5级小城MOD时，开启此MOD，检测到任何对小城进行了美化的MOD，例如与龙同行、OVN、JIANG， 都会动态生成一个兼容补丁",
+      "v122_fixed_title": "修复",
+      "v122_unrecognized_mods": "某些MOD无法被识别的问题",
+      "v122_stale_permission_table": "关闭选项时未清理旧权限表的问题",
+      "v121_adjusted_title": "调整",
+      "v121_added_title": "新增",
+      "v121_folder_sorting": "文件夹现在可以拖动排序了",
+      "v121_folder_playsets": "文件夹现在可以跨播放集保存",
+      "v121_ai_mod_types": "修改类型现在可以通过AI自动识别，前提是你在设置中配置了AI模型，AI会自动判断这个MOD的类型，加入标签，只会从当前已有的类型中进行选择",
+      "v120_fixed_title": "修复",
+      "v120_added_title": "新增",
+      "v120_warning_filter": "仅显示报警MOD模式下存在的问题",
+      "v120_launch_history": "启动记录功能，可以查看每一次游戏启动的MOD列表，支持和当前列表进行对比，也支持加载记录中的mod列表",
+      "v120_steam_family_mods": "当用户加入steam家庭组时，会显示家庭成员的MOD的问题",
+      "v119_adjusted_title": "调整",
+      "v119_workshop_refresh_speed": "优化新增MOD时，更新MOD信息的速度",
+      "v119_table_schema_update": "优化更新表结构功能",
+      "v119_fixed_title": "修复",
+      "v119_runtime_pack_safety": "内置pack存在的隐患",
+      "v118_fixed_title": "修复",
+      "v118_mod_diagnostics": "MOD启动排障存在的问题",
+      "v118_added_title": "新增",
+      "v118_table_schema_update": "更新表结构功能，在MOD上右键选择，可以更新MOD表结构，这个操作能够使得8.X版本大部分过期的MOD直接恢复正常，但依然有估计五分之一的MOD无法通过这个方式修复",
+      "v117_added_title": "新增",
+      "v117_mod_folders": "新增文件夹功能，可以在MOD列表中将MOD添加到不同的文件夹进行分组管理",
+      "v116_fixed_title": "修复",
+      "v116_unit_encyclopedia_compatibility": "修复单位图鉴存在的兼容性问题。",
+      "v115_added_title": "新增",
+      "v115_mod_diagnostics": "新增 MOD 启动排查功能，可自动排查当前 MOD 列表中导致游戏无法正常启动的 MOD，感谢热心群友 @Boss 的贡献。",
+      "v115_unit_encyclopedia": "新增单位图鉴，可直观浏览当前 MOD 列表中的所有单位，并直接修改单位属性。",
+      "v115_fixed_title": "修复",
+      "v115_misc_fixes": "修复一些零散的小问题。",
+      "v111_adjusted_title": "调整",
+      "v111_wh3_90_compatibility": "适配战锤9.0版本更新",
+      "v110_added_title": "新增",
+      "v110_variant_selector_compatibility": "支持动态 Variant Selector 兼容补丁，可以通过该 MOD 给所有原版和 MOD 的角色重置模型，能够解决大部分模型冲突问题",
+      "v110_fixed_title": "修复",
+      "v110_save_mods_excludes_vanilla_packs": "修复比较存档中已启用的 MOD 时错误地计入原版 Pack 文件的问题",
+      "v110_workshop_category_from_mod_type": "修复发布 MOD 更新时模组分类标签载入不正确的问题",
+      "v109_fixed_title": "修复",
+      "v109_unit_data_mod_load_order": "修复单位数据修改识别MOD加载顺序不正确的问题",
+      "v108_adjusted_title": "调整",
+      "v108_unit_data_physical_fields": "单位数据修改，移除不稳定的移速修改，添加体型与质量修改",
+      "v107_added_title": "新增",
+      "v107_update_outdated_mods": "警告界面可以更新过期MOD，也可以一键更新所有MOD",
+      "v107_warning_button_filter": "警告按钮现在可以右键让MOD列表只显示存在问题的MOD",
+      "v107_adjusted_title": "调整",
+      "v107_unit_data_anti_bonuses": "单位数据修改允许修改反大和反步加成",
+      "v107_fixed_title": "修复",
+      "v107_force_update_reliable": "强制更新功能现在采用更强力的方式进行更新，以避免steam经常更新失败的问题",
+      "v107_ror_patch_generation": "修复 Nanu's Dynamic RORs 兼容补丁生成可能会失败的问题",
+      "v107_artillery_missile_damage": "修复修改炮兵远程伤害无法成功的问题",
+      "v106_added_title": "新增",
+      "v106_workshop_update_warning": "MOD更新检测，如果创意工坊的版本比玩家本地更高，则会进行警告提醒",
+      "v106_fixed_title": "修复",
+      "v106_runtime_patch_load_order": "由于内置排序问题导致的游戏数据修改、单位数据修改等功能存在异常，如果使用了这些功能，请务必更新",
+      "v105_added_title": "新增",
+      "v105_launcher_workshop_games": "启动器目前已兼容所有拥有创意工坊的全面战争系列游戏。",
+      "v105_unit_data_three_kingdoms": "单位数据修改功能已支持《全面战争：三国》。",
+      "v105_adjusted_title": "调整",
+      "v105_unit_data_more_fields": "单位数据修改功能新增了一些字段的修改。",
+      "v105_fixed_title": "修复",
+      "v105_unit_data_db_order": "修复单位数据修改功能载入 DB 顺序不正确的问题。",
+      "v105_disable_unit_recruitment": "修复禁用单位招募修改未生效的问题。",
+      "v105_model_count_edit": "修复模组数量修改存在的问题。",
+      "v101_fixed_title": "修复",
+      "v101_unit_data_localization": "修复单位数据修改界面没有正确读取多语言文件的问题。",
+      "v100_added_title": "新增",
+      "v100_unit_data_modification": "单位数据修改功能，可以修改原版及所有MOD单位的各种属性，基于当前已启用的所有MOD计算后的最终数值，所以兼容所有MOD，也兼容游戏数据修改功能。",
+      "v100_compatibility_patch": "兼容补丁功能，目前已有的补丁：Nanu's Dynamic RORs；开启后会自动为已启用的所有MOD生成Nanu's Dynamic RORs兼容补丁。",
+      "v100_adjusted_title": "调整",
+      "v100_non_chinese_error_messages": "优化非中文错误提示文本。",
+      "v099_fixed_title": "修复",
+      "v099_unit_scale_sfo_compatibility": "提高单位规模修改功能对SFO等MOD的兼容性。",
+      "v099_workshop_upload_stability": "提高MOD上传与更新功能的稳定性。",
+      "v098_adjusted_title": "调整",
+      "v098_rpfm_path_prompt": "当找不到 RPFM 时，提示玩家前往设置配置 RPFM 路径。",
+      "v098_disable_low_consumption": "选项中新增一个取消低消耗模式的开关。",
+      "v097_added_title": "新增",
+      "v097_end_game_process_button": "启动游戏后，原“启动游戏”按钮会变为“结束游戏进程”按钮，便于快速结束游戏。",
+      "v097_adjusted_title": "调整",
+      "v097_confirmation_dialog_ui": "优化所有确认弹窗的 UI。",
+      "v097_error_message_wording": "优化部分错误信息文本，使其更易懂。",
+      "v097_fixed_title": "修复",
+      "v097_mod_data_compatibility": "修复游戏数据修改功能与部分 MOD 不兼容的问题。",
+      "v096_added_title": "新增",
+      "v096_drag_insert_preview": "MOD 拖拽时增加定位特效。",
+      "v096_adjusted_title": "调整",
+      "v096_move_hidden_toggle": "将显示/隐藏 MOD 按钮移动到播放集旁边。",
+      "v096_playset_hidden_settings": "现在每个播放集的隐藏 MOD 设定互相独立。",
+      "v096_error_messages": "优化部分错误提示。",
+      "v095_fixed_title": "修复",
+      "v095_update_mod_styles": "修复更新 MOD 界面存在的一些样式问题。",
+      "v095_adjusted_title": "调整",
+      "v095_multi_model_war_machines": "再次优化单位规模倍率调整规则，多模组战争机器（如战争雪橇、战争车垒）现在将视为普通单位进行倍率调整。",
+      "v094_adjusted_title": "调整",
+      "v094_unit_scale_classification": "优化单位规模倍率的相关判定。",
+      "v093_fixed_title": "修复",
+      "v093_three_kingdoms_saves": "修复切换至三国后无法正确读取三国存档的问题。",
+      "v093_subscription_sort": "修复按订阅时间排序存在的问题。",
+      "v093_adjusted_title": "调整",
+      "v093_category_unit_rules": "单位规模调整功能现在支持单独调整炮兵和战争机器规则。",
+      "v092_adjusted_title": "调整",
+      "v092_subscription_sort": "支持按照订阅时间排序。",
+      "v092_independent_mod_search": "已启用 MOD 列表和未启用 MOD 列表的搜索栏现在完全独立，互不影响。",
+      "v090_added_title": "新增",
+      "v090_open_published_workshop_page": "发布或更新 MOD 后，自动打开对应的创意工坊页面。",
+      "v090_adjusted_title": "调整",
+      "v090_save_playset": "从存档中加载 MOD 时，会新建“存档+存档名”播放集，并严格保留存档中的 MOD 排序。",
+      "v090_fixed_title": "修复",
+      "v090_auto_update": "修复自动更新失败的问题。",
+      "v090_fully_custom_garrison": "单位规模修改现已兼容 Fully Custom Garrison 及其子 MOD。",
+      "v088_added_title": "新增",
+      "v088_dependency_action": "缺失依赖警告界面现在可以直接订阅并启用缺失的依赖。",
+      "v088_adjusted_title": "调整",
+      "v088_unit_formation_width": "调整单位规模倍率后，现在可以将阵型拉得更长。",
+      "v087_added_title": "新增",
+      "v087_type_order": "类型管理支持调整内置和自定义类型的显示顺序，并会持久保存。",
+      "v087_type_sort": "新增按类型排序，使用已配置的类型顺序排列 MOD。",
+      "v087_manual_type": "右键菜单新增“手动输入”类型，并支持 Shift+F 快捷键批量应用类型。",
+      "v087_adjusted_title": "调整",
+      "v087_readability": "放大详情信息、底部操作按钮、类型管理和设置页面等区域的文字，提高可读性。",
+      "v087_fixed_title": "修复",
+      "v087_publish_modal_ui": "修复发布更新窗口的关闭按钮和文本框大小调整控件样式不一致的问题。",
+      "v086_fixed_title": "修复",
+      "v086_playset_dependencies": "修复某些情况下依赖检测失效的问题",
+      "v086_settings_page_ui": "修复设置页面 UI 存在的问题。",
+      "v085_fixed_title": "修复",
+      "v085_non_ascii_launch_paths": "修复游戏本体或创意工坊目录含中文等非 ASCII 字符时无法启动的问题。",
+      "v085_game_data_overhauls": "修复游戏数据修改对于 ATC、SFO 等大修 MOD 作用不正常的问题。",
+      "v085_steam_friends_utf8": "修复 Steam 好友昵称含特殊字符时程序无法启动的问题。",
+      "v082_added_title": "新增",
+      "v082_batch_ai_generation": "右键菜单现可为多个已选 MOD 批量使用 AI 生成别名和备注。",
+      "v082_search_highlight": "搜索新增高亮模式：保留完整列表、淡化非结果，并跳转到首个结果。",
+      "v082_fixed_title": "修复",
+      "v082_ai_highlight_cache": "修复切换高亮搜索模式后 AI 生成找不到 MOD 的问题，无需重新扫描即可继续使用。",
+      "v081_fixed_title": "修复",
+      "v081_friendly_fire": "已在“游戏数据修改”面板恢复“移除友伤”设置。",
+      "v081_game_scoped_playsets": "播放集现按游戏分开保存和显示，战锤 3 与三国互不混用。",
+      "v081_update_restart": "修复软件更新后自动重启时偶发的错误提示，并避免作者信息刷新异常导致管理器退出。",
+      "v081_unit_formation": "修复多倍单位规模下阵型拖拽范围异常，并避免巨炮、战鼓等战争机器重复放大每台机器的牵引坐骑，防止数量错乱和穿模。",
+      "v080_added_title": "新增",
+      "v080_adjusted_title": "调整",
+      "v080_workshop_collection_import": "新增创意工坊 MOD 合集导入：自动订阅缺失 MOD，并按合集原有顺序写入当前播放集。",
+      "v080_recruitment_capacity": "游戏数据修改新增单位招募容量调节，可设置 1–5 倍或无限。",
+      "v080_editable_shortcuts": "快捷键支持自定义组合键，并会在右键菜单中显示对应快捷键。",
+      "v080_themed_controls": "统一下拉框主题样式，并放大设置页标签与更新日志文字。",
+      "v080_update_channel": "移除设置中的“软件更新通道”选项，更新检查统一使用内置来源。",
+      "v080_fixed_title": "修复",
+      "v080_recycle_button": "修复“移入回收站”按钮样式显示不正确的问题。",
+      "v080_unicode_paths": "修复了由中文路径导致的各种功能失效。",
+      "v070_added_title": "新增",
+      "v070_fixed_title": "修复",
+      "v065_added_title": "新增",
+      "v065_adjusted_title": "调整",
+      "v065_fixed_title": "修复",
+      "v060_added_title": "新增",
+      "v060_adjusted_title": "调整",
+      "v060_fixed_title": "修复",
+      "v050_added_title": "新增",
+      "v050_adjusted_title": "调整",
+      "v050_fixed_title": "修复",
+      "v030_added_title": "新增",
+      "v030_fixed_title": "修复",
+      "v020_added_title": "新增",
+      "v020_fixed_title": "修复",
+      "v010_added_title": "新增",
+      "v080_games_title": "游戏支持",
+      "v080_three_kingdoms": "新增《全面战争：三国》选择与路径检测；切换游戏后会保留各自目录。",
+      "v080_workshop_title": "创意工坊发布",
+      "v080_workshop_ownership": "更新按钮只会对当前账号拥有的工坊项目显示；已订阅但不在 Data 中的自有 MOD 也可更新。",
+      "v080_publish_simplified": "发布窗口不再选择封面或确认所有权，自动使用与 Pack 同名 PNG 封面。",
+      "v080_startup_title": "启动提示",
+      "v080_startup_guidance": "启动前会检查必要运行组件，缺失时提供官方下载指引，减少空白窗口。",
+      "v080_shortcuts_title": "快捷键",
+      "v080_shortcuts": "新增快捷键设置：Shift+W 打开工坊，Shift+R 用 RPFM 打开，Shift+E 切换启用状态，Shift+Enter 启动游戏。",
+      "v070_single_entity_unit_rule": "新增单体单位调整规则设置，可在血量与规模之间切换；血量模式仅放大血量而不放大规模。",
+      "v070_low_consumption_stability": "修复低消耗模式切换时偶发异常的问题。",
+      "v070_game_data_title": "游戏数据修改",
+      "v070_unit_scale_ticks": "修复单位规模倍率滑条刻度与实际倍率不一致的问题。",
+      "v070_game_data_patch_reliability": "修复部分 MOD 的单位规模或领主与英雄血量未按倍率生效的问题。",
+      "v070_workshop_publish_title": "功能修复与调整",
+      "v070_workshop_cover": "发布 MOD 时会将同名 PNG 封面与 Pack 一同上传，封面最大 1 MB。",
+      "v070_save_mods": "修复“启用存档中的 MOD”无法读取当前存档 MOD 列表的问题。",
+      "v070_spanish_language": "新增西班牙语支持。",
+      "v065_game_data_title": "游戏数据修改",
+      "v065_auto_patch": "启动游戏时会自动校验游戏数据补丁；设置、播放集、启用的 MOD 或游戏数据变化后会自动重新生成。",
+      "v065_unit_scale": "单位规模倍率现为 1–5 倍整数滑条，并可选择同步调整领主与英雄血量。",
+      "v065_game_data_window": "游戏数据修改窗口现在打开更快。",
+      "v065_workshop_title": "创意工坊体验",
+      "v065_author_names": "提高作者昵称获取成功率；临时获取失败时会保留已有昵称。",
+      "v065_workshop_links": "MOD 右键菜单新增浏览器与 Steam 客户端两个创意工坊跳转入口。",
+      "v065_startup_title": "游戏启动",
+      "v065_skip_intro": "修复“跳过开场动画”未完整生效的问题。",
+      "v060_runtime_title": "启动与低消耗模式",
+      "v060_low_consumption": "新增低消耗模式：游戏运行时自动降低管理器资源占用，退出游戏后恢复。",
+      "v060_startup_speed": "优化启动和工坊刷新；重复启动会唤醒已有窗口，游戏运行状态识别也更准确。",
+      "v060_live_detection": "新增即时 MOD 增删检测：安装或删除 MOD 后自动刷新列表。",
+      "v060_game_data_title": "游戏数据修改",
+      "v060_game_data_controls": "新增“游戏数据修改”窗口，可调整兵模人数和友伤选项；支持一键生成补丁，保存更改时也会自动更新。",
+      "v060_unit_multiplier": "订阅 Dynamic Unit Size 后，可按 0.5–5 倍调整普通单位、骑乘与战争机器的兵模人数。",
+      "v060_friendly_fire": "订阅 Dynamic No Friendly Fire 后，可分别禁用单位友伤和法术友伤，增益与治疗仍可正常作用于友军。",
+      "v060_library_title": "存档与 MOD 列表操作",
+      "v060_save_actions": "存档列表可一键启用存档使用的 MOD，并与当前启用列表进行比较。",
+      "v060_select_all": "新增 Ctrl+A 全选和双击启用或停用，让 MOD 列表操作更快捷。",
+      "v060_official_profiles": "支持导入官方 MOD 启动器配置，快速新建播放集或替换当前播放集。",
+      "v060_dependency_refresh": "修复工坊依赖刷新不准确的问题，让缺失依赖警告更可靠。",
+      "v060_files_title": "MOD 文件与工坊操作",
+      "v060_copy_path": "支持批量复制 MOD 路径，详情栏的 MOD 名称和文件名也可直接选中复制。",
+      "v060_safe_delete": "支持将 MOD 文件移入 Windows 回收站，误删后仍可恢复。",
+      "v060_unsubscribe_cleanup": "取消订阅时会同步清理对应工坊文件，并立即刷新 MOD 列表。",
+      "v060_force_update_wait": "强制更新现在可重新下载并恢复缺失的工坊 MOD 文件。",
+      "v050_settings_title": "设置与关于项目",
+      "v050_settings_pages": "设置界面拆分为基础设置、功能（游戏启动增强）、AI 集成和关于项目四个分页。",
+      "v050_about_page": "新增关于项目页，集中显示版本与更新信息；下载入口仅指向 GitHub、Gitee 发布页，反馈与交流提供 GitHub Issues 和 QQ 群 592799189。",
+      "v050_startup_title": "启动恢复与列表操作",
+      "v050_restore_last_order": "首次启动时自动读取 Warhammer III 上次使用的 used_mods.txt，仅按本机已安装 MOD 恢复启用状态与加载顺序，不会下载或订阅缺失 MOD。",
+      "v050_drag_lists": "已启用与未启用 MOD 均支持单项或 Ctrl、Shift 批量拖拽；可在两栏之间移动，已启用顺序即时保存，未启用顺序仅在本次运行中保留。",
+      "v050_button_style": "统一打开目录、重新扫描、刷新工坊信息和打开游戏目录等按钮样式，并将页面入口统一命名为“创意工坊页面”。",
+      "v050_workshop_title": "创意工坊发布与分享码导入",
+      "v050_publish_language": "发布 MOD 更新时可选择语言，默认使用当前界面语言；切换语言后自动载入对应的创意工坊标题与描述，只有英文简介时自动使用英文。",
+      "v050_change_note": "将“更新说明”调整为默认为空的“更新日志”，并通过本地 Steamworks 补丁写入所选发布语言。",
+      "v050_share_subscribe": "分享码导入会列出未订阅的 MOD，在用户确认后自动订阅，并在下载完成、重新扫描后还原到播放集。",
+      "v050_language_title": "内置多语言",
+      "v050_system_language": "首次启动时根据系统语言自动选择简体中文、英语、韩语、俄语或日语；检测失败或系统语言不受支持时默认使用英语。",
+      "v050_builtin_languages": "界面与更新日志现已内置简体中文、英语、韩语、俄语和日语。",
+      "v050_single_language_ui": "统一各语言下的按钮、标题、状态与提示文本，避免界面混用其他语言。",
+      "v050_warning_title": "警告检测与提示修复",
+      "v050_outdated_check": "修复过期 MOD 检查的时间比较方向错误；现在仅当 MOD 在游戏本体更新后尚未更新时提示，同步更新说明文本，并兼容旧版忽略记录。",
+      "v050_enabled_dependency_scope": "缺失依赖警告现在只检查已启用 MOD；启用、停用、排序、跨栏拖放、切换播放集或导入后都会立即重新检测。",
+      "v050_dependency_cache_warning": "当 Steam 暂时无法读取部分创意工坊依赖时，明确说明正在使用缓存且缺失依赖结果可能不是最新状态，并允许在本次运行中忽略该提示。",
+      "v050_docs_title": "文档与项目说明",
+      "v050_readme": "重写 README 的用户功能介绍，精简不必要的实现细节，并补充 Warhammer Mod Manager 与 RimCrow 的致谢。",
+      "v030_title": "问题管理与文件定位",
+      "v030_data_location": "修复 Data 目录中的 MOD 无法在资源管理器中准确定位 Pack 文件的问题。",
+      "v030_ignore_issues": "右键菜单新增“忽略问题”，支持按 MOD 忽略或恢复过期与缺失依赖警告。",
+      "v030_warning_window": "将警告入口移到“已启用 MOD”标题栏中央，并新增可逐条忽略问题的居中窗口。",
+      "v020_title": "更新与批量操作",
+      "v020_dual_source": "支持按当前语言优先检查 Gitee 或 GitHub，并在双源间自动回退。",
+      "v020_context_menu": "右键菜单新增“打开文件目录”；批量选择时显示操作数量，并禁用 RPFM 单项操作。",
+      "v020_pyinstaller": "修复产品名称含撇号时 PyInstaller 一键打包失败的问题。",
+      "v010_title": "管理器基础功能",
+      "v010_playsets": "使用播放集管理 MOD 启用状态与加载顺序，所有修改即时保存。",
+      "v010_game_workshop": "支持继续游戏、从存档列表载入、Workshop 管理与依赖缺失警告。",
+      "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。"
+    },
+    "en-US": {
+      "v130_added_title": "Added",
+      "v130_adjusted_title": "Changed",
+      "v130_multiplayer_mode": "Added - Multiplayer mode. When checked, it disables the launcher's built-in Packs to improve multiplayer compatibility.",
+      "v130_voice_errors": "Changed - Voice compatibility patch error messages now identify exactly which MODs are incompatible. Report any incompatible MODs you find to me so I can investigate how to make them compatible.",
+      "v129_fixed_title": "Fixed",
+      "v129_legacy_launcher": "Fixed - MODs uploaded through this launcher were not visible in the official legacy launcher.",
+      "v129_owned_mod_update": "Fixed - Sometimes being unable to upload or update your own MODs.",
+      "v128_fixed_title": "Fixed",
+      "v128_voice_fix": "Issues with dynamic voice compatibility.",
+      "v128_adjusted_title": "Changed",
+      "v128_empty_folders": "Empty folders are now hidden automatically.",
+      "v127_added_title": "Added",
+      "v127_dynamic_voice": "Compatibility patches - Dynamic voice compatibility. Due to limitations in the base game, MODs that add new voices conflict with each other, and only one can take effect. I created this feature to make the voices from different MODs dynamically compatible.",
+      "v126_fixed_title": "Fixed",
+      "v126_tk_hidden_mods": "Fixed an issue that incorrectly hid some MODs in Total War: THREE KINGDOMS.",
+      "v126_publish_categories": "Fixed incorrect category tag reading when uploading/updating MODs.",
+      "v125_added_title": "Added",
+      "v125_adjusted_title": "Adjusted",
+      "v125_chinese_profile": "Game launch compatibility with Windows user folders containing Chinese characters.",
+      "v125_ai_analysis": "AI analysis can scan all currently enabled MODs and check their comment sections for bug reports.",
+      "v125_folder_actions": "Improved folders: enable or disable all MODs in a folder with one click, drag MODs into or out of folders, and filter MODs by folder.",
+      "v124_adjusted_title": "Adjusted",
+      "v124_patch_compatibility": "Improved compatibility of patch features with various MODs.",
+      "v123_added_title": "Added",
+      "v123_exception_probe": "An exception probe that writes more detailed memory logs to the game root directory, providing more clues when investigating difficult-to-diagnose errors.",
+      "v123_tier5_patch": "A tier 5 minor-settlement patch. When using the tier 5 minor-settlement MOD, enabling this MOD dynamically generates a compatibility patch for detected minor-settlement beautification MODs, such as Walking with the Dragon, OVN, and JIANG.",
+      "v122_fixed_title": "Fixed",
+      "v122_unrecognized_mods": "Some MODs could not be recognized.",
+      "v122_stale_permission_table": "The old permission table was not cleared when the option was turned off.",
+      "v121_adjusted_title": "Adjusted",
+      "v121_added_title": "Added",
+      "v121_folder_sorting": "Folders can now be reordered by dragging.",
+      "v121_folder_playsets": "Folders now persist across playsets.",
+      "v121_ai_mod_types": "MOD types can now be recognized automatically by AI after configuring an AI model in Settings. AI determines the MOD's types and adds labels, choosing only from the types currently available.",
+      "v120_fixed_title": "Fixed",
+      "v120_added_title": "Added",
+      "v120_warning_filter": "Issues in the mode that shows only MODs with warnings.",
+      "v120_launch_history": "Launch history: view the MOD list for each game launch, compare it with the current list, or load the list from a record.",
+      "v120_steam_family_mods": "An issue where joining a Steam Family caused family members' MODs to appear in the list.",
+      "v119_adjusted_title": "Adjusted",
+      "v119_workshop_refresh_speed": "Improved the speed of refreshing MOD information after subscribing to a new MOD.",
+      "v119_table_schema_update": "Improved the table schema update feature.",
+      "v119_fixed_title": "Fixed",
+      "v119_runtime_pack_safety": "Fixed issues with the launcher's built-in Packs.",
+      "v118_fixed_title": "Fixed",
+      "v118_mod_diagnostics": "Issues with MOD startup troubleshooting.",
+      "v118_added_title": "Added",
+      "v118_table_schema_update": "Table schema updates: right-click a MOD to update its table schemas. This can restore most outdated MODs from version 8.X, but an estimated one in five MODs still cannot be repaired this way.",
+      "v117_added_title": "Added",
+      "v117_mod_folders": "Added folders for grouping MODs in different folders in the MOD list.",
+      "v116_fixed_title": "Fixed",
+      "v116_unit_encyclopedia_compatibility": "Fixed a compatibility issue in the Unit Encyclopedia.",
+      "v115_added_title": "Added",
+      "v115_mod_diagnostics": "Added MOD startup diagnostics to identify MODs in the current list that prevent the game from launching. Contributed by community member @Boss.",
+      "v115_unit_encyclopedia": "Added a Unit Encyclopedia to browse units from the current MOD list and edit their attributes directly.",
+      "v115_fixed_title": "Fixed",
+      "v115_misc_fixes": "Fixed various minor issues.",
+      "v111_adjusted_title": "Adjusted",
+      "v111_wh3_90_compatibility": "Updated compatibility with the Total War: WARHAMMER III 9.0 update.",
+      "v110_added_title": "Added",
+      "v110_variant_selector_compatibility": "Added the Dynamic Variant Selector compatibility patch. This MOD can reset models for all vanilla and MOD characters, resolving most model conflicts.",
+      "v110_fixed_title": "Fixed",
+      "v110_save_mods_excludes_vanilla_packs": "Fixed save comparison incorrectly counting vanilla Pack files as enabled MODs.",
+      "v110_workshop_category_from_mod_type": "Fixed MOD category tags loading incorrectly when publishing a Workshop update.",
+      "v109_fixed_title": "Fix",
+      "v109_unit_data_mod_load_order": "Fixed incorrect MOD load-order detection in Unit Data Modification.",
+      "v108_adjusted_title": "Adjusted",
+      "v108_unit_data_physical_fields": "Unit Data Modification removed the unstable movement-speed edit and added body-size and mass edits.",
+      "v107_added_title": "Added",
+      "v107_update_outdated_mods": "The warning window can now update outdated MODs, and update all MODs with one click.",
+      "v107_warning_button_filter": "Right-clicking the warning button now filters the MOD lists to only show problematic MODs.",
+      "v107_adjusted_title": "Adjusted",
+      "v107_unit_data_anti_bonuses": "Unit Data Modification now supports editing anti-large and anti-infantry bonuses.",
+      "v107_fixed_title": "Fixed",
+      "v107_force_update_reliable": "Force Update now uses a more forceful method to avoid the frequent Steam update failures.",
+      "v107_ror_patch_generation": "Fixed an issue where generating the Nanu's Dynamic RORs compatibility patch could fail.",
+      "v107_artillery_missile_damage": "Fixed an issue where artillery ranged damage edits could not be applied.",
+      "v106_added_title": "Added",
+      "v106_workshop_update_warning": "MOD update detection now warns when the Steam Workshop version is newer than the player's local version.",
+      "v106_fixed_title": "Fixed",
+      "v106_runtime_patch_load_order": "Fixed an internal sorting issue that could cause Game Data Modification, Unit Data Modification, and related features to malfunction. Please update if you use these features.",
+      "v105_added_title": "Added",
+      "v105_launcher_workshop_games": "The launcher is now compatible with all Total War series games that support Steam Workshop.",
+      "v105_unit_data_three_kingdoms": "Unit Data Modification now supports Total War: THREE KINGDOMS.",
+      "v105_adjusted_title": "Adjusted",
+      "v105_unit_data_more_fields": "Unit Data Modification now supports editing additional fields.",
+      "v105_fixed_title": "Fixed",
+      "v105_unit_data_db_order": "Fixed an issue where Unit Data Modification loaded DB tables in the wrong order.",
+      "v105_disable_unit_recruitment": "Fixed an issue where disabling unit recruitment did not take effect.",
+      "v105_model_count_edit": "Fixed issues with editing the model count.",
+      "v101_fixed_title": "Fixed",
+      "v101_unit_data_localization": "Fixed an issue where the Unit Data Modification interface did not correctly read multilingual localization files.",
+      "v100_added_title": "Added",
+      "v100_unit_data_modification": "Added Unit Data Modification, which can edit various attributes of vanilla and MOD units using the final values calculated from all currently enabled MODs, so it is compatible with all MODs and with Game Data Modification.",
+      "v100_compatibility_patch": "Added Compatibility Patch. The available patch is Nanu's Dynamic RORs; when enabled, it automatically generates a Nanu's Dynamic RORs compatibility patch for all currently enabled MODs.",
+      "v100_adjusted_title": "Adjusted",
+      "v100_non_chinese_error_messages": "Improved non-Chinese error message text.",
+      "v099_fixed_title": "Fixed",
+      "v099_unit_scale_sfo_compatibility": "Improved compatibility between unit-scale modification and SFO and other MODs.",
+      "v099_workshop_upload_stability": "Improved the stability of MOD uploads and Workshop updates.",
+      "v098_adjusted_title": "Adjusted",
+      "v098_rpfm_path_prompt": "When RPFM cannot be found, the manager prompts the player to configure its path in Settings.",
+      "v098_disable_low_consumption": "Added an option to disable low-consumption mode.",
+      "v097_added_title": "Added",
+      "v097_end_game_process_button": "After launching the game, the Launch game button becomes End game process for quick termination.",
+      "v097_adjusted_title": "Adjusted",
+      "v097_confirmation_dialog_ui": "Improved the UI of all confirmation dialogs.",
+      "v097_error_message_wording": "Improved several error messages to make them easier to understand.",
+      "v097_fixed_title": "Fixed",
+      "v097_mod_data_compatibility": "Fixed compatibility issues between game-data modification and some MODs.",
+      "v096_added_title": "Added",
+      "v096_drag_insert_preview": "Added an insertion-position effect while dragging MODs.",
+      "v096_adjusted_title": "Adjusted",
+      "v096_move_hidden_toggle": "Moved the show/hide MOD button next to the playset controls.",
+      "v096_playset_hidden_settings": "Hidden MOD settings are now independent for each playset.",
+      "v096_error_messages": "Improved several error messages.",
+      "v095_fixed_title": "Fixed",
+      "v095_update_mod_styles": "Fixed several style issues in the MOD update interface.",
+      "v095_adjusted_title": "Adjusted",
+      "v095_multi_model_war_machines": "Further improved unit scale rules: multi-model war machines such as War Sleds and War Wagons are now treated as regular units for scaling.",
+      "v094_adjusted_title": "Adjusted",
+      "v094_unit_scale_classification": "Improved the classification logic used by unit scale multipliers.",
+      "v093_fixed_title": "Fixed",
+      "v093_three_kingdoms_saves": "Fixed an issue where switching to THREE KINGDOMS did not read its saves correctly.",
+      "v093_subscription_sort": "Fixed an issue with sorting MODs by subscription time.",
+      "v093_adjusted_title": "Adjusted",
+      "v093_category_unit_rules": "Unit scale adjustment now supports separate artillery and war-machine rules.",
+      "v092_adjusted_title": "Adjusted",
+      "v092_subscription_sort": "Added sorting by subscription time.",
+      "v092_independent_mod_search": "The search bars for enabled and disabled MOD lists now work completely independently.",
+      "v090_added_title": "Added",
+      "v090_open_published_workshop_page": "Publishing or updating a MOD now opens its Workshop page automatically.",
+      "v090_adjusted_title": "Adjusted",
+      "v090_save_playset": "Loading MODs from a save now creates a Save + save-name playset and preserves the save's MOD order exactly.",
+      "v090_fixed_title": "Fixed",
+      "v090_auto_update": "Fixed automatic update failures.",
+      "v090_fully_custom_garrison": "Unit scale modification now supports Fully Custom Garrison and its submods.",
+      "v088_added_title": "Added",
+      "v088_dependency_action": "The missing-dependency warning can now subscribe to and enable missing dependencies directly.",
+      "v088_adjusted_title": "Adjusted",
+      "v088_unit_formation_width": "Unit scale multipliers now also allow formations to be dragged wider.",
+      "v087_added_title": "Added",
+      "v087_type_order": "Type management now supports reordering built-in and custom types, with the order persisted.",
+      "v087_type_sort": "Added type-based MOD sorting that follows the configured type order.",
+      "v087_manual_type": "Added Manual input to the type context menu with Shift+F for applying a type to selected MODs.",
+      "v087_adjusted_title": "Adjusted",
+      "v087_readability": "Enlarged text in MOD details, bottom actions, type management, and Settings for better readability.",
+      "v087_fixed_title": "Fixed",
+      "v087_publish_modal_ui": "Fixed inconsistent styling for the close button and textarea resize control in the Workshop publish/update window.",
+      "v086_fixed_title": "Fixed",
+      "v086_playset_dependencies": "Fixed missing-dependency warnings when a required MOD is installed but not enabled in the current playset.",
+      "v086_settings_page_ui": "Fixed UI issues on the Settings page.",
+      "v085_fixed_title": "Fixed",
+      "v085_non_ascii_launch_paths": "Fixed game launch when the game installation or Workshop directory contains Chinese or other non-ASCII characters.",
+      "v085_game_data_overhauls": "Fixed Game Data Modification behaving incorrectly with overhaul MODs such as ATC and SFO.",
+      "v085_steam_friends_utf8": "Fixed startup failing when a Steam friend name contains special characters.",
+      "v082_added_title": "Added",
+      "v082_batch_ai_generation": "The context menu can now use AI to generate aliases and notes for multiple selected MODs.",
+      "v082_search_highlight": "Search now offers a highlight mode that keeps the full list visible, dims nonmatches, and jumps to the first result.",
+      "v082_fixed_title": "Fixes",
+      "v082_ai_highlight_cache": "Fixed AI generation reporting that a MOD was missing after switching highlight search mode; rescanning is no longer required.",
+      "v081_fixed_title": "Fixes",
+      "v081_friendly_fire": "Restored the Remove Friendly Fire setting in Game Data Modification.",
+      "v081_game_scoped_playsets": "Playsets are now stored and shown separately for each game, so WARHAMMER III and THREE KINGDOMS no longer mix.",
+      "v081_update_restart": "Fixed an occasional error after update restart and prevented author refresh failures from exiting the manager.",
+      "v081_unit_formation": "Fixed formation dragging at increased unit scales and stopped cannons, war drums, and other engines from multiplying their per-engine draught mounts.",
+      "v080_added_title": "Added",
+      "v080_adjusted_title": "Adjusted",
+      "v080_workshop_collection_import": "Added Workshop collection import: missing MODs are subscribed automatically and the current playset follows the collection order.",
+      "v080_recruitment_capacity": "Added recruitment-capacity controls to game-data modification, with 1–5× and Unlimited options.",
+      "v080_editable_shortcuts": "Keyboard shortcuts now support custom key combinations and are shown in the context menu.",
+      "v080_themed_controls": "Unified dropdown styling and enlarged the settings tabs and changelog text for readability.",
+      "v080_update_channel": "Removed the custom software update channel; update checks now use the built-in sources.",
+      "v080_fixed_title": "Fixed",
+      "v080_recycle_button": "Fixed the incorrect styling of the Move to Recycle Bin button.",
+      "v080_unicode_paths": "Fixed various features failing when the application is placed in a path containing Chinese characters.",
+      "v070_added_title": "Added",
+      "v070_fixed_title": "Fixed",
+      "v065_added_title": "Added",
+      "v065_adjusted_title": "Adjusted",
+      "v065_fixed_title": "Fixed",
+      "v060_added_title": "Added",
+      "v060_adjusted_title": "Adjusted",
+      "v060_fixed_title": "Fixed",
+      "v050_added_title": "Added",
+      "v050_adjusted_title": "Adjusted",
+      "v050_fixed_title": "Fixed",
+      "v030_added_title": "Added",
+      "v030_fixed_title": "Fixed",
+      "v020_added_title": "Added",
+      "v020_fixed_title": "Fixed",
+      "v010_added_title": "Added",
+      "v080_games_title": "Game support",
+      "v080_three_kingdoms": "Added Total War: THREE KINGDOMS selection and path detection; each game's folders remain saved when switching.",
+      "v080_workshop_title": "Workshop publishing",
+      "v080_workshop_ownership": "Updates are shown only for Workshop projects owned by the current account; subscribed owner MODs can update even outside Data.",
+      "v080_publish_simplified": "Publishing no longer asks for a cover or ownership confirmation and automatically uses the same-name PNG cover.",
+      "v080_startup_title": "Startup guidance",
+      "v080_startup_guidance": "Checks required runtime components before startup and offers official download guidance when one is missing, reducing blank windows.",
+      "v080_shortcuts_title": "Keyboard shortcuts",
+      "v080_shortcuts": "Added keyboard shortcuts: Shift+W opens Workshop, Shift+R opens RPFM, Shift+E toggles enabled state, and Shift+Enter launches the game.",
+      "v070_single_entity_unit_rule": "Added a single-entity unit adjustment setting that switches between health and scale; Health mode increases health without increasing unit scale.",
+      "v070_low_consumption_stability": "Fixed an intermittent error when switching low-consumption mode.",
+      "v070_game_data_title": "Game data modification",
+      "v070_unit_scale_ticks": "Fixed unit scale slider tick marks not matching the selected scale.",
+      "v070_game_data_patch_reliability": "Fixed game-data scaling not applying to some MOD units or lord and hero health.",
+      "v070_workshop_publish_title": "Feature fixes and adjustments",
+      "v070_workshop_cover": "Publishing a MOD now uploads its same-name PNG cover with the Pack; covers are limited to 1 MB.",
+      "v070_save_mods": "Fixed Enable MODs Used in Save failing to read MODs from current saves.",
+      "v070_spanish_language": "Added Spanish support.",
+      "v065_game_data_title": "Game data modification",
+      "v065_auto_patch": "The game-data patch is checked automatically when the game launches and regenerated after relevant settings, playsets, enabled MODs, or game data change.",
+      "v065_unit_scale": "Unit scale now uses an integer 1–5 slider, with an option to scale lord and hero health.",
+      "v065_game_data_window": "Game Data Modification now opens faster.",
+      "v065_workshop_title": "Workshop experience",
+      "v065_author_names": "Workshop author names are more reliable, while existing names remain available when a refresh temporarily fails.",
+      "v065_workshop_links": "MOD context menus now provide separate Workshop links for the browser and Steam client.",
+      "v065_startup_title": "Game launch",
+      "v065_skip_intro": "Fixed Skip Intro so all opening movies are skipped as expected.",
+      "v060_runtime_title": "Startup and low-consumption mode",
+      "v060_low_consumption": "Added low-consumption mode to reduce manager resource usage while the game is running and restore it after the game closes.",
+      "v060_startup_speed": "Improved startup and Workshop refresh; reopening WMM activates the existing window, with more accurate game-status detection.",
+      "v060_live_detection": "Added live MOD change detection so the list refreshes automatically after MODs are installed or removed.",
+      "v060_game_data_title": "Game data modification",
+      "v060_game_data_controls": "Added a Game Data Modification window for model counts and friendly fire; generate the patch with one click, with automatic updates when changes are saved.",
+      "v060_unit_multiplier": "Subscribe to Dynamic Unit Size to scale model counts for regular units, mounts, and war machines from 0.5× to 5×.",
+      "v060_friendly_fire": "Subscribe to Dynamic No Friendly Fire to disable unit and spell friendly fire separately while keeping buffs and healing available to allies.",
+      "v060_library_title": "Saves and MOD list controls",
+      "v060_save_actions": "Save entries can now enable their MODs with one click and compare them with the currently enabled list.",
+      "v060_select_all": "Added Ctrl+A selection and double-click enable or disable for faster MOD list control.",
+      "v060_official_profiles": "Official MOD launcher profiles can now create a new playset or replace the current one.",
+      "v060_dependency_refresh": "Fixed inaccurate Workshop dependency refreshes so missing-dependency warnings are more reliable.",
+      "v060_files_title": "MOD files and Workshop actions",
+      "v060_copy_path": "MOD paths can now be copied in batches, and MOD names and filenames in the details panel can be selected and copied.",
+      "v060_safe_delete": "MOD files can now be moved to the Windows Recycle Bin so accidental deletions remain recoverable.",
+      "v060_unsubscribe_cleanup": "Unsubscribing now removes the matching Workshop files and refreshes the MOD list immediately.",
+      "v060_force_update_wait": "Force Update can now redownload and restore missing Workshop MOD files.",
+      "v050_settings_title": "Settings and About",
+      "v050_settings_pages": "Settings are divided into Basic, Features (game launch enhancements), AI Integration, and About pages.",
+      "v050_about_page": "Added an About page with version and update information. Downloads link only to the GitHub and Gitee release pages, while feedback and discussion use GitHub Issues and QQ group 592799189.",
+      "v050_startup_title": "Startup recovery and list controls",
+      "v050_restore_last_order": "On first launch, the manager reads Warhammer III's last used_mods.txt and restores enabled state and load order for locally installed MODs only; missing MODs are never downloaded or subscribed automatically.",
+      "v050_drag_lists": "Enabled and inactive MODs support single, Ctrl, and Shift batch dragging. MODs can move between lists; enabled order saves instantly, while inactive order lasts for the current session only.",
+      "v050_button_style": "Unified the styles of directory, rescan, Workshop refresh, and game-directory actions, and consistently named the page entry Workshop Page.",
+      "v050_workshop_title": "Workshop publishing and share-code import",
+      "v050_publish_language": "Choose a language when publishing a MOD update, defaulting to the current interface language. Changing language loads the corresponding Workshop title and description, with automatic English fallback when only English content exists.",
+      "v050_change_note": "Renamed Update Notes to an initially empty Update Log and added the selected publishing language through the local Steamworks patch.",
+      "v050_share_subscribe": "Share-code import lists unsubscribed MODs, subscribes after confirmation, and restores them to the playset after download and rescan.",
+      "v050_language_title": "Built-in languages",
+      "v050_system_language": "On first launch, the interface follows the system language when it is Simplified Chinese, English, Korean, Russian, or Japanese; detection failures and unsupported languages default to English.",
+      "v050_builtin_languages": "The interface and changelog now include Simplified Chinese, English, Korean, Russian, and Japanese.",
+      "v050_single_language_ui": "Unified buttons, headings, status text, and prompts so the selected interface language is not mixed with other languages.",
+      "v050_warning_title": "Warning detection and messaging fixes",
+      "v050_outdated_check": "Fixed the reversed timestamp comparison in outdated-MOD detection. A warning now appears only when a MOD has not been updated since the game update; the help text was clarified and previous ignore records remain compatible.",
+      "v050_enabled_dependency_scope": "Missing-dependency warnings now apply only to enabled MODs and are recomputed immediately after enabling, disabling, reordering, cross-list dragging, switching playsets, or importing.",
+      "v050_dependency_cache_warning": "When Steam temporarily cannot read some Workshop dependencies, the manager now explains that cached data is in use and missing-dependency results may be stale, and the notice can be ignored for the current session.",
+      "v050_docs_title": "Documentation and project information",
+      "v050_readme": "Reworked the README around user-facing features, removed unnecessary implementation detail, and added acknowledgements for Warhammer Mod Manager and RimCrow.",
+      "v030_title": "Issue management and file location",
+      "v030_data_location": "Fixed locating Pack files for MODs stored in Data from File Explorer.",
+      "v030_ignore_issues": "Added Ignore Issue to the context menu, allowing outdated and missing-dependency warnings to be ignored or restored per MOD.",
+      "v030_warning_window": "Moved the warning entry to the center of the Enabled MODs heading and added a centered window for ignoring individual issues.",
+      "v020_title": "Updates and batch actions",
+      "v020_dual_source": "Added language-aware update priority between Gitee and GitHub with automatic fallback.",
+      "v020_context_menu": "Added Open File Location to the context menu; batch selections show their item count and disable the single-item RPFM action.",
+      "v020_pyinstaller": "Fixed one-click PyInstaller packaging when the product name contains an apostrophe.",
+      "v010_title": "Core manager features",
+      "v010_playsets": "Manage enabled MODs and load order with playsets; every change is saved immediately.",
+      "v010_game_workshop": "Supports continuing games, loading from the save list, Workshop management, and missing-dependency warnings.",
+      "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog."
+    },
+    "ko-KR": {
+      "v130_added_title": "추가",
+      "v130_adjusted_title": "조정",
+      "v130_multiplayer_mode": "추가 - 멀티플레이 모드. 체크하면 런처에 내장된 각종 Pack을 비활성화하여 멀티플레이 호환성을 높입니다.",
+      "v130_voice_errors": "조정 - 음성 호환 패치의 오류 메시지에 호환되지 않는 MOD가 구체적으로 표시됩니다. 발견한 비호환 MOD를 제게 알려 주시면 호환 방법을 연구하겠습니다.",
+      "v129_fixed_title": "수정",
+      "v129_legacy_launcher": "수정 - 이 런처로 업로드한 MOD가 공식 구형 런처에 표시되지 않던 문제.",
+      "v129_owned_mod_update": "수정 - 자신의 MOD를 업로드하거나 업데이트하지 못하는 경우가 있던 문제.",
+      "v128_fixed_title": "수정",
+      "v128_voice_fix": "동적 음성 호환 기능의 문제를 수정했습니다.",
+      "v128_adjusted_title": "조정",
+      "v128_empty_folders": "빈 폴더가 이제 자동으로 숨겨집니다.",
+      "v127_added_title": "추가",
+      "v127_dynamic_voice": "호환 패치 - 동적 음성 호환. 원본 게임의 제한으로 새로운 음성을 추가하는 MOD는 서로 충돌하여 하나만 적용됩니다. 여러 MOD의 음성을 동적으로 호환할 수 있도록 이 기능을 만들었습니다.",
+      "v126_fixed_title": "수정",
+      "v126_tk_hidden_mods": "토탈 워: 삼국에서 일부 MOD가 잘못 숨겨지는 문제를 수정했습니다.",
+      "v126_publish_categories": "MOD 업로드/업데이트 시 분류 태그를 잘못 읽는 문제를 수정했습니다.",
+      "v125_added_title": "추가",
+      "v125_adjusted_title": "조정",
+      "v125_chinese_profile": "중국어 문자가 포함된 Windows 사용자 폴더에서도 게임을 실행할 수 있도록 호환성을 개선했습니다.",
+      "v125_ai_analysis": "AI 분석으로 현재 활성화된 모든 MOD를 살펴보고 댓글에서 버그 보고를 확인할 수 있습니다.",
+      "v125_folder_actions": "폴더 기능 개선: 폴더 안의 모든 MOD를 한 번에 활성화하거나 비활성화하고, MOD를 폴더 안팎으로 드래그하며, 폴더별로 필터링할 수 있습니다.",
+      "v124_adjusted_title": "조정",
+      "v124_patch_compatibility": "패치 기능의 다양한 MOD 호환성을 개선했습니다.",
+      "v123_added_title": "추가",
+      "v123_exception_probe": "게임 루트 폴더에 더 상세한 메모리 로그를 기록하는 예외 탐지 기능으로, 원인을 찾기 어려운 오류를 조사할 때 더 많은 단서를 제공합니다.",
+      "v123_tier5_patch": "5단계 소도시 패치. 5단계 소도시 MOD와 함께 이 MOD를 활성화하면 与龙同行, OVN, JIANG 등의 소도시 외형 개선 MOD를 감지하여 호환 패치를 동적으로 생성합니다.",
+      "v122_fixed_title": "수정",
+      "v122_unrecognized_mods": "일부 MOD가 인식되지 않던 문제",
+      "v122_stale_permission_table": "옵션을 끌 때 이전 권한 테이블이 정리되지 않던 문제",
+      "v121_adjusted_title": "변경",
+      "v121_added_title": "추가",
+      "v121_folder_sorting": "이제 폴더를 드래그하여 순서를 변경할 수 있습니다.",
+      "v121_folder_playsets": "이제 폴더가 플레이 세트 간에 유지됩니다.",
+      "v121_ai_mod_types": "설정에서 AI 모델을 구성하면 MOD 유형을 AI로 자동 인식할 수 있습니다. AI가 MOD의 유형을 판단하고 태그를 추가하며, 현재 등록된 유형에서만 선택합니다.",
+      "v120_fixed_title": "수정",
+      "v120_added_title": "추가",
+      "v120_warning_filter": "경고가 있는 MOD만 표시하는 모드의 문제를 수정했습니다.",
+      "v120_launch_history": "실행 기록 기능을 추가했습니다. 게임을 실행할 때마다 사용한 MOD 목록을 확인하고, 현재 목록과 비교하거나 기록의 목록을 불러올 수 있습니다.",
+      "v120_steam_family_mods": "Steam 가족에 가입하면 가족 구성원의 MOD가 목록에 표시되던 문제를 수정했습니다.",
+      "v119_adjusted_title": "조정",
+      "v119_workshop_refresh_speed": "새 MOD를 구독할 때 MOD 정보가 더 빠르게 갱신되도록 개선했습니다.",
+      "v119_table_schema_update": "테이블 구조 업데이트 기능을 개선했습니다.",
+      "v119_fixed_title": "수정",
+      "v119_runtime_pack_safety": "런처 내장 Pack의 문제를 수정했습니다.",
+      "v118_fixed_title": "수정",
+      "v118_mod_diagnostics": "MOD 실행 문제 진단 기능의 문제를 수정했습니다.",
+      "v118_added_title": "추가",
+      "v118_table_schema_update": "테이블 구조 업데이트 기능을 추가했습니다. MOD를 오른쪽 클릭하여 테이블 구조를 업데이트할 수 있습니다. 이 작업으로 8.X 버전의 오래된 MOD 대부분을 다시 정상 작동시킬 수 있지만, 약 5분의 1은 이 방법으로 복구할 수 없습니다.",
+      "v117_added_title": "추가",
+      "v117_mod_folders": "폴더 기능을 추가했습니다. MOD 목록에서 MOD를 서로 다른 폴더에 넣어 그룹별로 관리할 수 있습니다.",
+      "v116_fixed_title": "수정",
+      "v116_unit_encyclopedia_compatibility": "유닛 도감의 호환성 문제를 수정했습니다.",
+      "v115_added_title": "추가",
+      "v115_mod_diagnostics": "현재 MOD 목록에서 게임 실행을 방해하는 MOD를 찾아내는 MOD 시작 문제 진단 기능을 추가했습니다. 기능을 제공해 주신 커뮤니티 회원 @Boss 님께 감사드립니다.",
+      "v115_unit_encyclopedia": "현재 MOD 목록의 모든 유닛을 한눈에 살펴보고 유닛 속성을 바로 수정할 수 있는 유닛 도감을 추가했습니다.",
+      "v115_fixed_title": "수정",
+      "v115_misc_fixes": "몇 가지 자잘한 문제를 수정했습니다.",
+      "v111_adjusted_title": "조정",
+      "v111_wh3_90_compatibility": "토탈 워: 워해머 III 9.0 업데이트에 맞게 호환성을 조정했습니다.",
+      "v110_added_title": "추가",
+      "v110_variant_selector_compatibility": "Dynamic Variant Selector 호환 패치를 추가했습니다. 이 MOD로 원본 게임과 MOD의 모든 캐릭터 모델을 재설정하여 대부분의 모델 충돌을 해결할 수 있습니다.",
+      "v110_fixed_title": "수정",
+      "v110_save_mods_excludes_vanilla_packs": "저장 게임 비교에서 원본 Pack 파일을 활성화된 MOD로 잘못 계산하던 문제를 수정했습니다.",
+      "v110_workshop_category_from_mod_type": "Workshop MOD 업데이트 게시 시 분류 태그가 올바르게 불러와지지 않던 문제를 수정했습니다.",
+      "v109_fixed_title": "수정",
+      "v109_unit_data_mod_load_order": "유닛 데이터 변경에서 MOD 로드 순서를 잘못 인식하던 문제를 수정했습니다.",
+      "v108_adjusted_title": "조정",
+      "v108_unit_data_physical_fields": "유닛 데이터 변경에서 불안정한 이동 속도 수정을 제거하고 크기와 질량 수정을 추가했습니다.",
+      "v107_added_title": "추가",
+      "v107_update_outdated_mods": "경고 창에서 오래된 MOD를 업데이트하고 모든 MOD를 한 번에 업데이트할 수 있습니다.",
+      "v107_warning_button_filter": "이제 경고 버튼을 마우스 오른쪽 버튼으로 클릭하면 문제가 있는 MOD만 목록에 표시됩니다.",
+      "v107_adjusted_title": "조정",
+      "v107_unit_data_anti_bonuses": "유닛 데이터 변경에서 대형 보너스와 보병 보너스를 수정할 수 있습니다.",
+      "v107_fixed_title": "수정",
+      "v107_force_update_reliable": "강제 업데이트가 더 강력한 방식으로 수행되어 Steam 업데이트 실패 문제를 줄였습니다.",
+      "v107_ror_patch_generation": "Nanu's Dynamic RORs 호환 패치 생성이 실패할 수 있는 문제를 수정했습니다.",
+      "v107_artillery_missile_damage": "포병 원거리 피해 수정이 적용되지 않던 문제를 수정했습니다.",
+      "v106_added_title": "추가",
+      "v106_workshop_update_warning": "MOD 업데이트 감지: Steam Workshop 버전이 플레이어의 로컬 버전보다 최신이면 경고를 표시합니다.",
+      "v106_fixed_title": "수정",
+      "v106_runtime_patch_load_order": "내부 정렬 문제로 게임 데이터 수정, 유닛 데이터 수정 등 기능이 비정상적으로 작동할 수 있던 문제를 수정했습니다. 해당 기능을 사용한다면 반드시 업데이트하세요.",
+      "v105_added_title": "추가",
+      "v105_launcher_workshop_games": "이제 Steam Workshop을 지원하는 모든 Total War 시리즈 게임과 호환됩니다.",
+      "v105_unit_data_three_kingdoms": "유닛 데이터 수정 기능이 Total War: THREE KINGDOMS를 지원합니다.",
+      "v105_adjusted_title": "조정",
+      "v105_unit_data_more_fields": "유닛 데이터 수정 기능에서 추가 필드의 편집을 지원합니다.",
+      "v105_fixed_title": "수정",
+      "v105_unit_data_db_order": "유닛 데이터 수정 기능이 DB를 잘못된 순서로 불러오던 문제를 수정했습니다.",
+      "v105_disable_unit_recruitment": "유닛 모집 비활성화 수정이 적용되지 않던 문제를 수정했습니다.",
+      "v105_model_count_edit": "유닛 모델 수 수정에 있던 문제를 수정했습니다.",
+      "v101_fixed_title": "수정",
+      "v101_unit_data_localization": "유닛 데이터 수정 화면에서 다국어 현지화 파일을 올바르게 읽지 못하던 문제를 수정했습니다.",
+      "v100_added_title": "추가",
+      "v100_unit_data_modification": "유닛 데이터 수정 기능을 추가했습니다. 현재 활성화된 모든 MOD를 계산한 최종 수치를 기준으로 기본 유닛과 모든 MOD 유닛의 다양한 속성을 수정할 수 있어 모든 MOD 및 게임 데이터 수정 기능과 호환됩니다.",
+      "v100_compatibility_patch": "호환 패치 기능을 추가했습니다. 현재 제공되는 패치는 Nanu's Dynamic RORs이며, 활성화하면 현재 활성화된 모든 MOD에 대한 Nanu's Dynamic RORs 호환 패치를 자동으로 생성합니다.",
+      "v100_adjusted_title": "조정",
+      "v100_non_chinese_error_messages": "중국어가 아닌 오류 메시지 텍스트를 개선했습니다.",
+      "v099_fixed_title": "수정",
+      "v099_unit_scale_sfo_compatibility": "SFO 등 MOD와의 유닛 규모 조정 호환성을 개선했습니다.",
+      "v099_workshop_upload_stability": "MOD 업로드 및 Workshop 업데이트 기능의 안정성을 개선했습니다.",
+      "v098_adjusted_title": "조정",
+      "v098_rpfm_path_prompt": "RPFM을 찾을 수 없으면 설정에서 RPFM 경로를 지정하라는 안내가 표시됩니다.",
+      "v098_disable_low_consumption": "저소비 모드를 끄는 옵션을 설정에 추가했습니다.",
+      "v097_added_title": "추가",
+      "v097_end_game_process_button": "게임을 시작하면 게임 시작 버튼이 빠른 종료를 위한 게임 프로세스 종료 버튼으로 바뀝니다.",
+      "v097_adjusted_title": "조정",
+      "v097_confirmation_dialog_ui": "모든 확인 대화 상자의 UI를 개선했습니다.",
+      "v097_error_message_wording": "일부 오류 메시지 문구를 더 이해하기 쉽게 개선했습니다.",
+      "v097_fixed_title": "수정",
+      "v097_mod_data_compatibility": "게임 데이터 수정 기능이 일부 MOD와 호환되지 않던 문제를 수정했습니다.",
+      "v096_added_title": "추가",
+      "v096_drag_insert_preview": "MOD를 드래그할 때 삽입 위치 효과를 추가했습니다.",
+      "v096_adjusted_title": "조정",
+      "v096_move_hidden_toggle": "MOD 표시/숨기기 버튼을 플레이 세트 컨트롤 옆으로 옮겼습니다.",
+      "v096_playset_hidden_settings": "이제 플레이 세트마다 숨긴 MOD 설정을 독립적으로 관리합니다.",
+      "v096_error_messages": "일부 오류 메시지를 개선했습니다.",
+      "v095_fixed_title": "수정",
+      "v095_update_mod_styles": "MOD 업데이트 화면의 일부 스타일 문제를 수정했습니다.",
+      "v095_adjusted_title": "조정",
+      "v095_multi_model_war_machines": "유닛 규모 규칙을 추가로 개선하여 전쟁 썰매와 전쟁 전차 같은 다중 모델 전쟁 기계를 이제 일반 유닛으로 취급합니다.",
+      "v094_adjusted_title": "조정",
+      "v094_unit_scale_classification": "유닛 규모 배율의 판정 로직을 개선했습니다.",
+      "v093_fixed_title": "수정",
+      "v093_three_kingdoms_saves": "삼국으로 전환한 후 삼국 저장 파일을 올바르게 읽지 못하던 문제를 수정했습니다.",
+      "v093_subscription_sort": "구독 시간순으로 MOD를 정렬할 때 발생하던 문제를 수정했습니다.",
+      "v093_adjusted_title": "조정",
+      "v093_category_unit_rules": "유닛 규모 조정에서 포병과 전쟁 기계 규칙을 별도로 설정할 수 있습니다.",
+      "v092_adjusted_title": "조정",
+      "v092_subscription_sort": "구독 시간순 정렬을 지원합니다.",
+      "v092_independent_mod_search": "활성화된 MOD 목록과 비활성화된 MOD 목록의 검색창이 완전히 독립적으로 작동합니다.",
+      "v090_added_title": "추가",
+      "v090_open_published_workshop_page": "MOD를 게시하거나 업데이트하면 해당 창작마당 페이지가 자동으로 열립니다.",
+      "v090_adjusted_title": "조정",
+      "v090_save_playset": "저장 파일에서 MOD를 불러오면 ‘저장+저장 이름’ 플레이 세트를 새로 만들고 저장 파일의 MOD 순서를 그대로 유지합니다.",
+      "v090_fixed_title": "수정",
+      "v090_auto_update": "자동 업데이트 실패 문제를 수정했습니다.",
+      "v090_fully_custom_garrison": "유닛 규모 변경이 Fully Custom Garrison 및 하위 MOD와 호환됩니다.",
+      "v088_added_title": "추가",
+      "v088_dependency_action": "누락된 종속성 경고 화면에서 누락된 종속성을 바로 구독하고 활성화할 수 있습니다.",
+      "v088_adjusted_title": "조정",
+      "v088_unit_formation_width": "유닛 규모 배율을 조정하면 이제 진형을 더 넓게 드래그할 수 있습니다.",
+      "v087_added_title": "추가",
+      "v087_type_order": "내장 유형과 사용자 지정 유형의 순서를 조정하고 저장할 수 있습니다.",
+      "v087_type_sort": "설정된 유형 순서를 따르는 유형별 MOD 정렬을 추가했습니다.",
+      "v087_manual_type": "유형 컨텍스트 메뉴에 선택한 MOD에 유형을 적용하는 수동 입력과 Shift+F 단축키를 추가했습니다.",
+      "v087_adjusted_title": "조정",
+      "v087_readability": "MOD 세부 정보, 하단 작업 버튼, 유형 관리 및 설정 페이지의 글자를 키워 가독성을 높였습니다.",
+      "v087_fixed_title": "수정",
+      "v087_publish_modal_ui": "창작마당 게시/업데이트 창의 닫기 버튼과 텍스트 영역 크기 조절 컨트롤 스타일이 일치하지 않던 문제를 수정했습니다.",
+      "v086_fixed_title": "수정",
+      "v086_playset_dependencies": "필수 MOD가 설치되어 있지만 현재 플레이세트에서 활성화되지 않은 경우 누락된 종속성 경고가 표시되지 않던 문제를 수정했습니다.",
+      "v086_settings_page_ui": "설정 페이지의 UI 문제를 수정했습니다.",
+      "v085_fixed_title": "수정",
+      "v085_non_ascii_launch_paths": "게임 설치 또는 창작마당 경로에 중국어 등 ASCII 이외 문자가 있으면 실행되지 않던 문제를 수정했습니다.",
+      "v085_game_data_overhauls": "ATC, SFO 등 대형 개편 MOD에서 게임 데이터 수정이 정상적으로 적용되지 않던 문제를 수정했습니다.",
+      "v085_steam_friends_utf8": "Steam 친구 이름에 특수 문자가 있으면 프로그램이 시작되지 않던 문제를 수정했습니다.",
+      "v082_added_title": "추가",
+      "v082_batch_ai_generation": "이제 우클릭 메뉴에서 여러 선택한 MOD의 별칭과 메모를 AI로 일괄 생성할 수 있습니다.",
+      "v082_search_highlight": "검색 결과 강조 모드가 추가되어 전체 목록을 유지하고 비일치 항목을 흐리게 하며 첫 결과로 이동합니다.",
+      "v082_fixed_title": "수정",
+      "v082_ai_highlight_cache": "검색 결과 강조 모드 전환 후 AI 생성에서 MOD를 찾지 못하던 문제를 수정해 다시 스캔하지 않아도 사용할 수 있습니다.",
+      "v081_fixed_title": "수정",
+      "v081_friendly_fire": "게임 데이터 수정 화면에 아군 오사 제거 설정을 복원했습니다.",
+      "v081_game_scoped_playsets": "플레이세트를 게임별로 따로 저장하고 표시하여 WARHAMMER III와 THREE KINGDOMS가 섞이지 않습니다.",
+      "v081_update_restart": "업데이트 후 자동 재시작 오류를 수정하고 작성자 정보 새로 고침 실패로 관리자가 종료되지 않도록 했습니다.",
+      "v081_unit_formation": "다중 유닛 규모의 대형 조절을 수정하고, 대포와 전쟁 북 같은 전쟁 기계가 각 기계의 견인 탈것 수를 중복 확대하지 않도록 했습니다.",
+      "v080_added_title": "추가",
+      "v080_adjusted_title": "조정",
+      "v080_workshop_collection_import": "창작마당 컬렉션 가져오기를 추가했습니다. 누락된 MOD를 자동 구독하고 현재 플레이 세트를 컬렉션 순서로 구성합니다.",
+      "v080_recruitment_capacity": "게임 데이터 수정에 모집 한도 조정을 추가했습니다. 1–5배 또는 무제한을 선택할 수 있습니다.",
+      "v080_editable_shortcuts": "키보드 단축키에서 사용자 지정 키 조합을 지원하며, 컨텍스트 메뉴에도 표시합니다.",
+      "v080_themed_controls": "드롭다운 테마를 통일하고 설정 탭과 변경 내역 글자를 키워 가독성을 높였습니다.",
+      "v080_update_channel": "설정에서 소프트웨어 업데이트 채널을 제거했으며 업데이트 확인은 내장 소스를 사용합니다.",
+      "v080_fixed_title": "수정",
+      "v080_recycle_button": "‘휴지통으로 이동’ 버튼 스타일이 잘못 표시되던 문제를 수정했습니다.",
+      "v080_unicode_paths": "프로그램이 중국어 문자가 포함된 경로에 있을 때 여러 기능이 작동하지 않던 문제를 수정했습니다.",
+      "v070_added_title": "추가",
+      "v070_fixed_title": "수정",
+      "v065_added_title": "추가",
+      "v065_adjusted_title": "조정",
+      "v065_fixed_title": "수정",
+      "v060_added_title": "추가",
+      "v060_adjusted_title": "조정",
+      "v060_fixed_title": "수정",
+      "v050_added_title": "추가",
+      "v050_adjusted_title": "조정",
+      "v050_fixed_title": "수정",
+      "v030_added_title": "추가",
+      "v030_fixed_title": "수정",
+      "v020_added_title": "추가",
+      "v020_fixed_title": "수정",
+      "v010_added_title": "추가",
+      "v080_games_title": "게임 지원",
+      "v080_three_kingdoms": "토탈 워: 삼국 선택과 경로 감지를 추가했으며, 게임을 전환해도 각 게임의 폴더를 유지합니다.",
+      "v080_workshop_title": "창작마당 게시",
+      "v080_workshop_ownership": "현재 계정이 소유한 창작마당 항목에만 업데이트 버튼을 표시하며, Data 밖에 있는 구독한 본인 MOD도 업데이트할 수 있습니다.",
+      "v080_publish_simplified": "게시 창에서 표지 선택과 소유 확인을 제거하고 Pack과 같은 이름의 PNG 표지를 자동으로 사용합니다.",
+      "v080_startup_title": "시작 안내",
+      "v080_startup_guidance": "시작 전에 필요한 실행 구성 요소를 확인하고, 없으면 공식 다운로드 안내를 표시해 빈 창을 줄입니다.",
+      "v080_shortcuts_title": "키보드 단축키",
+      "v080_shortcuts": "단축키 설정을 추가했습니다. Shift+W는 창작마당을 열고, Shift+R은 RPFM으로 열며, Shift+E는 활성 상태를 전환하고, Shift+Enter는 게임을 실행합니다.",
+      "v070_single_entity_unit_rule": "단일 개체 유닛 조정 설정을 추가했습니다. 체력과 규모 중에서 선택할 수 있으며, 체력 모드에서는 체력만 늘어나고 규모는 늘어나지 않습니다.",
+      "v070_low_consumption_stability": "저소비 모드를 전환할 때 간헐적으로 발생하던 오류를 수정했습니다.",
+      "v070_game_data_title": "게임 데이터 수정",
+      "v070_unit_scale_ticks": "유닛 규모 배율 슬라이더 눈금이 선택한 배율과 일치하지 않던 문제를 수정했습니다.",
+      "v070_game_data_patch_reliability": "일부 MOD에서 유닛 규모 또는 군주와 영웅 체력이 배율대로 적용되지 않던 문제를 수정했습니다.",
+      "v070_workshop_publish_title": "기능 수정 및 조정",
+      "v070_workshop_cover": "MOD 게시 시 같은 이름의 PNG 표지를 Pack과 함께 업로드하며, 표지는 최대 1MB까지 지원합니다.",
+      "v070_save_mods": "‘저장에 사용된 MOD 활성화’가 현재 저장 파일의 MOD 목록을 읽지 못하던 문제를 수정했습니다.",
+      "v070_spanish_language": "스페인어 지원을 추가했습니다.",
+      "v065_game_data_title": "게임 데이터 수정",
+      "v065_auto_patch": "게임을 실행할 때 게임 데이터 패치를 자동으로 확인하며, 관련 설정, 플레이 세트, 활성 MOD 또는 게임 데이터가 바뀌면 자동으로 다시 생성합니다.",
+      "v065_unit_scale": "유닛 규모 배율을 1–5 정수 슬라이더로 변경하고 군주와 영웅의 체력도 함께 조정할 수 있습니다.",
+      "v065_game_data_window": "게임 데이터 수정 창이 더 빠르게 열립니다.",
+      "v065_workshop_title": "창작마당 사용성",
+      "v065_author_names": "창작마당 작성자 이름을 더 안정적으로 표시하며, 일시적으로 가져오지 못해도 기존 이름을 유지합니다.",
+      "v065_workshop_links": "MOD 우클릭 메뉴에서 브라우저와 Steam 클라이언트용 창작마당 링크를 각각 열 수 있습니다.",
+      "v065_startup_title": "게임 시작",
+      "v065_skip_intro": "‘오프닝 영상 건너뛰기’가 모든 시작 영상을 정상적으로 건너뛰도록 수정했습니다.",
+      "v060_runtime_title": "시작 및 저소비 모드",
+      "v060_low_consumption": "게임 실행 중 관리자의 리소스 사용량을 줄이고 게임 종료 후 자동 복원하는 저소비 모드를 추가했습니다.",
+      "v060_startup_speed": "시작과 창작마당 새로 고침을 개선했으며, WMM을 다시 실행하면 기존 창이 열리고 게임 실행 상태도 더 정확하게 감지합니다.",
+      "v060_live_detection": "MOD 설치 또는 삭제 후 목록을 자동으로 새로 고치는 실시간 MOD 변경 감지를 추가했습니다.",
+      "v060_game_data_title": "게임 데이터 수정",
+      "v060_game_data_controls": "유닛 모델 수와 아군 피해 옵션을 조정하고 패치를 생성할 수 있으며, 변경 사항을 저장하면 자동으로 업데이트됩니다.",
+      "v060_unit_multiplier": "Dynamic Unit Size를 구독하면 일반 유닛, 탑승물, 전쟁 기계의 모델 수를 0.5~5배로 조정할 수 있습니다.",
+      "v060_friendly_fire": "Dynamic No Friendly Fire를 구독하면 유닛과 주문의 아군 피해를 각각 끌 수 있으며 강화와 치유는 아군에게 계속 적용됩니다.",
+      "v060_library_title": "저장 파일 및 MOD 목록 조작",
+      "v060_save_actions": "저장 파일에서 사용한 MOD를 한 번에 활성화하고 현재 활성 목록과 비교할 수 있습니다.",
+      "v060_select_all": "Ctrl+A 전체 선택과 더블 클릭 활성화·비활성화를 추가해 MOD 목록을 더 빠르게 조작할 수 있습니다.",
+      "v060_official_profiles": "공식 MOD 런처 프로필을 가져와 새 플레이 세트를 만들거나 현재 플레이 세트를 바꿀 수 있습니다.",
+      "v060_dependency_refresh": "창작마당 종속성 새로 고침 오류를 수정해 누락 종속성 경고가 더 정확해졌습니다.",
+      "v060_files_title": "MOD 파일 및 창작마당 작업",
+      "v060_copy_path": "여러 MOD 경로를 한 번에 복사할 수 있으며 상세 패널의 MOD 이름과 파일 이름도 선택해 복사할 수 있습니다.",
+      "v060_safe_delete": "MOD 파일을 Windows 휴지통으로 이동해 실수로 삭제해도 복구할 수 있습니다.",
+      "v060_unsubscribe_cleanup": "구독을 취소하면 해당 창작마당 파일을 함께 정리하고 MOD 목록을 즉시 새로 고칩니다.",
+      "v060_force_update_wait": "강제 업데이트로 누락된 창작마당 MOD 파일을 다시 다운로드하고 복원할 수 있습니다.",
+      "v050_settings_title": "설정 및 프로젝트 정보",
+      "v050_settings_pages": "설정을 기본 설정, 기능(게임 실행 향상), AI 통합 및 프로젝트 정보의 네 페이지로 나눴습니다.",
+      "v050_about_page": "버전과 업데이트 정보를 한곳에 제공하는 프로젝트 정보 페이지를 추가했습니다. 다운로드는 GitHub와 Gitee 릴리스 페이지만 연결하며, 피드백과 소통은 GitHub Issues와 QQ 그룹 592799189를 이용합니다.",
+      "v050_startup_title": "시작 복원 및 목록 조작",
+      "v050_restore_last_order": "처음 실행할 때 Warhammer III의 마지막 used_mods.txt를 읽고 로컬에 설치된 MOD의 활성 상태와 로드 순서만 복원합니다. 누락된 MOD를 다운로드하거나 구독하지 않습니다.",
+      "v050_drag_lists": "활성 및 비활성 MOD 목록 모두 단일, Ctrl, Shift 일괄 드래그를 지원합니다. 목록 사이로 이동할 수 있으며 활성 순서는 즉시 저장되고 비활성 순서는 현재 실행 중에만 유지됩니다.",
+      "v050_button_style": "폴더 열기, 다시 검색, 창작마당 정보 새로 고침, 게임 폴더 열기 등의 버튼 스타일을 통일하고 페이지 항목 이름을 창작마당 페이지로 통일했습니다.",
+      "v050_workshop_title": "창작마당 게시 및 공유 코드 가져오기",
+      "v050_publish_language": "MOD 업데이트 게시 언어를 선택할 수 있으며 기본값은 현재 인터페이스 언어입니다. 언어를 바꾸면 해당 창작마당 제목과 설명을 불러오며 영어 내용만 있으면 영어를 자동 사용합니다.",
+      "v050_change_note": "업데이트 설명을 기본적으로 비어 있는 업데이트 로그로 바꾸고 로컬 Steamworks 패치를 통해 선택한 게시 언어를 기록합니다.",
+      "v050_share_subscribe": "공유 코드 가져오기에서 미구독 MOD를 표시하고 확인 후 자동 구독하며 다운로드와 재검색 후 플레이 세트에 복원합니다.",
+      "v050_language_title": "내장 다국어",
+      "v050_system_language": "처음 실행할 때 시스템 언어가 중국어 간체, 영어, 한국어, 러시아어 또는 일본어이면 자동으로 적용하며, 감지에 실패하거나 지원하지 않는 언어이면 영어를 기본값으로 사용합니다.",
+      "v050_builtin_languages": "인터페이스와 변경 내역에 중국어 간체, 영어, 한국어, 러시아어 및 일본어를 내장했습니다.",
+      "v050_single_language_ui": "선택한 인터페이스 언어에 다른 언어가 섞이지 않도록 버튼, 제목, 상태 및 알림 문구를 통일했습니다.",
+      "v050_warning_title": "경고 감지 및 안내 수정",
+      "v050_outdated_check": "오래된 MOD 검사에서 시간 비교 방향이 반대로 적용되던 문제를 수정했습니다. 이제 게임 업데이트 후 MOD가 갱신되지 않은 경우에만 경고하며, 도움말을 명확히 하고 이전 무시 기록도 계속 호환합니다.",
+      "v050_enabled_dependency_scope": "누락 종속성 경고는 이제 활성 MOD만 검사하며, 활성화, 비활성화, 순서 변경, 목록 간 드래그, 플레이 세트 전환 또는 가져오기 후 즉시 다시 검사합니다.",
+      "v050_dependency_cache_warning": "Steam에서 일부 창작마당 종속성을 일시적으로 읽지 못하면 캐시 사용 중이며 누락 종속성 결과가 최신이 아닐 수 있음을 명확히 안내하고, 현재 실행 중에는 해당 알림을 무시할 수 있습니다.",
+      "v050_docs_title": "문서 및 프로젝트 정보",
+      "v050_readme": "README를 사용자 기능 중심으로 다시 정리하고 불필요한 구현 세부 정보를 줄였으며 Warhammer Mod Manager와 RimCrow에 대한 감사를 추가했습니다.",
+      "v030_title": "문제 관리 및 파일 위치",
+      "v030_data_location": "Data 폴더의 MOD Pack 파일을 파일 탐색기에서 정확히 찾지 못하던 문제를 수정했습니다.",
+      "v030_ignore_issues": "컨텍스트 메뉴에 문제 무시를 추가하여 MOD별로 오래됨 및 누락된 종속성 경고를 무시하거나 복원할 수 있습니다.",
+      "v030_warning_window": "경고 항목을 활성 MOD 제목 중앙으로 옮기고 개별 문제를 무시할 수 있는 중앙 창을 추가했습니다.",
+      "v020_title": "업데이트 및 일괄 작업",
+      "v020_dual_source": "현재 언어에 따라 Gitee 또는 GitHub를 우선 확인하고 자동 대체하도록 했습니다.",
+      "v020_context_menu": "컨텍스트 메뉴에 파일 위치 열기를 추가했습니다. 일괄 선택 시 항목 수를 표시하고 단일 항목 RPFM 작업을 비활성화합니다.",
+      "v020_pyinstaller": "제품 이름에 아포스트로피가 있을 때 PyInstaller 원클릭 패키징이 실패하는 문제를 수정했습니다.",
+      "v010_title": "관리자 기본 기능",
+      "v010_playsets": "플레이 세트로 MOD 활성 상태와 로드 순서를 관리하며 모든 변경을 즉시 저장합니다.",
+      "v010_game_workshop": "게임 계속하기, 저장 목록 불러오기, 창작마당 관리 및 누락된 종속성 경고를 지원합니다.",
+      "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다."
+    },
+    "ru-RU": {
+      "v130_added_title": "Добавлено",
+      "v130_adjusted_title": "Изменено",
+      "v130_multiplayer_mode": "Добавлено — режим сетевой игры. При включении отключает все встроенные Pack лаунчера для улучшения совместимости в сетевой игре.",
+      "v130_voice_errors": "Изменено — сообщения об ошибках патча совместимости озвучки теперь указывают, какие именно MOD несовместимы. Сообщайте мне о найденных несовместимых MOD, и я изучу, как обеспечить их совместимость.",
+      "v129_fixed_title": "Исправлено",
+      "v129_legacy_launcher": "Исправлено — MOD, загруженные через этот лаунчер, не отображались в старом официальном лаунчере.",
+      "v129_owned_mod_update": "Исправлено — иногда не удавалось загрузить или обновить собственные MOD.",
+      "v128_fixed_title": "Исправлено",
+      "v128_voice_fix": "Исправлены проблемы динамической совместимости озвучки.",
+      "v128_adjusted_title": "Изменено",
+      "v128_empty_folders": "Пустые папки теперь скрываются автоматически.",
+      "v127_added_title": "Добавлено",
+      "v127_dynamic_voice": "Патчи совместимости — динамическая совместимость озвучки. Из-за ограничений базовой игры MOD, добавляющие новые голоса, конфликтуют друг с другом, и работает только один. Я создал эту функцию, чтобы озвучка разных MOD могла динамически работать вместе.",
+      "v126_fixed_title": "Исправлено",
+      "v126_tk_hidden_mods": "Исправлена ошибка, из-за которой некоторые MOD неправильно скрывались в Total War: THREE KINGDOMS.",
+      "v126_publish_categories": "Исправлено неверное чтение категории при загрузке/обновлении MOD.",
+      "v125_added_title": "Добавлено",
+      "v125_adjusted_title": "Изменено",
+      "v125_chinese_profile": "Совместимость запуска игры с папками пользователя Windows, содержащими китайские символы.",
+      "v125_ai_analysis": "Анализ ИИ позволяет проверить все включённые MOD и найти сообщения об ошибках в их комментариях.",
+      "v125_folder_actions": "Улучшены папки: включение и отключение всех MOD в папке одним нажатием, перетаскивание MOD в папки и из них, а также фильтрация по папкам.",
+      "v124_adjusted_title": "Изменено",
+      "v124_patch_compatibility": "Улучшена совместимость функций патчей с различными MOD.",
+      "v123_added_title": "Добавлено",
+      "v123_exception_probe": "Зонд исключений, записывающий более подробные журналы памяти в корневую папку игры, чтобы дать больше подсказок при поиске причин трудно диагностируемых ошибок.",
+      "v123_tier5_patch": "Патч малых поселений 5-го уровня. При использовании соответствующего MOD включение этого MOD динамически создаёт патч совместимости для обнаруженных MOD внешнего вида малых поселений, например 与龙同行, OVN и JIANG.",
+      "v122_fixed_title": "Исправлено",
+      "v122_unrecognized_mods": "Проблема, из-за которой некоторые MOD не распознавались.",
+      "v122_stale_permission_table": "Проблема, из-за которой при отключении параметра не очищалась старая таблица разрешений.",
+      "v121_adjusted_title": "Изменено",
+      "v121_added_title": "Добавлено",
+      "v121_folder_sorting": "Теперь порядок папок можно менять перетаскиванием.",
+      "v121_folder_playsets": "Теперь папки сохраняются при переключении наборов модов.",
+      "v121_ai_mod_types": "После настройки модели ИИ в настройках типы MOD можно определять автоматически. ИИ определяет типы MOD и добавляет метки, выбирая только из уже существующих типов.",
+      "v120_fixed_title": "Исправлено",
+      "v120_added_title": "Добавлено",
+      "v120_warning_filter": "Проблемы в режиме отображения только MOD с предупреждениями.",
+      "v120_launch_history": "История запусков: просмотр списка MOD для каждого запуска игры, сравнение с текущим списком и загрузка списка из записи.",
+      "v120_steam_family_mods": "Ошибка, из-за которой после вступления в семью Steam в списке отображались MOD других членов семьи.",
+      "v119_adjusted_title": "Изменено",
+      "v119_workshop_refresh_speed": "Ускорено обновление информации о MOD после подписки на новый MOD.",
+      "v119_table_schema_update": "Улучшена функция обновления структуры таблиц.",
+      "v119_fixed_title": "Исправлено",
+      "v119_runtime_pack_safety": "Исправлены проблемы встроенных Pack лаунчера.",
+      "v118_fixed_title": "Исправлено",
+      "v118_mod_diagnostics": "Проблемы с диагностикой запуска MOD.",
+      "v118_added_title": "Добавлено",
+      "v118_table_schema_update": "Обновление структуры таблиц: нажмите правой кнопкой на MOD, чтобы обновить его таблицы. Это может восстановить работу большинства устаревших MOD для версии 8.X, но, по оценке, около одной пятой MOD таким способом исправить нельзя.",
+      "v117_added_title": "Добавлено",
+      "v117_mod_folders": "Добавлены папки: теперь моды в списке можно распределять по разным папкам для управления группами.",
+      "v116_fixed_title": "Исправлено",
+      "v116_unit_encyclopedia_compatibility": "Исправлена проблема совместимости в энциклопедии отрядов.",
+      "v115_added_title": "Добавлено",
+      "v115_mod_diagnostics": "Добавлена диагностика запуска MOD: она помогает найти MOD из текущего списка, мешающие запуску игры. Функция предоставлена участником сообщества @Boss.",
+      "v115_unit_encyclopedia": "Добавлен справочник отрядов: он позволяет просматривать все отряды из текущего списка MOD и сразу изменять их свойства.",
+      "v115_fixed_title": "Исправлено",
+      "v115_misc_fixes": "Исправлены мелкие недочёты.",
+      "v111_adjusted_title": "Изменено",
+      "v111_wh3_90_compatibility": "Обновлена совместимость с обновлением Total War: WARHAMMER III до версии 9.0.",
+      "v110_added_title": "Добавлено",
+      "v110_variant_selector_compatibility": "Добавлен патч совместимости Dynamic Variant Selector. Этот MOD позволяет сбросить модели всех персонажей из оригинальной игры и MOD, устраняя большинство конфликтов моделей.",
+      "v110_fixed_title": "Исправлено",
+      "v110_save_mods_excludes_vanilla_packs": "Исправлена ошибка, из-за которой при сравнении сохранения файлы оригинальных Pack ошибочно учитывались как активированные MOD.",
+      "v110_workshop_category_from_mod_type": "Исправлена неправильная загрузка категорий MOD при публикации обновления в Workshop.",
+      "v109_fixed_title": "Исправлено",
+      "v109_unit_data_mod_load_order": "Исправлено неправильное определение порядка загрузки MOD при изменении данных отрядов.",
+      "v108_adjusted_title": "Изменено",
+      "v108_unit_data_physical_fields": "В изменении данных отрядов удалено нестабильное изменение скорости передвижения и добавлены изменения размера и массы.",
+      "v107_added_title": "Добавлено",
+      "v107_update_outdated_mods": "В окне предупреждений можно обновить устаревшие MOD, а также обновить все MOD одной кнопкой.",
+      "v107_warning_button_filter": "Теперь правый клик по кнопке предупреждений показывает в списках только проблемные MOD.",
+      "v107_adjusted_title": "Изменено",
+      "v107_unit_data_anti_bonuses": "Изменение данных юнитов теперь позволяет править бонусы против крупных целей и против пехоты.",
+      "v107_fixed_title": "Исправлено",
+      "v107_force_update_reliable": "Принудительное обновление теперь выполняется более надёжным способом, чтобы избежать частых ошибок обновления Steam.",
+      "v107_ror_patch_generation": "Исправлена проблема, из-за которой генерация совместимого патча Nanu's Dynamic RORs могла завершаться ошибкой.",
+      "v107_artillery_missile_damage": "Исправлена проблема, из-за которой изменение дальнего урона артиллерии не могло быть применено.",
+      "v106_added_title": "Добавлено",
+      "v106_workshop_update_warning": "Добавлено обнаружение обновлений MOD: если версия в Steam Workshop новее локальной версии игрока, отображается предупреждение.",
+      "v106_fixed_title": "Исправлено",
+      "v106_runtime_patch_load_order": "Исправлена проблема внутренней сортировки, из-за которой изменение игровых данных, изменение данных отрядов и связанные функции могли работать некорректно. Если вы используете эти функции, обязательно обновитесь.",
+      "v105_added_title": "Добавлено",
+      "v105_launcher_workshop_games": "Лаунчер теперь совместим со всеми играми серии Total War, поддерживающими Steam Workshop.",
+      "v105_unit_data_three_kingdoms": "Изменение данных отрядов теперь поддерживает Total War: THREE KINGDOMS.",
+      "v105_adjusted_title": "Изменено",
+      "v105_unit_data_more_fields": "В изменение данных отрядов добавлена поддержка редактирования дополнительных полей.",
+      "v105_fixed_title": "Исправлено",
+      "v105_unit_data_db_order": "Исправлена проблема, из-за которой изменение данных отрядов загружало таблицы DB в неправильном порядке.",
+      "v105_disable_unit_recruitment": "Исправлена проблема, из-за которой отключение найма отряда не применялось.",
+      "v105_model_count_edit": "Исправлены проблемы с изменением числа моделей отряда.",
+      "v101_fixed_title": "Исправлено",
+      "v101_unit_data_localization": "Исправлена проблема, из-за которой интерфейс изменения данных отрядов неправильно читал многоязычные файлы локализации.",
+      "v100_added_title": "Добавлено",
+      "v100_unit_data_modification": "Добавлено изменение данных отрядов: можно менять различные свойства исходных и MOD-отрядов на основе итоговых значений, рассчитанных по всем включённым MOD, поэтому функция совместима со всеми MOD и с изменением игровых данных.",
+      "v100_compatibility_patch": "Добавлены патчи совместимости. Сейчас доступен патч для Nanu's Dynamic RORs; после включения он автоматически создаёт патч совместимости для всех включённых MOD.",
+      "v100_adjusted_title": "Изменено",
+      "v100_non_chinese_error_messages": "Улучшен текст сообщений об ошибках не на китайском языке.",
+      "v099_fixed_title": "Исправлено",
+      "v099_unit_scale_sfo_compatibility": "Улучшена совместимость изменения масштаба отрядов с SFO и другими модами.",
+      "v099_workshop_upload_stability": "Повышена стабильность загрузки MOD и обновления в Мастерской Steam.",
+      "v098_adjusted_title": "Изменено",
+      "v098_rpfm_path_prompt": "Если RPFM не найден, менеджер предложит указать его путь в настройках.",
+      "v098_disable_low_consumption": "В настройки добавлена возможность отключить режим низкого потребления.",
+      "v097_added_title": "Добавлено",
+      "v097_end_game_process_button": "После запуска игры кнопка запуска превращается в кнопку завершения процесса игры для быстрого выхода.",
+      "v097_adjusted_title": "Изменено",
+      "v097_confirmation_dialog_ui": "Улучшен интерфейс всех окон подтверждения.",
+      "v097_error_message_wording": "Некоторые сообщения об ошибках стали понятнее.",
+      "v097_fixed_title": "Исправлено",
+      "v097_mod_data_compatibility": "Исправлена несовместимость изменения игровых данных с некоторыми MOD.",
+      "v096_added_title": "Добавлено",
+      "v096_drag_insert_preview": "Добавлен эффект положения вставки при перетаскивании MOD.",
+      "v096_adjusted_title": "Изменено",
+      "v096_move_hidden_toggle": "Кнопка показа и скрытия MOD перенесена рядом с управлением наборами.",
+      "v096_playset_hidden_settings": "Настройки скрытых MOD теперь независимы для каждого набора.",
+      "v096_error_messages": "Улучшены некоторые сообщения об ошибках.",
+      "v095_fixed_title": "Исправлено",
+      "v095_update_mod_styles": "Исправлены некоторые проблемы со стилями интерфейса обновления MOD.",
+      "v095_adjusted_title": "Изменено",
+      "v095_multi_model_war_machines": "Дополнительно улучшены правила масштаба: боевые машины с несколькими моделями, например боевые сани и боевые повозки, теперь считаются обычными юнитами.",
+      "v094_adjusted_title": "Изменено",
+      "v094_unit_scale_classification": "Улучшена логика определения правил множителя размера отрядов.",
+      "v093_fixed_title": "Исправлено",
+      "v093_three_kingdoms_saves": "Исправлена проблема, из-за которой после переключения на Three Kingdoms неправильно читались её сохранения.",
+      "v093_subscription_sort": "Исправлена проблема сортировки MOD по времени подписки.",
+      "v093_adjusted_title": "Изменено",
+      "v093_category_unit_rules": "Изменение размера отрядов теперь поддерживает отдельные правила для артиллерии и боевых машин.",
+      "v092_adjusted_title": "Изменено",
+      "v092_subscription_sort": "Добавлена сортировка по времени подписки.",
+      "v092_independent_mod_search": "Поисковые поля списков включенных и отключенных MOD теперь работают полностью независимо.",
+      "v090_added_title": "Добавлено",
+      "v090_open_published_workshop_page": "После публикации или обновления MOD его страница Мастерской открывается автоматически.",
+      "v090_adjusted_title": "Изменено",
+      "v090_save_playset": "Загрузка MOD из сохранения теперь создает новый набор «Сохранение + имя» и точно сохраняет порядок MOD из сохранения.",
+      "v090_fixed_title": "Исправлено",
+      "v090_auto_update": "Исправлены ошибки автоматического обновления.",
+      "v090_fully_custom_garrison": "Изменение размера отрядов теперь совместимо с Fully Custom Garrison и его подмодами.",
+      "v088_added_title": "Добавлено",
+      "v088_dependency_action": "На экране предупреждений о недостающих зависимостях теперь можно сразу подписаться на них и включить их.",
+      "v088_adjusted_title": "Изменено",
+      "v088_unit_formation_width": "Множитель размера отрядов теперь также позволяет растягивать строй шире.",
+      "v087_added_title": "Добавлено",
+      "v087_type_order": "Добавлена настройка и сохранение порядка встроенных и пользовательских типов.",
+      "v087_type_sort": "Добавлена сортировка MOD по настроенному порядку типов.",
+      "v087_manual_type": "В контекстное меню типов добавлен ручной ввод с сочетанием Shift+F для применения типа к выбранным MOD.",
+      "v087_adjusted_title": "Изменено",
+      "v087_readability": "Увеличен размер текста в сведениях о MOD, нижних кнопках, управлении типами и настройках.",
+      "v087_fixed_title": "Исправлено",
+      "v087_publish_modal_ui": "Исправлен разный стиль кнопки закрытия и элемента изменения размера текста в окне публикации и обновления Workshop.",
+      "v086_fixed_title": "Исправлено",
+      "v086_playset_dependencies": "Исправлено отсутствие предупреждения о зависимости, когда требуемый MOD установлен, но не включён в текущем наборе.",
+      "v086_settings_page_ui": "Исправлены проблемы интерфейса на странице настроек.",
+      "v085_fixed_title": "Исправлено",
+      "v085_non_ascii_launch_paths": "Исправлен запуск игры, когда путь к игре или каталогу Мастерской содержит китайские или другие не-ASCII символы.",
+      "v085_game_data_overhauls": "Исправлена некорректная работа изменения игровых данных с крупными модами, такими как ATC и SFO.",
+      "v085_steam_friends_utf8": "Исправлен сбой запуска, когда имя друга в Steam содержит специальные символы.",
+      "v082_added_title": "Добавлено",
+      "v082_batch_ai_generation": "В контекстном меню теперь можно с помощью ИИ создать псевдонимы и заметки для нескольких выбранных MOD.",
+      "v082_search_highlight": "Поиск получил режим подсветки: полный список остаётся видимым, несовпадения приглушаются, выполняется переход к первому результату.",
+      "v082_fixed_title": "Исправления",
+      "v082_ai_highlight_cache": "Исправлена ошибка, из-за которой после включения подсветки поиска ИИ не находил MOD; повторное сканирование больше не требуется.",
+      "v081_fixed_title": "Исправления",
+      "v081_friendly_fire": "В панели изменения игровых данных восстановлена настройка отключения дружественного огня.",
+      "v081_game_scoped_playsets": "Наборы модов теперь сохраняются и отображаются отдельно для каждой игры: WARHAMMER III и THREE KINGDOMS не смешиваются.",
+      "v081_update_restart": "Исправлена ошибка автоперезапуска после обновления; сбой обновления данных авторов больше не закрывает менеджер.",
+      "v081_unit_formation": "Исправлено растягивание строя; пушки, боевые барабаны и другие машины больше не умножают повторно число тягловых животных на каждую машину.",
+      "v080_added_title": "Добавлено",
+      "v080_adjusted_title": "Изменено",
+      "v080_workshop_collection_import": "Добавлен импорт коллекций Мастерской: недостающие MOD подписываются автоматически, а текущий набор получает порядок коллекции.",
+      "v080_recruitment_capacity": "В изменение игровых данных добавлена настройка лимита найма: 1–5× или без ограничений.",
+      "v080_editable_shortcuts": "Горячие клавиши поддерживают пользовательские сочетания и отображаются в контекстном меню.",
+      "v080_themed_controls": "Оформление выпадающих списков унифицировано, а текст вкладок настроек и журнала изменений увеличен.",
+      "v080_update_channel": "Удалён настраиваемый канал обновлений; проверка использует встроенные источники.",
+      "v080_fixed_title": "Исправлено",
+      "v080_recycle_button": "Исправлено неправильное оформление кнопки «Переместить в корзину».",
+      "v080_unicode_paths": "Исправлены сбои различных функций, возникавшие, когда программа находилась в пути с китайскими символами.",
+      "v070_added_title": "Добавлено",
+      "v070_fixed_title": "Исправлено",
+      "v065_added_title": "Добавлено",
+      "v065_adjusted_title": "Изменено",
+      "v065_fixed_title": "Исправлено",
+      "v060_added_title": "Добавлено",
+      "v060_adjusted_title": "Изменено",
+      "v060_fixed_title": "Исправлено",
+      "v050_added_title": "Добавлено",
+      "v050_adjusted_title": "Изменено",
+      "v050_fixed_title": "Исправлено",
+      "v030_added_title": "Добавлено",
+      "v030_fixed_title": "Исправлено",
+      "v020_added_title": "Добавлено",
+      "v020_fixed_title": "Исправлено",
+      "v010_added_title": "Добавлено",
+      "v080_games_title": "Поддержка игр",
+      "v080_three_kingdoms": "Добавлен выбор Total War: THREE KINGDOMS и поиск путей; папки каждой игры сохраняются при переключении.",
+      "v080_workshop_title": "Публикация в Мастерской",
+      "v080_workshop_ownership": "Кнопка обновления показывается только для проектов Мастерской текущей учётной записи; можно обновлять и свои подписанные MOD вне Data.",
+      "v080_publish_simplified": "В публикации больше не нужно выбирать обложку или подтверждать владение: автоматически используется одноимённая PNG-обложка Pack.",
+      "v080_startup_title": "Подсказки при запуске",
+      "v080_startup_guidance": "Перед запуском проверяются необходимые компоненты, а при отсутствии открывается официальная инструкция по загрузке, чтобы избежать пустого окна.",
+      "v080_shortcuts_title": "Горячие клавиши",
+      "v080_shortcuts": "Добавлены горячие клавиши: Shift+W открывает Мастерскую, Shift+R — RPFM, Shift+E переключает включение, Shift+Enter запускает игру.",
+      "v070_single_entity_unit_rule": "Добавлена настройка одиночных юнитов: можно выбрать здоровье или масштаб; режим здоровья увеличивает только здоровье, не масштаб юнита.",
+      "v070_low_consumption_stability": "Исправлена периодическая ошибка при переключении режима низкого потребления.",
+      "v070_game_data_title": "Изменение игровых данных",
+      "v070_unit_scale_ticks": "Исправлено несовпадение делений ползунка масштаба отрядов с выбранным значением.",
+      "v070_game_data_patch_reliability": "Исправлено применение масштаба не ко всем юнитам MOD и здоровью лордов и героев.",
+      "v070_workshop_publish_title": "Исправления и настройка функций",
+      "v070_workshop_cover": "При публикации MOD теперь загружается одноимённая PNG-обложка вместе с Pack; размер обложки — до 1 МБ.",
+      "v070_save_mods": "Исправлено чтение списка MOD из текущих сохранений для команды включения MOD из сохранения.",
+      "v070_spanish_language": "Добавлена поддержка испанского языка.",
+      "v065_game_data_title": "Изменение игровых данных",
+      "v065_auto_patch": "Патч игровых данных автоматически проверяется при запуске игры и пересоздаётся после изменения настроек, набора, активных MOD или игровых данных.",
+      "v065_unit_scale": "Масштаб отрядов теперь задаётся целым значением 1–5 на ползунке; здоровье лордов и героев можно масштабировать вместе с ним.",
+      "v065_game_data_window": "Окно изменения игровых данных теперь открывается быстрее.",
+      "v065_workshop_title": "Работа с Мастерской",
+      "v065_author_names": "Имена авторов Мастерской отображаются надёжнее, а при временной ошибке сохраняется уже полученное имя.",
+      "v065_workshop_links": "В контекстном меню MOD появились отдельные переходы в Мастерскую через браузер и клиент Steam.",
+      "v065_startup_title": "Запуск игры",
+      "v065_skip_intro": "Исправлен пропуск вступительных роликов: теперь он пропускает все начальные видео.",
+      "v060_runtime_title": "Запуск и режим низкого потребления",
+      "v060_low_consumption": "Добавлен режим низкого потребления: во время игры менеджер расходует меньше ресурсов, а после выхода автоматически восстанавливается.",
+      "v060_startup_speed": "Ускорены запуск и обновление Мастерской; повторный запуск открывает существующее окно, а состояние игры определяется точнее.",
+      "v060_live_detection": "Добавлено мгновенное обнаружение изменений MOD: список обновляется автоматически после установки или удаления.",
+      "v060_game_data_title": "Изменение игровых данных",
+      "v060_game_data_controls": "В окне изменения игровых данных можно настроить численность моделей и урон союзникам, одним нажатием создать патч; он автоматически обновляется при сохранении изменений.",
+      "v060_unit_multiplier": "Подписка на Dynamic Unit Size позволяет менять численность моделей обычных отрядов, ездовых существ и машин от 0,5 до 5 раз.",
+      "v060_friendly_fire": "Подписка на Dynamic No Friendly Fire позволяет отдельно отключать урон союзникам от отрядов и заклинаний, сохраняя усиления и лечение.",
+      "v060_library_title": "Сохранения и управление списком MOD",
+      "v060_save_actions": "Из сохранения теперь можно одним действием включить используемые MOD и сравнить их с текущим списком.",
+      "v060_select_all": "Добавлены выбор всего списка через Ctrl+A и включение или отключение MOD двойным щелчком.",
+      "v060_official_profiles": "Профили официального лаунчера MOD можно импортировать в новый набор или использовать для замены текущего.",
+      "v060_dependency_refresh": "Исправлено неточное обновление зависимостей Мастерской, поэтому предупреждения об отсутствующих зависимостях стали надёжнее.",
+      "v060_files_title": "Файлы MOD и действия Мастерской",
+      "v060_copy_path": "Пути MOD можно копировать группой, а названия MOD и файлов на панели сведений — выделять и копировать.",
+      "v060_safe_delete": "Файлы MOD можно перемещать в корзину Windows, чтобы их можно было восстановить после случайного удаления.",
+      "v060_unsubscribe_cleanup": "Отмена подписки теперь удаляет соответствующие файлы Мастерской и сразу обновляет список MOD.",
+      "v060_force_update_wait": "Принудительное обновление теперь повторно загружает и восстанавливает отсутствующие файлы MOD из Мастерской.",
+      "v050_settings_title": "Настройки и сведения о проекте",
+      "v050_settings_pages": "Настройки разделены на четыре страницы: основные, функции запуска игры, интеграция ИИ и сведения о проекте.",
+      "v050_about_page": "Добавлена страница проекта с версией и сведениями об обновлениях. Ссылки для загрузки ведут только на выпуски GitHub и Gitee, а для обратной связи доступны GitHub Issues и группа QQ 592799189.",
+      "v050_startup_title": "Восстановление при запуске и управление списками",
+      "v050_restore_last_order": "При первом запуске менеджер читает последний used_mods.txt Warhammer III и восстанавливает состояние и порядок только для установленных локально MOD, не загружая и не подписывая отсутствующие MOD.",
+      "v050_drag_lists": "Списки включённых и отключённых MOD поддерживают одиночное и групповое перетаскивание с Ctrl или Shift. MOD можно переносить между списками; порядок включённых сохраняется сразу, а порядок отключённых — только на текущий сеанс.",
+      "v050_button_style": "Унифицирован стиль кнопок открытия папок, повторного сканирования, обновления сведений Мастерской и открытия папки игры; название перехода к странице Мастерской также приведено к единому виду.",
+      "v050_workshop_title": "Публикация в Мастерской и импорт кода",
+      "v050_publish_language": "При обновлении MOD можно выбрать язык, по умолчанию совпадающий с языком интерфейса. Его смена загружает соответствующие название и описание Мастерской; если доступен только английский, он выбирается автоматически.",
+      "v050_change_note": "Поле описания обновления заменено на изначально пустой журнал обновления; выбранный язык публикации передаётся через локальный патч Steamworks.",
+      "v050_share_subscribe": "Импорт кода показывает MOD без подписки, подписывает их после подтверждения и восстанавливает в наборе после загрузки и повторного сканирования.",
+      "v050_language_title": "Встроенные языки",
+      "v050_system_language": "При первом запуске интерфейс автоматически использует системный язык, если это упрощённый китайский, английский, корейский, русский или японский; при ошибке определения и для неподдерживаемых языков используется английский.",
+      "v050_builtin_languages": "Интерфейс и журнал изменений теперь доступны на упрощённом китайском, английском, корейском, русском и японском языках.",
+      "v050_single_language_ui": "Тексты кнопок, заголовков, состояний и сообщений унифицированы, чтобы в интерфейсе не смешивались разные языки.",
+      "v050_warning_title": "Исправления проверки и сообщений о проблемах",
+      "v050_outdated_check": "Исправлено обратное сравнение времени при проверке устаревших MOD. Теперь предупреждение появляется только если MOD не обновлялся после обновления игры; пояснение уточнено, а прежние записи игнорирования остаются совместимыми.",
+      "v050_enabled_dependency_scope": "Предупреждения об отсутствующих зависимостях теперь проверяются только для включённых MOD и сразу пересчитываются после включения, отключения, изменения порядка, перетаскивания между списками, смены набора или импорта.",
+      "v050_dependency_cache_warning": "Если Steam временно не может прочитать часть зависимостей Мастерской, менеджер сообщает об использовании кеша и возможной неактуальности результатов; уведомление можно скрыть до конца текущего сеанса.",
+      "v050_docs_title": "Документация и сведения о проекте",
+      "v050_readme": "README переработан с акцентом на пользовательские функции, лишние технические подробности сокращены, а Warhammer Mod Manager и RimCrow добавлены в благодарности.",
+      "v030_title": "Управление проблемами и расположение файлов",
+      "v030_data_location": "Исправлено точное выделение Pack-файла MOD из папки Data в Проводнике.",
+      "v030_ignore_issues": "В контекстное меню добавлено игнорирование устаревших MOD и отсутствующих зависимостей с возможностью восстановления для каждого MOD.",
+      "v030_warning_window": "Кнопка предупреждений перенесена в центр заголовка включённых MOD; добавлено окно для игнорирования отдельных проблем.",
+      "v020_title": "Обновления и групповые действия",
+      "v020_dual_source": "Добавлен приоритет Gitee или GitHub по языку с автоматическим переходом на второй источник.",
+      "v020_context_menu": "В контекстное меню добавлено открытие расположения файла; для группового выбора показывается число элементов и отключается одиночная операция RPFM.",
+      "v020_pyinstaller": "Исправлена упаковка PyInstaller одним нажатием, когда имя продукта содержит апостроф.",
+      "v010_title": "Основные функции менеджера",
+      "v010_playsets": "Наборы управляют включением MOD и порядком загрузки; все изменения сохраняются сразу.",
+      "v010_game_workshop": "Поддерживаются продолжение игры, загрузка из списка сохранений, управление Мастерской и предупреждения об отсутствующих зависимостях.",
+      "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении."
+    },
+    "ja-JP": {
+      "v130_added_title": "追加",
+      "v130_adjusted_title": "調整",
+      "v130_multiplayer_mode": "追加 - マルチプレイモード。チェックするとランチャー内蔵の各種Packを無効にし、マルチプレイの互換性を高めます。",
+      "v130_voice_errors": "調整 - 音声互換パッチのエラー表示で、互換性のないMODが具体的に分かるようになりました。見つけた非互換MODを私に報告していただければ、互換性を確保する方法を調べます。",
+      "v129_fixed_title": "修正",
+      "v129_legacy_launcher": "修正 - このランチャーからアップロードしたMODが公式の旧ランチャーに表示されない問題。",
+      "v129_owned_mod_update": "修正 - 自分のMODをアップロードまたは更新できないことがある問題。",
+      "v128_fixed_title": "修正",
+      "v128_voice_fix": "動的音声互換機能の問題を修正。",
+      "v128_adjusted_title": "調整",
+      "v128_empty_folders": "空のフォルダーが自動的に非表示になりました。",
+      "v127_added_title": "追加",
+      "v127_dynamic_voice": "互換パッチ - 動的音声互換。ゲーム本体の制限により、新しい音声を追加するMOD同士は競合し、1つしか有効になりません。各MODの音声を動的に併用できるよう、この機能を作成しました。",
+      "v126_fixed_title": "修正",
+      "v126_tk_hidden_mods": "Total War: THREE KINGDOMSで一部のMODが誤って非表示になる問題を修正しました。",
+      "v126_publish_categories": "MODのアップロード/更新時にカテゴリタグを誤って読み取る問題を修正しました。",
+      "v125_added_title": "追加",
+      "v125_adjusted_title": "調整",
+      "v125_chinese_profile": "中国語の文字を含むWindowsユーザーフォルダーでのゲーム起動に対応しました。",
+      "v125_ai_analysis": "AI分析で現在有効なすべてのMODを調べ、コメント欄に不具合報告があるか確認できます。",
+      "v125_folder_actions": "フォルダー機能を改善し、フォルダー内のすべてのMODを一括で有効・無効にする操作、MODのフォルダーへのドラッグと取り出し、フォルダー別の絞り込みに対応しました。",
+      "v124_adjusted_title": "調整",
+      "v124_patch_compatibility": "パッチ機能と各種MODの互換性を向上しました。",
+      "v123_added_title": "追加",
+      "v123_exception_probe": "より詳しいメモリログをゲームのルートフォルダーに出力する例外プローブ機能。原因の特定が難しいエラーを調べる際に、より多くの手がかりを得られます。",
+      "v123_tier5_patch": "レベル5の小規模集落パッチ。レベル5の小規模集落MODとともにこのMODを有効にすると、与龙同行、OVN、JIANGなどの集落外観MODを検出し、互換パッチを動的に生成します。",
+      "v122_fixed_title": "修正",
+      "v122_unrecognized_mods": "一部のMODが認識されない問題",
+      "v122_stale_permission_table": "オプションをオフにしたときに古い権限テーブルが削除されない問題",
+      "v121_adjusted_title": "調整",
+      "v121_added_title": "追加",
+      "v121_folder_sorting": "フォルダーをドラッグして並べ替えられるようになりました。",
+      "v121_folder_playsets": "フォルダーがプレイセットを切り替えても保持されるようになりました。",
+      "v121_ai_mod_types": "設定でAIモデルを構成すると、MODの種類をAIで自動認識できます。AIがMODの種類を判断してタグを追加し、現在登録されている種類からのみ選択します。",
+      "v120_fixed_title": "修正",
+      "v120_added_title": "追加",
+      "v120_warning_filter": "警告のあるMODのみ表示するモードの問題を修正しました。",
+      "v120_launch_history": "起動履歴機能を追加しました。ゲーム起動ごとのMOD一覧を確認し、現在の一覧と比較したり、履歴の一覧を読み込んだりできます。",
+      "v120_steam_family_mods": "Steamファミリーに参加すると、他のファミリーメンバーのMODが一覧に表示される問題を修正しました。",
+      "v119_adjusted_title": "調整",
+      "v119_workshop_refresh_speed": "新しいMODをサブスクライブした際のMOD情報の更新を高速化しました。",
+      "v119_table_schema_update": "テーブル構造の更新機能を改善しました。",
+      "v119_fixed_title": "修正",
+      "v119_runtime_pack_safety": "ランチャー内蔵Packの問題を修正しました。",
+      "v118_fixed_title": "修正",
+      "v118_mod_diagnostics": "MOD起動トラブル診断の問題を修正しました。",
+      "v118_added_title": "追加",
+      "v118_table_schema_update": "テーブル構造の更新機能を追加しました。MODを右クリックしてテーブル構造を更新できます。これにより8.X版の古いMODの多くが再び正常に動作しますが、推定で約5分の1のMODはこの方法では修復できません。",
+      "v117_added_title": "追加",
+      "v117_mod_folders": "フォルダー機能を追加しました。MOD一覧でMODを異なるフォルダーに追加して、グループごとに管理できます。",
+      "v116_fixed_title": "修正",
+      "v116_unit_encyclopedia_compatibility": "ユニット図鑑の互換性問題を修正しました。",
+      "v115_added_title": "追加",
+      "v115_mod_diagnostics": "ゲームの起動を妨げている MOD を現在の MOD リストから特定する、MOD 起動診断機能を追加しました。コミュニティメンバー @Boss さんのご協力に感謝します。",
+      "v115_unit_encyclopedia": "現在の MOD リストに含まれる全ユニットを見やすく閲覧し、属性を直接編集できるユニット図鑑を追加しました。",
+      "v115_fixed_title": "修正",
+      "v115_misc_fixes": "細かな問題をいくつか修正しました。",
+      "v111_adjusted_title": "調整",
+      "v111_wh3_90_compatibility": "Total War: WARHAMMER III の 9.0 アップデートに対応しました。",
+      "v110_added_title": "追加",
+      "v110_variant_selector_compatibility": "Dynamic Variant Selector 互換パッチを追加しました。この MOD でオリジナルと MOD のすべてのキャラクターのモデルをリセットし、多くのモデル競合を解決できます。",
+      "v110_fixed_title": "修正",
+      "v110_save_mods_excludes_vanilla_packs": "セーブデータの比較でオリジナルの Pack ファイルを有効な MOD として誤って数える問題を修正しました。",
+      "v110_workshop_category_from_mod_type": "Workshop で MOD を更新するとき、MOD の分類タグが正しく読み込まれない問題を修正しました。",
+      "v109_fixed_title": "修正",
+      "v109_unit_data_mod_load_order": "ユニットデータ変更でMODの読み込み順序を誤って認識する問題を修正しました。",
+      "v108_adjusted_title": "調整",
+      "v108_unit_data_physical_fields": "ユニットデータ変更から不安定な移動速度の変更を削除し、体格と質量の変更を追加しました。",
+      "v107_added_title": "追加",
+      "v107_update_outdated_mods": "警告画面で期限切れの MOD を更新でき、すべての MOD をワンクリックで更新できるようになりました。",
+      "v107_warning_button_filter": "警告ボタンを右クリックすると、問題のある MOD だけが一覧に表示されるようになりました。",
+      "v107_adjusted_title": "調整",
+      "v107_unit_data_anti_bonuses": "ユニットデータ変更で大型へのボーナスと歩兵へのボーナスを変更できるようになりました。",
+      "v107_fixed_title": "修正",
+      "v107_force_update_reliable": "強制更新がより強力な方法で行われるようになり、Steam の更新失敗が頻発する問題を回避します。",
+      "v107_ror_patch_generation": "Nanu's Dynamic RORs 互換パッチの生成に失敗することがある問題を修正しました。",
+      "v107_artillery_missile_damage": "砲兵の遠隔ダメージの変更が適用されない問題を修正しました。",
+      "v106_added_title": "追加",
+      "v106_workshop_update_warning": "MOD更新検出を追加しました。Steam Workshop版がプレイヤーのローカル版より新しい場合、警告を表示します。",
+      "v106_fixed_title": "修正",
+      "v106_runtime_patch_load_order": "内部の並び順の問題により、ゲームデータ変更、ユニットデータ変更などの機能が正常に動作しない場合がある問題を修正しました。これらの機能を使用している場合は、必ず更新してください。",
+      "v105_added_title": "追加",
+      "v105_launcher_workshop_games": "ランチャーがSteam Workshopに対応するすべてのTotal Warシリーズ作品に対応しました。",
+      "v105_unit_data_three_kingdoms": "ユニットデータ変更機能がTotal War: THREE KINGDOMSに対応しました。",
+      "v105_adjusted_title": "調整",
+      "v105_unit_data_more_fields": "ユニットデータ変更機能で追加のフィールドを編集できるようになりました。",
+      "v105_fixed_title": "修正",
+      "v105_unit_data_db_order": "ユニットデータ変更機能でDBを誤った順序で読み込む問題を修正しました。",
+      "v105_disable_unit_recruitment": "ユニットの募集無効化の変更が反映されない問題を修正しました。",
+      "v105_model_count_edit": "ユニットモデル数の変更に関する問題を修正しました。",
+      "v101_fixed_title": "修正",
+      "v101_unit_data_localization": "ユニットデータ変更画面で多言語ローカライズファイルを正しく読み込めない問題を修正しました。",
+      "v100_added_title": "追加",
+      "v100_unit_data_modification": "ユニットデータ変更機能を追加しました。有効なすべてのMODを計算した最終値を基に、元のユニットとすべてのMODユニットの各種属性を変更できるため、すべてのMODおよびゲームデータ変更機能に対応します。",
+      "v100_compatibility_patch": "互換パッチ機能を追加しました。現在利用できるパッチは Nanu's Dynamic RORs です。有効にすると、有効なすべてのMOD向けに Nanu's Dynamic RORs 互換パッチを自動生成します。",
+      "v100_adjusted_title": "調整",
+      "v100_non_chinese_error_messages": "中国語以外のエラーメッセージを改善しました。",
+      "v099_fixed_title": "修正",
+      "v099_unit_scale_sfo_compatibility": "SFO などの MOD に対するユニット規模変更の互換性を改善しました。",
+      "v099_workshop_upload_stability": "MOD のアップロードと Workshop 更新機能の安定性を改善しました。",
+      "v098_adjusted_title": "調整",
+      "v098_rpfm_path_prompt": "RPFM が見つからない場合、設定で RPFM のパスを指定するよう案内します。",
+      "v098_disable_low_consumption": "低消費モードを無効にする設定を追加しました。",
+      "v097_added_title": "追加",
+      "v097_end_game_process_button": "ゲーム起動後、「ゲームを起動」ボタンが素早く終了できる「ゲームプロセスを終了」ボタンに変わります。",
+      "v097_adjusted_title": "調整",
+      "v097_confirmation_dialog_ui": "すべての確認ダイアログの UI を改善しました。",
+      "v097_error_message_wording": "一部のエラーメッセージをより分かりやすく改善しました。",
+      "v097_fixed_title": "修正",
+      "v097_mod_data_compatibility": "ゲームデータ変更機能が一部の MOD と互換性を持たない問題を修正しました。",
+      "v096_added_title": "追加",
+      "v096_drag_insert_preview": "MOD のドラッグ中に挿入位置エフェクトを追加しました。",
+      "v096_adjusted_title": "調整",
+      "v096_move_hidden_toggle": "MOD の表示・非表示ボタンをプレイセットの操作項目の横へ移動しました。",
+      "v096_playset_hidden_settings": "プレイセットごとに非表示 MOD の設定を個別に管理するようにしました。",
+      "v096_error_messages": "一部のエラーメッセージを改善しました。",
+      "v095_fixed_title": "修正",
+      "v095_update_mod_styles": "MOD 更新画面にあったいくつかのスタイル問題を修正しました。",
+      "v095_adjusted_title": "調整",
+      "v095_multi_model_war_machines": "ユニット規模ルールをさらに改善し、戦争そりや戦争車両など複数モデルの戦争機械を通常ユニットとして扱うようにしました。",
+      "v094_adjusted_title": "調整",
+      "v094_unit_scale_classification": "ユニット規模倍率の判定ロジックを改善しました。",
+      "v093_fixed_title": "修正",
+      "v093_three_kingdoms_saves": "Three Kingdoms に切り替えた後、同作のセーブを正しく読み込めない問題を修正しました。",
+      "v093_subscription_sort": "購読日時による MOD の並べ替えに関する問題を修正しました。",
+      "v093_adjusted_title": "調整",
+      "v093_category_unit_rules": "ユニット規模の調整で、砲兵と戦争機械のルールを個別に設定できるようになりました。",
+      "v092_adjusted_title": "調整",
+      "v092_subscription_sort": "購読日時による並べ替えに対応しました。",
+      "v092_independent_mod_search": "有効な MOD と無効な MOD の検索欄が完全に独立して動作するようになりました。",
+      "v090_added_title": "追加",
+      "v090_open_published_workshop_page": "MOD の公開または更新後、対応するワークショップページを自動で開くようになりました。",
+      "v090_adjusted_title": "調整",
+      "v090_save_playset": "セーブから MOD を読み込むと、「セーブ+セーブ名」の新しいプレイセットを作成し、セーブ内の MOD 順を厳密に保持します。",
+      "v090_fixed_title": "修正",
+      "v090_auto_update": "自動更新の失敗を修正しました。",
+      "v090_fully_custom_garrison": "ユニット規模の変更が Fully Custom Garrison とそのサブMODに対応しました。",
+      "v088_added_title": "追加",
+      "v088_dependency_action": "不足している依存関係の警告画面から、依存関係を直接購読して有効化できるようにしました。",
+      "v088_adjusted_title": "調整",
+      "v088_unit_formation_width": "ユニット規模の倍率を調整すると、陣形をより広くドラッグできるようになりました。",
+      "v087_added_title": "追加",
+      "v087_type_order": "組み込みタイプとカスタムタイプの順序を変更して保存できるようにしました。",
+      "v087_type_sort": "設定したタイプ順に MOD を並べ替える機能を追加しました。",
+      "v087_manual_type": "タイプのコンテキストメニューに手動入力を追加し、Shift+F で選択した MOD に適用できるようにしました。",
+      "v087_adjusted_title": "調整",
+      "v087_readability": "MOD 詳細、下部操作ボタン、タイプ管理、設定画面などの文字を大きくして可読性を高めました。",
+      "v087_fixed_title": "修正",
+      "v087_publish_modal_ui": "Workshop の公開・更新画面で、閉じるボタンとテキストエリアのサイズ変更コントロールのスタイルが一致しない問題を修正しました。",
+      "v086_fixed_title": "修正",
+      "v086_playset_dependencies": "必要な MOD がインストール済みでも現在のプレイセットで有効化されていない場合に、依存関係不足の警告が表示されない問題を修正しました。",
+      "v086_settings_page_ui": "設定ページの UI の問題を修正しました。",
+      "v085_fixed_title": "修正",
+      "v085_non_ascii_launch_paths": "ゲーム本体またはワークショップのパスに中国語などの ASCII 以外の文字が含まれると起動できない問題を修正しました。",
+      "v085_game_data_overhauls": "ATC、SFO などの大型オーバーホール MOD でゲームデータ変更が正常に適用されない問題を修正しました。",
+      "v085_steam_friends_utf8": "Steam フレンド名に特殊文字が含まれると起動できない問題を修正しました。",
+      "v082_added_title": "追加",
+      "v082_batch_ai_generation": "右クリックメニューから、選択した複数の MOD の別名とメモを AI で一括生成できるようになりました。",
+      "v082_search_highlight": "検索結果の強調表示モードを追加し、一覧を維持したまま非該当項目を薄く表示して最初の結果へ移動します。",
+      "v082_fixed_title": "修正",
+      "v082_ai_highlight_cache": "検索結果の強調表示モード切り替え後に AI 生成で MOD が見つからなくなる問題を修正し、再スキャンを不要にしました。",
+      "v081_fixed_title": "修正",
+      "v081_friendly_fire": "ゲームデータ変更画面に「味方への攻撃を無効化」設定を復元しました。",
+      "v081_game_scoped_playsets": "プレイセットをゲームごとに保存・表示するようにし、WARHAMMER III と THREE KINGDOMS が混在しなくなりました。",
+      "v081_update_restart": "更新後の自動再起動エラーを修正し、作者情報の更新失敗でマネージャーが終了しないようにしました。",
+      "v081_unit_formation": "ユニット規模拡大時の陣形調整を修正し、大砲や戦鼓などが兵器ごとの牽引動物数まで重複して拡大しないようにしました。",
+      "v080_added_title": "追加",
+      "v080_adjusted_title": "調整",
+      "v080_workshop_collection_import": "ワークショップコレクションのインポートを追加しました。不足している MOD を自動購読し、現在のプレイセットへコレクション順で追加します。",
+      "v080_recruitment_capacity": "ゲームデータ変更に募集上限の調整を追加し、1～5倍または無制限を選べるようにしました。",
+      "v080_editable_shortcuts": "キーボードショートカットでキーの組み合わせを変更でき、コンテキストメニューにも表示します。",
+      "v080_themed_controls": "ドロップダウンのテーマを統一し、設定タブと更新履歴の文字を大きくして読みやすくしました。",
+      "v080_update_channel": "設定からソフトウェア更新チャンネルを削除し、内蔵ソースで更新を確認します。",
+      "v080_fixed_title": "修正",
+      "v080_recycle_button": "「ごみ箱へ移動」ボタンの表示スタイルが正しくない問題を修正しました。",
+      "v080_unicode_paths": "プログラムを中国語文字を含むパスに配置すると各種機能が動作しない問題を修正しました。",
+      "v070_added_title": "追加",
+      "v070_fixed_title": "修正",
+      "v065_added_title": "追加",
+      "v065_adjusted_title": "調整",
+      "v065_fixed_title": "修正",
+      "v060_added_title": "追加",
+      "v060_adjusted_title": "調整",
+      "v060_fixed_title": "修正",
+      "v050_added_title": "追加",
+      "v050_adjusted_title": "調整",
+      "v050_fixed_title": "修正",
+      "v030_added_title": "追加",
+      "v030_fixed_title": "修正",
+      "v020_added_title": "追加",
+      "v020_fixed_title": "修正",
+      "v010_added_title": "追加",
+      "v080_games_title": "ゲーム対応",
+      "v080_three_kingdoms": "Total War: THREE KINGDOMS の選択とパス検出を追加し、切り替えても各ゲームのフォルダーを保持します。",
+      "v080_workshop_title": "ワークショップ公開",
+      "v080_workshop_ownership": "更新ボタンは現在のアカウントが所有するワークショップ項目だけに表示され、Data 外の購読済み自作 MOD も更新できます。",
+      "v080_publish_simplified": "公開画面で表紙の選択と所有確認が不要になり、Pack と同名の PNG 表紙を自動使用します。",
+      "v080_startup_title": "起動ガイド",
+      "v080_startup_guidance": "起動前に必要な実行コンポーネントを確認し、不足時は公式ダウンロード案内を表示して空白ウィンドウを減らします。",
+      "v080_shortcuts_title": "キーボードショートカット",
+      "v080_shortcuts": "ショートカット設定を追加しました。Shift+W でワークショップ、Shift+R で RPFM を開き、Shift+E で有効状態を切り替え、Shift+Enter でゲームを起動します。",
+      "v070_single_entity_unit_rule": "単体ユニットの調整設定を追加し、体力または規模を選択できるようになりました。体力モードでは体力だけを増やし、規模は増やしません。",
+      "v070_low_consumption_stability": "低消費モード切替時に断続的に発生するエラーを修正しました。",
+      "v070_game_data_title": "ゲームデータ変更",
+      "v070_unit_scale_ticks": "ユニット規模倍率スライダーの目盛りと選択した倍率が一致しない問題を修正しました。",
+      "v070_game_data_patch_reliability": "一部の MOD でユニット規模やロード・ヒーローの体力に倍率が適用されない問題を修正しました。",
+      "v070_workshop_publish_title": "機能の修正と調整",
+      "v070_workshop_cover": "MOD 公開時に同名の PNG 表紙を Pack と一緒にアップロードし、表紙は 1 MB までに制限しました。",
+      "v070_save_mods": "「セーブで使用した MOD を有効化」で現在のセーブの MOD 一覧を読み取れない問題を修正しました。",
+      "v070_spanish_language": "スペイン語に対応しました。",
+      "v065_game_data_title": "ゲームデータ変更",
+      "v065_auto_patch": "ゲーム起動時にゲームデータパッチを自動確認し、関連設定、プレイセット、有効な MOD、またはゲームデータが変わると自動で再生成します。",
+      "v065_unit_scale": "ユニット規模倍率を 1～5 の整数スライダーに変更し、ロードとヒーローの体力も同時に調整できるようにしました。",
+      "v065_game_data_window": "ゲームデータ変更画面がより速く開くようになりました。",
+      "v065_workshop_title": "ワークショップ操作",
+      "v065_author_names": "ワークショップ作者名をより安定して表示し、一時的に取得できない場合も既存の名前を保持します。",
+      "v065_workshop_links": "MOD の右クリックメニューから、ブラウザーと Steam クライアントのワークショップを個別に開けるようにしました。",
+      "v065_startup_title": "ゲーム起動",
+      "v065_skip_intro": "「オープニングムービーをスキップ」がすべての開始動画に正しく適用されるよう修正しました。",
+      "v060_runtime_title": "起動と低消費モード",
+      "v060_low_consumption": "ゲーム実行中の管理ツールのリソース使用量を抑え、終了後に自動復帰する低消費モードを追加しました。",
+      "v060_startup_speed": "起動とワークショップ更新を改善しました。WMM を再起動すると既存画面を表示し、ゲーム状態もより正確に判定します。",
+      "v060_live_detection": "MOD のインストールや削除後に一覧を自動更新する即時変更検出を追加しました。",
+      "v060_game_data_title": "ゲームデータ変更",
+      "v060_game_data_controls": "兵数倍率と味方ダメージを調整し、パッチを生成できるゲームデータ変更画面を追加しました。変更を保存すると自動的に更新されます。",
+      "v060_unit_multiplier": "Dynamic Unit Size を購読すると、一般ユニット、騎乗物、兵器の兵数を 0.5～5 倍に調整できます。",
+      "v060_friendly_fire": "Dynamic No Friendly Fire を購読すると、ユニットと呪文の味方ダメージを個別に無効化しつつ、強化と回復は維持できます。",
+      "v060_library_title": "セーブと MOD 一覧操作",
+      "v060_save_actions": "セーブで使用した MOD をまとめて有効化し、現在の有効一覧と比較できるようになりました。",
+      "v060_select_all": "Ctrl+A の全選択と、ダブルクリックによる MOD の有効化・無効化を追加しました。",
+      "v060_official_profiles": "公式 MOD ランチャーのプロファイルから、新しいプレイセットの作成や現在のプレイセットの置換ができます。",
+      "v060_dependency_refresh": "ワークショップの依存関係更新を修正し、不足している依存 MOD の警告をより正確にしました。",
+      "v060_files_title": "MOD ファイルとワークショップ操作",
+      "v060_copy_path": "複数の MOD パスをまとめてコピーでき、詳細欄の MOD 名とファイル名も選択してコピーできます。",
+      "v060_safe_delete": "MOD ファイルをごみ箱へ移動できるようになり、誤って削除しても復元できます。",
+      "v060_unsubscribe_cleanup": "購読解除時に対応するワークショップファイルを削除し、MOD 一覧をすぐに更新します。",
+      "v060_force_update_wait": "強制更新で不足しているワークショップ MOD ファイルを再ダウンロードして復元できるようになりました。",
+      "v050_settings_title": "設定とプロジェクト情報",
+      "v050_settings_pages": "設定画面を基本設定、機能（ゲーム起動の拡張）、AI 統合、プロジェクト情報の4ページに分割しました。",
+      "v050_about_page": "バージョンと更新情報をまとめたプロジェクト情報ページを追加しました。ダウンロード先は GitHub と Gitee のリリースページだけにし、フィードバックと交流には GitHub Issues と QQ グループ 592799189 を案内します。",
+      "v050_startup_title": "起動時の復元と一覧操作",
+      "v050_restore_last_order": "初回起動時に Warhammer III が最後に使用した used_mods.txt を読み、ローカルにインストール済みの MOD だけを有効状態と読み込み順へ復元します。不足 MOD のダウンロードや購読は行いません。",
+      "v050_drag_lists": "有効・無効の両 MOD 一覧で、単一および Ctrl・Shift による複数ドラッグに対応しました。一覧間の移動が可能で、有効順は即時保存、無効順は現在の実行中のみ保持します。",
+      "v050_button_style": "フォルダーを開く、再スキャン、ワークショップ情報の更新、ゲームフォルダーを開くなどのボタンスタイルを統一し、ページ入口の名称もワークショップページに統一しました。",
+      "v050_workshop_title": "ワークショップ公開と共有コードのインポート",
+      "v050_publish_language": "MOD 更新の公開言語を選択でき、初期値には現在の表示言語を使用します。言語を切り替えると対応するワークショップタイトルと説明を読み込み、英語しかない場合は自動的に英語を使用します。",
+      "v050_change_note": "更新説明を初期状態が空の更新ログに変更し、ローカル Steamworks パッチから選択した公開言語を書き込むようにしました。",
+      "v050_share_subscribe": "共有コードのインポート時に未購読 MOD を表示し、確認後に自動購読します。ダウンロード後の再スキャンでプレイセットへ復元します。",
+      "v050_language_title": "内蔵多言語",
+      "v050_system_language": "初回起動時、システム言語が簡体字中国語、英語、韓国語、ロシア語、日本語のいずれかなら自動選択し、検出失敗または未対応言語の場合は英語を既定値にします。",
+      "v050_builtin_languages": "画面と更新履歴に簡体字中国語、英語、韓国語、ロシア語、日本語を内蔵しました。",
+      "v050_single_language_ui": "選択した表示言語に別の言語が混ざらないよう、ボタン、見出し、状態、通知文を統一しました。",
+      "v050_warning_title": "警告判定と案内の修正",
+      "v050_outdated_check": "古い MOD の判定で更新時刻の比較方向が逆だった問題を修正しました。ゲーム本体の更新後に MOD が更新されていない場合だけ警告し、説明文を明確化するとともに旧版の無視設定も引き継ぎます。",
+      "v050_enabled_dependency_scope": "依存関係不足の警告は有効な MOD だけを対象とし、有効化、無効化、並べ替え、一覧間のドラッグ、プレイセット切り替え、インポートの直後に再判定するようにしました。",
+      "v050_dependency_cache_warning": "Steam が一部のワークショップ依存関係を一時的に取得できない場合、キャッシュ使用中で依存関係不足の結果が最新でない可能性を明示し、今回の実行中は通知を無視できるようにしました。",
+      "v050_docs_title": "ドキュメントとプロジェクト情報",
+      "v050_readme": "README をユーザー向け機能中心に整理し、不要な実装詳細を減らし、Warhammer Mod Manager と RimCrow への謝辞を追加しました。",
+      "v030_title": "問題管理とファイル位置",
+      "v030_data_location": "Data フォルダー内の MOD の Pack ファイルをエクスプローラーで正確に選択できない問題を修正しました。",
+      "v030_ignore_issues": "右クリックメニューに問題を無視する機能を追加し、MOD ごとに古さと依存関係不足の警告を無視・復元できます。",
+      "v030_warning_window": "警告入口を有効な MOD の見出し中央へ移動し、個別の問題を無視できる中央ウィンドウを追加しました。",
+      "v020_title": "更新と一括操作",
+      "v020_dual_source": "現在の言語に応じて Gitee または GitHub を優先確認し、自動的に代替ソースへ切り替えるようにしました。",
+      "v020_context_menu": "右クリックメニューにファイルの場所を開く操作を追加しました。複数選択時は件数を表示し、単一項目用の RPFM 操作を無効にします。",
+      "v020_pyinstaller": "製品名にアポストロフィがある場合に PyInstaller のワンクリックパッケージが失敗する問題を修正しました。",
+      "v010_title": "マネージャーの基本機能",
+      "v010_playsets": "プレイセットで MOD の有効状態と読み込み順を管理し、すべての変更を即時保存します。",
+      "v010_game_workshop": "ゲームの続行、セーブ一覧からの読み込み、ワークショップ管理、依存関係不足の警告に対応しました。",
+      "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。"
+    },
+    "es-ES": {
+      "v130_added_title": "Añadido",
+      "v130_adjusted_title": "Ajustado",
+      "v130_multiplayer_mode": "Añadido - Modo multijugador. Al marcarlo, se desactivan los Pack incluidos en el lanzador para mejorar la compatibilidad multijugador.",
+      "v130_voice_errors": "Ajustado - Los mensajes de error del parche de compatibilidad de voces ahora indican exactamente qué MOD son incompatibles. Puedes comunicarme los MOD incompatibles que encuentres para que investigue cómo hacerlos compatibles.",
+      "v129_fixed_title": "Corregido",
+      "v129_legacy_launcher": "Corregido - Los MOD subidos desde este lanzador no aparecían en el lanzador oficial antiguo.",
+      "v129_owned_mod_update": "Corregido - A veces no se podían subir o actualizar los MOD propios.",
+      "v128_fixed_title": "Corregido",
+      "v128_voice_fix": "Corregidos problemas de la compatibilidad dinámica de voces.",
+      "v128_adjusted_title": "Ajustado",
+      "v128_empty_folders": "Las carpetas vacías ahora se ocultan automáticamente.",
+      "v127_added_title": "Añadido",
+      "v127_dynamic_voice": "Parches de compatibilidad - Compatibilidad dinámica de voces. Debido a las limitaciones del juego base, los MOD que añaden nuevas voces entran en conflicto y solo uno puede funcionar. He creado esta función para que las voces de distintos MOD sean compatibles de forma dinámica.",
+      "v126_fixed_title": "Corregido",
+      "v126_tk_hidden_mods": "Corregido un problema que ocultaba incorrectamente algunos MODs en Total War: THREE KINGDOMS.",
+      "v126_publish_categories": "Corregida la lectura incorrecta de las etiquetas de categoría al subir/actualizar MODs.",
+      "v125_added_title": "Añadido",
+      "v125_adjusted_title": "Ajustado",
+      "v125_chinese_profile": "Compatibilidad al iniciar el juego con carpetas de usuario de Windows que contienen caracteres chinos.",
+      "v125_ai_analysis": "El análisis con IA puede examinar todos los MODs activos y buscar informes de errores en sus comentarios.",
+      "v125_folder_actions": "Mejoras en las carpetas: activar o desactivar todos sus MODs con un clic, arrastrar MODs dentro o fuera de las carpetas y filtrar por carpeta.",
+      "v124_adjusted_title": "Ajustado",
+      "v124_patch_compatibility": "Se mejoró la compatibilidad de las funciones de parches con diversos MOD.",
+      "v123_added_title": "Añadido",
+      "v123_exception_probe": "Una sonda de excepciones que guarda registros de memoria más detallados en la carpeta raíz del juego, aportando más pistas para investigar errores difíciles de diagnosticar.",
+      "v123_tier5_patch": "Un parche de asentamientos menores de nivel 5. Al usar el MOD de asentamientos menores de nivel 5 y activar este MOD, se genera dinámicamente un parche de compatibilidad para los MOD de apariencia detectados, como 与龙同行, OVN y JIANG.",
+      "v122_fixed_title": "Corregido",
+      "v122_unrecognized_mods": "Un problema que impedía reconocer algunos MOD.",
+      "v122_stale_permission_table": "Un problema por el que no se eliminaba la tabla de permisos anterior al desactivar la opción.",
+      "v121_adjusted_title": "Ajustado",
+      "v121_added_title": "Añadido",
+      "v121_folder_sorting": "Ahora se puede cambiar el orden de las carpetas arrastrándolas.",
+      "v121_folder_playsets": "Ahora las carpetas se conservan entre conjuntos de juego.",
+      "v121_ai_mod_types": "Los tipos de MOD ahora se pueden reconocer automáticamente mediante IA tras configurar un modelo en Ajustes. La IA determina los tipos del MOD y añade etiquetas, eligiendo únicamente entre los tipos existentes.",
+      "v120_fixed_title": "Corregido",
+      "v120_added_title": "Añadido",
+      "v120_warning_filter": "Problemas en el modo que muestra solo los MODs con advertencias.",
+      "v120_launch_history": "Historial de inicios: consulta la lista de MODs de cada inicio del juego, compárala con la lista actual o carga la lista de un registro.",
+      "v120_steam_family_mods": "Un problema que hacía que los MODs de otros miembros aparecieran en la lista al unirse a una familia de Steam.",
+      "v119_adjusted_title": "Ajustado",
+      "v119_workshop_refresh_speed": "Se aceleró la actualización de la información de los MODs al suscribirse a uno nuevo.",
+      "v119_table_schema_update": "Se mejoró la función de actualización de la estructura de tablas.",
+      "v119_fixed_title": "Corregido",
+      "v119_runtime_pack_safety": "Se corrigieron problemas con los Packs integrados del lanzador.",
+      "v118_fixed_title": "Corregido",
+      "v118_mod_diagnostics": "Problemas con el diagnóstico de inicio de MODs.",
+      "v118_added_title": "Añadido",
+      "v118_table_schema_update": "Actualización de la estructura de tablas: haz clic derecho en un MOD para actualizar sus tablas. Esto puede restaurar la mayoría de los MODs obsoletos de la versión 8.X, aunque se estima que uno de cada cinco MODs no puede repararse de esta forma.",
+      "v117_added_title": "Añadido",
+      "v117_mod_folders": "Se añadieron carpetas para agrupar y gestionar los MODs en distintas carpetas dentro de la lista de MODs.",
+      "v116_fixed_title": "Corregido",
+      "v116_unit_encyclopedia_compatibility": "Se corrigió un problema de compatibilidad en la enciclopedia de unidades.",
+      "v115_added_title": "Añadido",
+      "v115_mod_diagnostics": "Se añadió el diagnóstico de inicio de MOD para localizar los MOD de la lista actual que impiden iniciar el juego. Función aportada por @Boss, miembro de la comunidad.",
+      "v115_unit_encyclopedia": "Se añadió una enciclopedia de unidades para consultar las unidades de la lista actual de MOD y editar sus atributos directamente.",
+      "v115_fixed_title": "Corregido",
+      "v115_misc_fixes": "Se corrigieron varios problemas menores.",
+      "v111_adjusted_title": "Ajustado",
+      "v111_wh3_90_compatibility": "Se actualizó la compatibilidad con la actualización 9.0 de Total War: WARHAMMER III.",
+      "v110_added_title": "Añadido",
+      "v110_variant_selector_compatibility": "Se añadió el parche de compatibilidad Dynamic Variant Selector. Este MOD puede restablecer los modelos de todos los personajes del juego original y de los MOD, lo que resuelve la mayoría de los conflictos de modelos.",
+      "v110_fixed_title": "Corregido",
+      "v110_save_mods_excludes_vanilla_packs": "Se corrigió que la comparación de partidas contara por error los archivos Pack originales como MOD activados.",
+      "v110_workshop_category_from_mod_type": "Se corrigió la carga incorrecta de las etiquetas de categoría de MOD al publicar una actualización en Workshop.",
+      "v109_fixed_title": "Corregido",
+      "v109_unit_data_mod_load_order": "Se corrigió la detección incorrecta del orden de carga de MOD en la modificación de datos de unidades.",
+      "v108_adjusted_title": "Ajustado",
+      "v108_unit_data_physical_fields": "La modificación de datos de unidades eliminó el cambio inestable de velocidad de movimiento y añadió cambios de tamaño corporal y masa.",
+      "v107_added_title": "Añadido",
+      "v107_update_outdated_mods": "La ventana de advertencias ahora puede actualizar MODs desactualizados y actualizar todos los MODs con un solo clic.",
+      "v107_warning_button_filter": "Al hacer clic derecho en el botón de advertencias, las listas de MOD solo muestran los MOD con problemas.",
+      "v107_adjusted_title": "Ajustado",
+      "v107_unit_data_anti_bonuses": "La modificación de datos de unidades ahora permite editar las bonificaciones contra grandes y contra infantería.",
+      "v107_fixed_title": "Corregido",
+      "v107_force_update_reliable": "La actualización forzada ahora usa un método más potente para evitar los frecuentes fallos de actualización de Steam.",
+      "v107_ror_patch_generation": "Se corrigió un problema por el que la generación del parche de compatibilidad de Nanu's Dynamic RORs podía fallar.",
+      "v107_artillery_missile_damage": "Se corrigió un problema por el que no se podía aplicar el cambio de daño a distancia de la artillería.",
+      "v106_added_title": "Añadido",
+      "v106_workshop_update_warning": "Se añadió la detección de actualizaciones de MOD: se muestra una advertencia si la versión de Steam Workshop es más reciente que la versión local del jugador.",
+      "v106_fixed_title": "Corregido",
+      "v106_runtime_patch_load_order": "Se corrigió un problema de orden interno que podía hacer que la modificación de datos del juego, la modificación de datos de unidades y funciones relacionadas no funcionaran correctamente. Actualiza obligatoriamente si utilizas estas funciones.",
+      "v105_added_title": "Añadido",
+      "v105_launcher_workshop_games": "El lanzador ahora es compatible con todos los juegos de la serie Total War que admiten Steam Workshop.",
+      "v105_unit_data_three_kingdoms": "La modificación de datos de unidades ahora es compatible con Total War: THREE KINGDOMS.",
+      "v105_adjusted_title": "Ajustado",
+      "v105_unit_data_more_fields": "La modificación de datos de unidades ahora permite editar campos adicionales.",
+      "v105_fixed_title": "Corregido",
+      "v105_unit_data_db_order": "Se corrigió un problema por el que la modificación de datos de unidades cargaba las tablas DB en un orden incorrecto.",
+      "v105_disable_unit_recruitment": "Se corrigió un problema por el que desactivar el reclutamiento de una unidad no surtía efecto.",
+      "v105_model_count_edit": "Se corrigieron problemas al editar el número de modelos.",
+      "v101_fixed_title": "Corregido",
+      "v101_unit_data_localization": "Se corrigió un problema por el que la interfaz de modificación de datos de unidades no leía correctamente los archivos de localización multilingües.",
+      "v100_added_title": "Añadido",
+      "v100_unit_data_modification": "Se añadió la modificación de datos de unidades: permite cambiar varios atributos de las unidades originales y de todos los MOD usando los valores finales calculados con todos los MOD habilitados, por lo que es compatible con todos los MOD y con la modificación de datos del juego.",
+      "v100_compatibility_patch": "Se añadió la función de parches de compatibilidad. El parche disponible actualmente es Nanu's Dynamic RORs; al activarlo, genera automáticamente un parche compatible con Nanu's Dynamic RORs para todos los MOD habilitados.",
+      "v100_adjusted_title": "Ajustado",
+      "v100_non_chinese_error_messages": "Se mejoró el texto de los mensajes de error que no están en chino.",
+      "v099_fixed_title": "Corregido",
+      "v099_unit_scale_sfo_compatibility": "Se mejoró la compatibilidad de la modificación de la escala de unidades con SFO y otros MODs.",
+      "v099_workshop_upload_stability": "Se mejoró la estabilidad de las funciones de carga y actualización de MODs en Workshop.",
+      "v098_adjusted_title": "Ajustado",
+      "v098_rpfm_path_prompt": "Si no se encuentra RPFM, el gestor pide configurar su ruta en Ajustes.",
+      "v098_disable_low_consumption": "Se añadió una opción para desactivar el modo de bajo consumo.",
+      "v097_added_title": "Añadido",
+      "v097_end_game_process_button": "Después de iniciar el juego, el botón Iniciar juego se convierte en Terminar proceso del juego para cerrarlo rápidamente.",
+      "v097_adjusted_title": "Ajustado",
+      "v097_confirmation_dialog_ui": "Se mejoró la interfaz de todos los cuadros de confirmación.",
+      "v097_error_message_wording": "Se mejoraron algunos mensajes de error para que sean más fáciles de entender.",
+      "v097_fixed_title": "Corregido",
+      "v097_mod_data_compatibility": "Se corrigieron problemas de compatibilidad entre la modificación de datos del juego y algunos MODs.",
+      "v096_added_title": "Añadido",
+      "v096_drag_insert_preview": "Se añadió un efecto que indica la posición de inserción al arrastrar MODs.",
+      "v096_adjusted_title": "Ajustado",
+      "v096_move_hidden_toggle": "Se movió el botón para mostrar u ocultar MODs junto a los controles del conjunto.",
+      "v096_playset_hidden_settings": "La configuración de MODs ocultos ahora es independiente en cada conjunto.",
+      "v096_error_messages": "Se mejoraron algunos mensajes de error.",
+      "v095_fixed_title": "Corregido",
+      "v095_update_mod_styles": "Se corrigieron algunos problemas de estilo en la interfaz de actualización de MODs.",
+      "v095_adjusted_title": "Ajustado",
+      "v095_multi_model_war_machines": "Se mejoraron de nuevo las reglas de tamaño de unidad: las máquinas de guerra con varios modelos, como los trineos y carros de guerra, ahora se tratan como unidades normales.",
+      "v094_adjusted_title": "Ajustado",
+      "v094_unit_scale_classification": "Se mejoró la lógica de clasificación de los multiplicadores del tamaño de unidad.",
+      "v093_fixed_title": "Corregido",
+      "v093_three_kingdoms_saves": "Se corrigió un problema por el que, al cambiar a Three Kingdoms, sus partidas no se leían correctamente.",
+      "v093_subscription_sort": "Se corrigió un problema al ordenar los MOD por fecha de suscripción.",
+      "v093_adjusted_title": "Ajustado",
+      "v093_category_unit_rules": "El ajuste del tamaño de unidad ahora admite reglas independientes para la artillería y las máquinas de guerra.",
+      "v092_adjusted_title": "Ajustado",
+      "v092_subscription_sort": "Ahora se admite ordenar por fecha de suscripción.",
+      "v092_independent_mod_search": "Las barras de búsqueda de las listas de MOD activados y desactivados ahora funcionan de forma totalmente independiente.",
+      "v090_added_title": "Añadido",
+      "v090_open_published_workshop_page": "Al publicar o actualizar un MOD, su página del Taller se abre automáticamente.",
+      "v090_adjusted_title": "Ajustado",
+      "v090_save_playset": "Al cargar MOD desde una partida guardada se crea un conjunto «Guardado + nombre» y se conserva exactamente su orden.",
+      "v090_fixed_title": "Corregido",
+      "v090_auto_update": "Se corrigieron fallos de actualización automática.",
+      "v090_fully_custom_garrison": "La modificación del tamaño de unidad ahora es compatible con Fully Custom Garrison y sus submods.",
+      "v088_added_title": "Añadido",
+      "v088_dependency_action": "La advertencia de dependencias faltantes ahora permite suscribirse y activarlas directamente.",
+      "v088_adjusted_title": "Ajustado",
+      "v088_unit_formation_width": "Los multiplicadores del tamaño de unidad ahora también permiten arrastrar las formaciones más anchas.",
+      "v087_added_title": "Añadido",
+      "v087_type_order": "La gestión de tipos ahora permite reordenar y guardar los tipos integrados y personalizados.",
+      "v087_type_sort": "Se añadió la clasificación de MOD por el orden configurado de tipos.",
+      "v087_manual_type": "Se añadió Entrada manual al menú contextual de tipos, con Shift+F para aplicarla a los MOD seleccionados.",
+      "v087_adjusted_title": "Ajustado",
+      "v087_readability": "Se amplió el texto de los detalles del MOD, los botones inferiores, la gestión de tipos y Configuración.",
+      "v087_fixed_title": "Corregido",
+      "v087_publish_modal_ui": "Se corrigieron los estilos incoherentes del botón de cierre y del control de tamaño de texto en la ventana de publicación/actualización del Taller.",
+      "v086_fixed_title": "Corregido",
+      "v086_playset_dependencies": "Se corrigió la falta de aviso de dependencia cuando el MOD requerido está instalado pero no está habilitado en el conjunto actual.",
+      "v086_settings_page_ui": "Se corrigieron problemas de interfaz en la página de configuración.",
+      "v085_fixed_title": "Corregido",
+      "v085_non_ascii_launch_paths": "Se corrigió el inicio del juego cuando la instalación o la carpeta de Workshop contiene caracteres chinos u otros caracteres no ASCII.",
+      "v085_game_data_overhauls": "Se corrigió el funcionamiento incorrecto de la modificación de datos del juego con grandes MOD, como ATC y SFO.",
+      "v085_steam_friends_utf8": "Se corrigió el fallo de inicio cuando el nombre de un amigo de Steam contiene caracteres especiales.",
+      "v082_added_title": "Añadido",
+      "v082_batch_ai_generation": "El menú contextual ahora puede usar IA para generar alias y notas para varios MOD seleccionados.",
+      "v082_search_highlight": "La búsqueda incluye un modo de resaltado que conserva la lista completa, atenúa los demás MOD y salta al primer resultado.",
+      "v082_fixed_title": "Correcciones",
+      "v082_ai_highlight_cache": "Se corrigió el error por el que la IA no encontraba MOD tras activar el resaltado; ya no es necesario volver a escanear.",
+      "v081_fixed_title": "Correcciones",
+      "v081_friendly_fire": "Se restauró el ajuste para eliminar el fuego amigo en Modificación de datos del juego.",
+      "v081_game_scoped_playsets": "Los conjuntos se guardan y se muestran por juego para que WARHAMMER III y THREE KINGDOMS no se mezclen.",
+      "v081_update_restart": "Se corrigió el reinicio tras actualizar y se evitó que un fallo al actualizar autores cierre el gestor.",
+      "v081_unit_formation": "Se corrigió el ajuste de formaciones y se evitó que cañones, tambores de guerra y otras máquinas multipliquen de nuevo sus monturas de tiro por máquina.",
+      "v080_added_title": "Añadido",
+      "v080_adjusted_title": "Ajustado",
+      "v080_workshop_collection_import": "Se añadió la importación de colecciones del Taller: los MOD faltantes se suscriben automáticamente y el conjunto actual conserva el orden de la colección.",
+      "v080_recruitment_capacity": "Se añadió el ajuste de capacidad de reclutamiento en los datos del juego, con opciones de 1–5× o ilimitada.",
+      "v080_editable_shortcuts": "Los atajos admiten combinaciones personalizadas y se muestran también en el menú contextual.",
+      "v080_themed_controls": "Se unificó el estilo de los desplegables y se amplió el texto de las pestañas de ajustes y del registro de cambios.",
+      "v080_update_channel": "Se eliminó el canal de actualización configurable; las comprobaciones usan las fuentes integradas.",
+      "v080_fixed_title": "Corregido",
+      "v080_recycle_button": "Se corrigió el estilo incorrecto del botón «Mover a la papelera de reciclaje».",
+      "v080_unicode_paths": "Se corrigieron varios fallos de funciones cuando el programa se encuentra en una ruta con caracteres chinos.",
+      "v070_added_title": "Añadido",
+      "v070_fixed_title": "Corregido",
+      "v065_added_title": "Añadido",
+      "v065_adjusted_title": "Ajustado",
+      "v065_fixed_title": "Corregido",
+      "v060_added_title": "Añadido",
+      "v060_adjusted_title": "Ajustado",
+      "v060_fixed_title": "Corregido",
+      "v050_added_title": "Añadido",
+      "v050_adjusted_title": "Ajustado",
+      "v050_fixed_title": "Corregido",
+      "v030_added_title": "Añadido",
+      "v030_fixed_title": "Corregido",
+      "v020_added_title": "Añadido",
+      "v020_fixed_title": "Corregido",
+      "v010_added_title": "Añadido",
+      "v080_games_title": "Compatibilidad con juegos",
+      "v080_three_kingdoms": "Se añadieron la selección y detección de rutas de Total War: THREE KINGDOMS; las carpetas de cada juego se conservan al cambiar.",
+      "v080_workshop_title": "Publicación en el Taller",
+      "v080_workshop_ownership": "Las actualizaciones solo se muestran para proyectos del Taller propiedad de la cuenta actual; los MOD propios suscritos fuera de Data también se pueden actualizar.",
+      "v080_publish_simplified": "Publicar ya no pide elegir portada ni confirmar propiedad y usa automáticamente la portada PNG con el mismo nombre que el Pack.",
+      "v080_startup_title": "Guía de inicio",
+      "v080_startup_guidance": "Antes de iniciar se comprueban los componentes necesarios y, si falta alguno, se ofrece la guía oficial de descarga para reducir las ventanas en blanco.",
+      "v080_shortcuts_title": "Atajos de teclado",
+      "v080_shortcuts": "Se añadieron atajos: Shift+W abre el Taller, Shift+R abre RPFM, Shift+E alterna el estado activado y Shift+Enter inicia el juego.",
+      "v070_single_entity_unit_rule": "Se añadió un ajuste para unidades de una sola entidad: permite elegir salud o tamaño; el modo Salud aumenta solo la salud, no el tamaño.",
+      "v070_low_consumption_stability": "Se corrigió un error ocasional al cambiar de modo de bajo consumo.",
+      "v070_game_data_title": "Modificación de datos del juego",
+      "v070_unit_scale_ticks": "Se corrigieron las marcas del control de escala de unidades que no coincidían con el multiplicador seleccionado.",
+      "v070_game_data_patch_reliability": "Se corrigió que el escalado no se aplicara a algunas unidades MOD ni a la salud de señores y héroes.",
+      "v070_workshop_publish_title": "Correcciones y ajustes de funciones",
+      "v070_workshop_cover": "Al publicar un MOD, ahora se sube una portada PNG del mismo nombre junto con el Pack; el límite de la portada es 1 MB.",
+      "v070_save_mods": "Se corrigió la lectura de MODs de las partidas actuales al usar «Activar MODs usados en la partida».",
+      "v070_spanish_language": "Se añadió compatibilidad con español.",
+      "v065_game_data_title": "Modificación de datos del juego",
+      "v065_auto_patch": "El parche se verifica al iniciar el juego y se regenera al cambiar ajustes, conjuntos, MODs activos o datos del juego.",
+      "v065_unit_scale": "La escala de unidades ahora usa un control deslizante entero de 1–5, con una opción para escalar la salud de señores y héroes.",
+      "v065_game_data_window": "La ventana de modificación de datos del juego ahora se abre más rápido.",
+      "v065_workshop_title": "Experiencia del Taller",
+      "v065_author_names": "Los nombres de autores del Taller son más fiables; los ya obtenidos se conservan si una actualización falla temporalmente.",
+      "v065_workshop_links": "Los menús contextuales de MOD incluyen enlaces separados al Taller en el navegador y en Steam.",
+      "v065_startup_title": "Inicio del juego",
+      "v065_skip_intro": "Se corrigió «Saltar introducción» para omitir todas las cinemáticas iniciales.",
+      "v060_runtime_title": "Inicio y modo de bajo consumo",
+      "v060_low_consumption": "Se añadió un modo de bajo consumo que reduce los recursos del gestor mientras el juego está en ejecución y los restaura al cerrarlo.",
+      "v060_startup_speed": "Se mejoraron el inicio y la actualización del Taller; al reabrir WMM se activa la ventana existente y la detección del juego es más precisa.",
+      "v060_live_detection": "Se añadió detección de cambios de MOD en tiempo real para actualizar la lista automáticamente al instalar o eliminar MODs.",
+      "v060_game_data_title": "Modificación de datos del juego",
+      "v060_game_data_controls": "Se añadió una ventana para ajustar modelos y fuego amigo; permite generar el parche con un clic y se actualiza automáticamente al guardar los cambios.",
+      "v060_unit_multiplier": "Suscríbete a Dynamic Unit Size para ajustar los modelos de unidades normales, monturas y máquinas de guerra de 0,5× a 5×.",
+      "v060_friendly_fire": "Suscríbete a Dynamic No Friendly Fire para desactivar por separado el fuego amigo de unidades y hechizos, conservando mejoras y curación para aliados.",
+      "v060_library_title": "Partidas guardadas y lista de MODs",
+      "v060_save_actions": "Las partidas guardadas pueden activar sus MODs con un clic y compararlos con la lista activa.",
+      "v060_select_all": "Se añadieron Ctrl+A y doble clic para activar o desactivar MODs más rápidamente.",
+      "v060_official_profiles": "Los perfiles del lanzador oficial pueden crear un conjunto nuevo o reemplazar el actual.",
+      "v060_dependency_refresh": "Se corrigió la actualización de dependencias del Taller para que los avisos de dependencias faltantes sean más fiables.",
+      "v060_files_title": "Archivos MOD y acciones del Taller",
+      "v060_copy_path": "Se pueden copiar rutas de MOD por lotes, y seleccionar y copiar nombres de MOD y archivos en el panel de detalles.",
+      "v060_safe_delete": "Los archivos MOD se pueden mover a la Papelera de reciclaje de Windows para recuperarlos tras un borrado accidental.",
+      "v060_unsubscribe_cleanup": "Al cancelar la suscripción se limpian los archivos correspondientes del Taller y se actualiza la lista de MODs.",
+      "v060_force_update_wait": "Actualización forzada puede volver a descargar y restaurar archivos MOD del Taller que faltan.",
+      "v050_settings_title": "Configuración e información del proyecto",
+      "v050_settings_pages": "La configuración se divide en Básica, Funciones, Integración de IA y Acerca de.",
+      "v050_about_page": "Se añadió una página Acerca de con versiones y actualizaciones. Las descargas apuntan a GitHub y Gitee; comentarios y debates usan GitHub Issues y el grupo QQ 592799189.",
+      "v050_startup_title": "Recuperación de inicio y controles de lista",
+      "v050_restore_last_order": "En el primer inicio, el gestor lee el último used_mods.txt de Warhammer III y restaura el estado activo y el orden de carga de los MODs instalados localmente. Nunca descarga ni suscribe automáticamente MODs faltantes.",
+      "v050_drag_lists": "Los MODs activos e inactivos admiten arrastre por lotes con clic, Ctrl y Shift. Pueden moverse entre listas; el orden activo se guarda al instante y el inactivo dura solo durante la sesión.",
+      "v050_button_style": "Se unificaron las acciones de directorios, reanálisis, Taller y actualización del directorio del juego, incluidos sus nombres.",
+      "v050_workshop_title": "Publicación en el Taller e importación de códigos compartidos",
+      "v050_publish_language": "Al publicar una actualización de MOD se puede elegir el idioma, que por defecto es el de la interfaz. Al cambiarlo se carga el título y la descripción del Taller, con respaldo en inglés si solo existe contenido en inglés.",
+      "v050_change_note": "Se cambió «Notas de actualización» por «Registro de actualización», inicialmente vacío, y se añadió el idioma de publicación seleccionado.",
+      "v050_share_subscribe": "La importación de códigos compartidos muestra MODs sin suscripción, los suscribe tras confirmación y los restaura en el conjunto después de descargarlos y reanalizarlos.",
+      "v050_language_title": "Idiomas integrados",
+      "v050_system_language": "En el primer inicio, la interfaz sigue el idioma del sistema si es chino simplificado, inglés, coreano, ruso o japonés; los errores de detección y los idiomas no compatibles usan inglés.",
+      "v050_builtin_languages": "La interfaz y el registro de cambios incluyen chino simplificado, inglés, coreano, ruso y japonés.",
+      "v050_single_language_ui": "Se unificaron botones, encabezados, estados y avisos para que la interfaz seleccionada no mezcle idiomas.",
+      "v050_warning_title": "Detección de advertencias y corrección de mensajes",
+      "v050_outdated_check": "Se corrigió la comparación invertida de fechas para MODs desactualizados. El aviso aparece solo cuando un MOD no se actualizó desde el juego y se conservan los avisos ignorados.",
+      "v050_enabled_dependency_scope": "Los avisos de dependencias faltantes se aplican solo a MODs activos y se recalculan al activar, desactivar, reordenar, arrastrar, cambiar de conjunto o importar.",
+      "v050_dependency_cache_warning": "Si Steam no puede leer algunas dependencias del Taller, el gestor explica que usa datos en caché y que los resultados pueden estar desactualizados; el aviso se puede ignorar durante la sesión.",
+      "v050_docs_title": "Documentación e información del proyecto",
+      "v050_readme": "Se reorganizó el README alrededor de funciones para usuarios, se quitaron detalles innecesarios y se añadieron agradecimientos a Warhammer Mod Manager y RimCrow.",
+      "v030_title": "Gestión de problemas y ubicación de archivos",
+      "v030_data_location": "Se corrigió la ubicación de archivos Pack de MODs almacenados en Data desde el Explorador de archivos.",
+      "v030_ignore_issues": "Se añadió «Ignorar problema» al menú contextual para ignorar o restaurar avisos de MODs desactualizados y dependencias faltantes.",
+      "v030_warning_window": "La entrada de advertencias se movió al centro del encabezado de MODs activos y se añadió una ventana centrada para ignorar problemas individuales.",
+      "v020_title": "Actualizaciones y acciones por lotes",
+      "v020_dual_source": "Se añadió prioridad de actualización según el idioma entre Gitee y GitHub, con respaldo automático.",
+      "v020_context_menu": "Se añadió «Abrir ubicación del archivo» al menú contextual; las selecciones por lotes muestran el número de elementos y desactivan la acción RPFM individual.",
+      "v020_pyinstaller": "Se corrigió el empaquetado con un clic de PyInstaller cuando el nombre del producto contiene un apóstrofo.",
+      "v010_title": "Funciones básicas del gestor",
+      "v010_playsets": "Gestiona MODs activos y el orden de carga con conjuntos; todos los cambios se guardan inmediatamente.",
+      "v010_game_workshop": "Permite continuar partidas, cargar desde la lista de guardados, gestionar el Taller y avisar de dependencias faltantes.",
+      "v010_updates": "Incluye comprobación automática de actualizaciones, descargas verificadas, reemplazo seguro y registro de cambios dentro de la aplicación."
+    }
+  }
+}
