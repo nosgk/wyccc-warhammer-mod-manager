@@ -422,11 +422,17 @@ def evaluate_order(
     *,
     ai_relations: Iterable[OrderRelation] = (),
     max_soft_confidence: float = 0.55,
+    baseline_order: list[str] | None = None,
 ) -> OrderEvaluation:
     items = [item.with_category() for item in evidence]
     by_id = {item.mod_id: item for item in items}
-    ordered_ids = [mod_id for mod_id in current_order if mod_id in by_id]
-    ordered_ids.extend(item.mod_id for item in items if item.mod_id not in ordered_ids)
+    current_ids = [mod_id for mod_id in current_order if mod_id in by_id]
+    current_ids.extend(item.mod_id for item in items if item.mod_id not in current_ids)
+    current_ids = list(dict.fromkeys(current_ids))
+    baseline_source = baseline_order if baseline_order is not None else current_order
+    baseline_ids = [mod_id for mod_id in baseline_source if mod_id in by_id]
+    baseline_ids.extend(item.mod_id for item in items if item.mod_id not in baseline_ids)
+    baseline_ids = list(dict.fromkeys(baseline_ids))
 
     by_workshop: dict[str, list[str]] = {}
     by_pack: dict[str, list[str]] = {}
@@ -446,7 +452,7 @@ def evaluate_order(
 
     pack_names = {item.mod_id: item.pack_name.casefold() for item in items}
     recommended, dropped, order_warnings = stable_topological_order(
-        ordered_ids, relations, pack_names=pack_names
+        baseline_ids, relations, pack_names=pack_names
     )
     warnings.extend(order_warnings)
     conflicts = detect_conflicts(items)
@@ -454,7 +460,7 @@ def evaluate_order(
     item_payloads = _build_item_payloads(
         items,
         recommended,
-        current_order=ordered_ids,
+        current_order=current_ids,
         relations=relations,
         conflicts=conflicts,
         by_id=by_id,

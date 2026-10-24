@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import { t } from '../languages'
+import { currentLocale, t } from '../languages'
 import { useAppStore } from '../store'
 
 const props = defineProps({ open: { type: Boolean, default: false } })
@@ -18,12 +18,20 @@ const idleState = () => ({
   current_mod: '',
   ai_enabled: false,
   degraded: false,
+  baseline: 'current',
   warnings: [],
   error: '',
   result: null,
+  events: [],
+  stats: {},
 })
 
 const session = ref(idleState())
+const baseline = ref('current')
+const history = ref([])
+const historyBusy = ref(false)
+const historyError = ref('')
+const viewingHistoryId = ref('')
 const pending = ref(false)
 const error = ref('')
 let revision = 0
@@ -38,13 +46,15 @@ const progress = computed(() => Math.min(100, Math.max(0, Number(session.value.p
 const phaseKey = computed(() => {
   const phase = session.value.phase
   if (phase === 'cancelling') return 'aiOrder.cancel'
-  if (['collecting', 'evaluating', 'analyzing', 'done', 'cancelled', 'error'].includes(phase)) {
+  if (['collecting', 'evaluating', 'analyzing', 'global', 'done', 'cancelled', 'error'].includes(phase)) {
     return `aiOrder.${phase}`
   }
   return session.value.running ? 'aiOrder.collecting' : 'aiOrder.done'
 })
 const canStart = computed(() => !pending.value && !session.value.running && store.activeIds.length > 0)
 const canApply = computed(() => !pending.value && session.value.status === 'ready' && !!result.value)
+const events = computed(() => session.value.events || [])
+const stats = computed(() => session.value.stats || {})
 const recommended = computed(() => {
   if (!result.value) return []
   return result.value.recommended_order.map(
@@ -84,9 +94,10 @@ const start = async () => {
   const currentRevision = ++revision
   pending.value = true
   error.value = ''
+  viewingHistoryId.value = ''
   clearTimer()
   try {
-    const state = await store.startModOrderAnalysis()
+    const state = await store.startModOrderAnalysis(null, baseline.value)
     if (currentRevision !== revision) {
       if (state.running) void store.cancelModOrderAnalysis(state.id).catch(() => {})
       return
@@ -120,9 +131,14 @@ const apply = async () => {
   pending.value = true
   error.value = ''
   try {
-    await store.applyModOrderAnalysis(session.value.id)
+    if (viewingHistoryId.value) {
+      await store.applyModOrderHistory(viewingHistoryId.value)
+    } else {
+      await store.applyModOrderAnalysis(session.value.id)
+    }
     if (currentRevision === revision) {
       store.notify(t('aiOrder.applied'), 'success')
+      await loadHistory()
       close()
     }
   } catch (failure) {
@@ -131,6 +147,79 @@ const apply = async () => {
     }
   } finally {
     if (currentRevision === revision) pending.value = false
+  }
+}
+
+const loadHistory = async () => {
+  try {
+    const records = await store.listModOrderHistory()
+    history.value = Array.isArray(records) ? records : []
+    historyError.value = ''
+  } catch (failure) {
+    historyError.value = failure.message || String(failure)
+  }
+}
+
+const viewHistory = async (recordId) => {
+  if (pending.value || session.value.running) return
+  historyBusy.value = true
+  historyError.value = ''
+  try {
+    const record = await store.getModOrderHistory(recordId)
+    session.value = {
+      ...idleState(),
+      id: record.id,
+      status: 'ready',
+      running: false,
+      phase: 'done',
+      progress: 100,
+      total_mods: record.total_mods,
+      completed_mods: record.total_mods,
+      ai_enabled: record.ai_enabled,
+      degraded: record.degraded,
+      baseline: record.baseline,
+      warnings: record.warnings || [],
+      result: record.result,
+    }
+    viewingHistoryId.value = recordId
+  } catch (failure) {
+    historyError.value = failure.message || String(failure)
+  } finally {
+    historyBusy.value = false
+  }
+}
+
+const applyHistory = async (recordId) => {
+  if (historyBusy.value) return
+  historyBusy.value = true
+  historyError.value = ''
+  try {
+    await store.applyModOrderHistory(recordId)
+    store.notify(t('aiOrder.applied'), 'success')
+    await loadHistory()
+    close()
+  } catch (failure) {
+    historyError.value = failure.message || String(failure)
+  } finally {
+    historyBusy.value = false
+  }
+}
+
+const deleteHistory = async (recordId) => {
+  if (historyBusy.value) return
+  historyBusy.value = true
+  historyError.value = ''
+  try {
+    await store.deleteModOrderHistory(recordId)
+    if (viewingHistoryId.value === recordId) {
+      viewingHistoryId.value = ''
+      session.value = idleState()
+    }
+    await loadHistory()
+  } catch (failure) {
+    historyError.value = failure.message || String(failure)
+  } finally {
+    historyBusy.value = false
   }
 }
 
@@ -146,9 +235,14 @@ const reset = () => {
   clearTimer()
   if (session.value.running) void store.cancelModOrderAnalysis(session.value.id).catch(() => {})
   session.value = idleState()
+  viewingHistoryId.value = ''
+  historyError.value = ''
   pending.value = false
   error.value = ''
 }
+
+const formatTime = (value) => (value ? new Date(value).toLocaleTimeString(currentLocale()) : '')
+const formatDate = (value) => (value ? new Date(value).toLocaleString(currentLocale()) : '')
 
 const moveLabel = (item) => {
   const move = Number(item.move) || 0
@@ -169,6 +263,7 @@ watch(
       return
     }
     reset()
+    void loadHistory()
   },
   { immediate: true },
 )
@@ -206,6 +301,17 @@ onBeforeUnmount(reset)
         </p>
         <p class="ai-order-muted">{{ t('aiOrder.analyzingHint') }}</p>
         <p class="ai-order-warning">{{ t('aiOrder.noAutoSubscribe') }}</p>
+        <div class="ai-order-baseline">
+          <label>
+            <span>{{ t('aiOrder.baseline') }}</span>
+            <select v-model="baseline" :disabled="session.running || pending">
+              <option value="current">{{ t('aiOrder.baselineCurrent') }}</option>
+              <option value="default">{{ t('aiOrder.baselineDefault') }}</option>
+            </select>
+          </label>
+          <p class="ai-order-muted">{{ t('aiOrder.baselineHelp') }}</p>
+        </div>
+        <p v-if="viewingHistoryId" class="ai-order-warning">{{ t('aiOrder.viewingHistory') }}</p>
         <p v-if="!store.activeIds.length && session.status === 'idle'" class="ai-order-error" role="alert">
           {{ t('aiOrder.empty') }}
         </p>
@@ -233,57 +339,133 @@ onBeforeUnmount(reset)
         </div>
       </div>
 
-      <div v-if="result" class="modal-body ai-order-body">
-        <div class="ai-order-columns">
-          <section class="ai-order-column">
-            <h3>{{ t('aiOrder.currentOrder') }}</h3>
-            <ol class="ai-order-list">
-              <li v-for="item in current" :key="item.mod_id" class="ai-order-item">
-                <span class="ai-order-name">{{ item.name }}</span>
-                <span class="ai-order-meta">{{ item.category }}</span>
-              </li>
-            </ol>
-          </section>
-          <section class="ai-order-column">
-            <h3>{{ t('aiOrder.recommendedOrder') }}</h3>
-            <ol class="ai-order-list">
-              <li
-                v-for="item in recommended"
-                :key="item.mod_id"
-                class="ai-order-item"
-                :class="{ moved: Number(item.move) }"
-              >
-                <div class="ai-order-item-head">
+      <div class="modal-body ai-order-body">
+        <template v-if="result">
+          <div class="ai-order-columns">
+            <section class="ai-order-column">
+              <h3>{{ t('aiOrder.currentOrder') }}</h3>
+              <ol class="ai-order-list">
+                <li v-for="item in current" :key="item.mod_id" class="ai-order-item">
                   <span class="ai-order-name">{{ item.name }}</span>
-                  <span class="ai-order-meta"
-                    >{{ moveLabel(item) }} · {{ t('aiOrder.confidence', { value: confidence(item) }) }}</span
-                  >
-                </div>
-                <ul v-if="item.reasons?.length" class="ai-order-reasons">
-                  <li v-for="reason in item.reasons" :key="reason">{{ reason }}</li>
-                </ul>
-                <p v-for="warning in item.warnings || []" :key="warning" class="ai-order-warning">
-                  {{ warning }}
-                </p>
+                  <span class="ai-order-meta">{{ item.category }}</span>
+                </li>
+              </ol>
+            </section>
+            <section class="ai-order-column">
+              <h3>{{ t('aiOrder.recommendedOrder') }}</h3>
+              <ol class="ai-order-list">
+                <li
+                  v-for="item in recommended"
+                  :key="item.mod_id"
+                  class="ai-order-item"
+                  :class="{ moved: Number(item.move) }"
+                >
+                  <div class="ai-order-item-head">
+                    <span class="ai-order-name">{{ item.name }}</span>
+                    <span class="ai-order-meta"
+                      >{{ moveLabel(item) }} ·
+                      {{ t('aiOrder.confidence', { value: confidence(item) }) }}</span
+                    >
+                  </div>
+                  <ul v-if="item.reasons?.length" class="ai-order-reasons">
+                    <li v-for="reason in item.reasons" :key="reason">{{ reason }}</li>
+                  </ul>
+                  <p v-for="warning in item.warnings || []" :key="warning" class="ai-order-warning">
+                    {{ warning }}
+                  </p>
+                </li>
+              </ol>
+            </section>
+          </div>
+
+          <section v-if="events.length" class="ai-order-section">
+            <h3>{{ t('aiOrder.process') }}</h3>
+            <ol class="ai-order-events">
+              <li v-for="event in events" :key="`${event.at}-${event.message}`">
+                <time>{{ formatTime(event.at) }}</time>
+                <span class="ai-order-event-phase">{{ event.phase }}</span>
+                <span>{{ event.message }}</span>
               </li>
             </ol>
           </section>
-        </div>
 
-        <section v-if="conflicts.length" class="ai-order-section">
-          <h3>{{ t('aiOrder.conflicts') }}</h3>
-          <ul class="ai-order-conflicts">
-            <li v-for="conflict in conflicts" :key="`${conflict.kind}:${conflict.resource}`">
-              <strong>{{ conflictNames(conflict) }}</strong>
-              <span>{{ conflict.kind }} · {{ conflict.resource }} · {{ conflict.severity }}</span>
+          <section v-if="stats && Object.keys(stats).length" class="ai-order-section">
+            <h3>{{ t('aiOrder.stats') }}</h3>
+            <div class="ai-order-stats">
+              <span>{{ t('aiOrder.statsRelations', { count: stats.relations_total || 0 }) }}</span>
+              <span>{{ t('aiOrder.statsConflicts', { count: stats.conflicts || 0 }) }}</span>
+              <span>{{
+                t('aiOrder.statsAiBatches', {
+                  local: stats.ai_local_batches || 0,
+                  global: stats.ai_global_batches || 0,
+                })
+              }}</span>
+              <span>{{ t('aiOrder.statsRetries', { count: stats.ai_retries || 0 }) }}</span>
+              <span>{{ t('aiOrder.statsCache', { count: stats.cache_hits || 0 }) }}</span>
+            </div>
+          </section>
+
+          <section v-if="conflicts.length" class="ai-order-section">
+            <h3>{{ t('aiOrder.conflicts') }}</h3>
+            <ul class="ai-order-conflicts">
+              <li v-for="conflict in conflicts" :key="`${conflict.kind}:${conflict.resource}`">
+                <strong>{{ conflictNames(conflict) }}</strong>
+                <span>{{ conflict.kind }} · {{ conflict.resource }} · {{ conflict.severity }}</span>
+              </li>
+            </ul>
+          </section>
+
+          <section v-if="warnings.length" class="ai-order-section">
+            <h3>{{ t('aiOrder.warnings') }}</h3>
+            <ul class="ai-order-warnings">
+              <li v-for="warning in warnings" :key="warning">{{ warning }}</li>
+            </ul>
+          </section>
+        </template>
+
+        <section class="ai-order-section">
+          <h3>{{ t('aiOrder.history') }}</h3>
+          <p v-if="historyError" class="ai-order-error" role="alert">{{ historyError }}</p>
+          <p v-if="!history.length" class="ai-order-muted">{{ t('aiOrder.historyEmpty') }}</p>
+          <ul v-else class="ai-order-history">
+            <li v-for="record in history" :key="record.id">
+              <div class="ai-order-history-meta">
+                <strong>{{ formatDate(record.completed_at) }}</strong>
+                <span class="ai-order-meta">
+                  {{ record.total_mods }} · {{ record.baseline }} ·
+                  {{ record.degraded ? t('aiOrder.degradedShort') : 'AI' }}
+                </span>
+                <span v-if="record.applied_at" class="ai-order-meta">
+                  {{ t('aiOrder.historyApplied') }}
+                </span>
+              </div>
+              <div class="ai-order-history-actions">
+                <button
+                  type="button"
+                  class="secondary-button"
+                  :disabled="historyBusy || session.running"
+                  @click="viewHistory(record.id)"
+                >
+                  {{ t('aiOrder.historyView') }}
+                </button>
+                <button
+                  type="button"
+                  class="secondary-button"
+                  :disabled="historyBusy || session.running"
+                  @click="applyHistory(record.id)"
+                >
+                  {{ t('aiOrder.historyApply') }}
+                </button>
+                <button
+                  type="button"
+                  class="secondary-button"
+                  :disabled="historyBusy || session.running"
+                  @click="deleteHistory(record.id)"
+                >
+                  {{ t('common.delete') }}
+                </button>
+              </div>
             </li>
-          </ul>
-        </section>
-
-        <section v-if="warnings.length" class="ai-order-section">
-          <h3>{{ t('aiOrder.warnings') }}</h3>
-          <ul class="ai-order-warnings">
-            <li v-for="warning in warnings" :key="warning">{{ warning }}</li>
           </ul>
         </section>
       </div>
@@ -495,6 +677,86 @@ onBeforeUnmount(reset)
   justify-content: flex-end;
   gap: 10px;
   padding: 12px 24px;
+}
+.ai-order-baseline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ai-order-baseline label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.ai-order-baseline select {
+  height: 32px;
+  padding: 0 8px;
+}
+.ai-order-baseline p {
+  margin: 0;
+}
+.ai-order-events {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow: auto;
+  font-size: 12px;
+}
+.ai-order-events li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.ai-order-events time {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.ai-order-event-phase {
+  color: #df9f61;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.ai-order-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.ai-order-history {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ai-order-history li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.ai-order-history-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+}
+.ai-order-history-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 @media (max-width: 1100px) {
   .ai-order-columns {

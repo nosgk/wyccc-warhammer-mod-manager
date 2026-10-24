@@ -209,7 +209,7 @@ class ModOrderRelationTests(unittest.TestCase):
                 ]
             }
         )
-        with patch("backend.ai_service._chat_completion", return_value=response):
+        with patch("backend.ai_service._chat_completion_once", return_value=response):
             relations = analyze_mod_order_relations(
                 [{"id": "a"}, {"id": "b"}], {"language": "en-US"}
             )
@@ -217,7 +217,7 @@ class ModOrderRelationTests(unittest.TestCase):
         self.assertEqual(relations[0]["relation"], "must_before")
 
     def test_empty_relations_are_valid(self) -> None:
-        with patch("backend.ai_service._chat_completion", return_value='{"relations":[]}'):
+        with patch("backend.ai_service._chat_completion_once", return_value='{"relations":[]}'):
             self.assertEqual(analyze_mod_order_relations([{"id": "a"}], {}), [])
 
     def test_rejects_unknown_ids(self) -> None:
@@ -234,7 +234,7 @@ class ModOrderRelationTests(unittest.TestCase):
                 ]
             }
         )
-        with patch("backend.ai_service._chat_completion", return_value=response):
+        with patch("backend.ai_service._chat_completion_once", return_value=response):
             with self.assertRaisesRegex(ValueError, "aiOrder.invalidAIResponse"):
                 analyze_mod_order_relations([{"id": "a"}], {})
 
@@ -252,7 +252,7 @@ class ModOrderRelationTests(unittest.TestCase):
                 ]
             }
         )
-        with patch("backend.ai_service._chat_completion", return_value=response):
+        with patch("backend.ai_service._chat_completion_once", return_value=response):
             with self.assertRaisesRegex(ValueError, "aiOrder.invalidAIResponse"):
                 analyze_mod_order_relations([{"id": "a"}, {"id": "b"}], {})
 
@@ -263,12 +263,41 @@ class ModOrderRelationTests(unittest.TestCase):
             captured["system"] = system_prompt
             return '{"relations":[]}'
 
-        with patch("backend.ai_service._chat_completion", side_effect=fake):
+        with patch("backend.ai_service._chat_completion_once", side_effect=fake):
             analyze_mod_order_relations([{"id": "a"}], {"language": "en-US"})
 
         self.assertIn("Never recommend subscribing", captured["system"])
         self.assertIn("bundle the original", captured["system"])
         self.assertIn("Workshop required items are evidence", captured["system"])
+
+    def test_retries_transient_failures(self) -> None:
+        calls: list[int] = []
+
+        def fake(settings, system_prompt, user_prompt):
+            calls.append(len(calls) + 1)
+            if len(calls) < 3:
+                raise ValueError("AI 请求失败（HTTP 503）：busy")
+            return '{"relations":[]}'
+
+        with (
+            patch("backend.ai_service._chat_completion_once", side_effect=fake),
+            patch("backend.ai_service.time.sleep") as sleep,
+        ):
+            self.assertEqual(
+                analyze_mod_order_relations([{"id": "a"}], {}, retries=10), []
+            )
+
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(sleep.call_count, 2)
+
+    def test_does_not_retry_configuration_errors(self) -> None:
+        with patch(
+            "backend.ai_service._chat_completion_once",
+            side_effect=ValueError("AI 功能未启用，请先在设置中完成 AI 配置"),
+        ) as call:
+            with self.assertRaisesRegex(ValueError, "未启用"):
+                analyze_mod_order_relations([{"id": "a"}], {}, retries=10)
+        self.assertEqual(call.call_count, 1)
 
 
 if __name__ == "__main__":

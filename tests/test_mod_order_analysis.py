@@ -66,6 +66,24 @@ class ModOrderAnalysisServiceTests(unittest.TestCase):
         self.assertEqual(state["result"]["recommended_order"], ["b", "a"])
         self.assertEqual(service.apply(initial["id"]), ["b", "a"])
 
+    def test_default_baseline_uses_pack_name_order_and_records_history(self) -> None:
+        service = self._service()
+        assets = self._plain_assets()
+        initial = service.start(
+            assets,
+            {"ai_enabled": False, "language": "en-US"},
+            game_id="warhammer3",
+            current_order=["b", "a"],
+            baseline="default",
+        )
+        state = _wait(service, initial["id"])
+        self.assertEqual(state["baseline"], "default")
+        self.assertEqual(state["result"]["recommended_order"], ["a", "b"])
+        history = service.list_history()
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0]["baseline"], "default")
+        self.assertEqual(service.get_history(history[0]["id"])["recommended_order"], ["a", "b"])
+
     def test_ai_relations_are_applied(self) -> None:
         service = self._service()
         assets = self._plain_assets()
@@ -115,6 +133,39 @@ class ModOrderAnalysisServiceTests(unittest.TestCase):
         self.assertTrue(state["degraded"])
         self.assertTrue(any("AI ordering unavailable" in warning for warning in state["warnings"]))
         self.assertEqual(state["result"]["recommended_order"], ["a", "b"])
+
+    def test_large_selection_runs_a_global_relation_pass(self) -> None:
+        service = self._service()
+        assets = [
+            make_asset(write_pack(self.root / f"mod{index}.pack"), f"mod{index}", "data")
+            for index in range(25)
+        ]
+        calls: list[int] = []
+
+        def fake(payload, settings, **kwargs):
+            calls.append(len(payload))
+            return []
+
+        settings = {
+            "ai_enabled": True,
+            "ai_base_url": "https://example.invalid/v1",
+            "ai_model": "example-model",
+            "language": "en-US",
+        }
+        with patch("backend.mod_order_analysis.analyze_mod_order_relations", side_effect=fake):
+            initial = service.start(
+                assets,
+                settings,
+                game_id="warhammer3",
+                current_order=[asset.id for asset in assets],
+            )
+            state = _wait(service, initial["id"])
+
+        self.assertEqual(state["status"], "ready")
+        self.assertEqual(calls[:3], [10, 10, 5])
+        self.assertEqual(calls[3], 25)
+        self.assertEqual(state["stats"]["ai_local_batches"], 3)
+        self.assertEqual(state["stats"]["ai_global_batches"], 1)
 
     def test_cancel_stops_a_running_job(self) -> None:
         service = self._service()

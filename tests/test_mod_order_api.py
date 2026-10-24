@@ -63,6 +63,19 @@ class ModOrderApiTests(unittest.TestCase):
             content = (game / "used_mods.txt").read_text(encoding="utf-8")
             self.assertLess(content.index('"b.pack"'), content.index('"a.pack"'))
 
+            history = api.call("list_mod_order_history")
+            self.assertTrue(history["ok"], history)
+            self.assertEqual(len(history["data"]), 1)
+            record_id = history["data"][0]["id"]
+            record = api.call("get_mod_order_history", [record_id])
+            self.assertTrue(record["ok"], record)
+            self.assertEqual(record["data"]["recommended_order"], [b_id, a_id])
+            self.assertGreater(record["data"]["applied_at"], 0)
+
+            reapplied = api.call("apply_mod_order_history", [record_id])
+            self.assertTrue(reapplied["ok"], reapplied)
+            self.assertEqual(reapplied["data"]["ordered_mod_ids"], [b_id, a_id])
+
 
 if __name__ == "__main__":
     unittest.main()

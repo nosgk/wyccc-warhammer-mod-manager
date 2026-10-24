@@ -190,6 +190,18 @@ class TopologicalTests(unittest.TestCase):
         self.assertEqual(payload["a"]["move"], 1)
         self.assertTrue(payload["a"]["reasons"])
 
+    def test_baseline_order_changes_the_starting_point_not_the_reported_current_index(self) -> None:
+        items = [evidence("a"), evidence("b")]
+        result = evaluate_order(
+            items,
+            ["b", "a"],
+            baseline_order=["a", "b"],
+        )
+        self.assertEqual(result.recommended_order, ["a", "b"])
+        payload = {item["mod_id"]: item for item in result.items}
+        self.assertEqual(payload["a"]["current_index"], 1)
+        self.assertEqual(payload["a"]["suggested_index"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

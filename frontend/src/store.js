@@ -1144,9 +1144,9 @@ export const useAppStore = defineStore('app', {
     async cancelModAIAnalysis(sessionId) {
       return invoke('cancel_mod_ai_analysis', sessionId)
     },
-    async startModOrderAnalysis(modIds = null) {
+    async startModOrderAnalysis(modIds = null, baseline = 'current') {
       const ids = Array.isArray(modIds) && modIds.length ? modIds : [...this.activeIds]
-      return invoke('start_mod_order_analysis', ids)
+      return invoke('start_mod_order_analysis', ids, baseline)
     },
     async getModOrderAnalysis(sessionId = '') {
       return invoke('get_mod_order_analysis', sessionId)
@@ -1154,8 +1154,7 @@ export const useAppStore = defineStore('app', {
     async cancelModOrderAnalysis(sessionId) {
       return invoke('cancel_mod_order_analysis', sessionId)
     },
-    async applyModOrderAnalysis(sessionId) {
-      const data = await invoke('apply_mod_order_analysis', sessionId)
+    applyOrderResult(data) {
       const order = Array.isArray(data.ordered_mod_ids) ? data.ordered_mod_ids : []
       this.activeIds = order
       this.orderToken = data.order_token || this.orderToken
@@ -1166,6 +1165,21 @@ export const useAppStore = defineStore('app', {
       ))
       if (data.backup) this.backups.unshift(data.backup)
       return data
+    },
+    async applyModOrderAnalysis(sessionId) {
+      return this.applyOrderResult(await invoke('apply_mod_order_analysis', sessionId))
+    },
+    async listModOrderHistory() {
+      return invoke('list_mod_order_history')
+    },
+    async getModOrderHistory(recordId) {
+      return invoke('get_mod_order_history', recordId)
+    },
+    async applyModOrderHistory(recordId) {
+      return this.applyOrderResult(await invoke('apply_mod_order_history', recordId))
+    },
+    async deleteModOrderHistory(recordId) {
+      return invoke('delete_mod_order_history', recordId)
     },
     async getCrashDiagnosis() {
       return invoke('get_crash_diagnosis')

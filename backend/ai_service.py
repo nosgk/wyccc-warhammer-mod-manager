@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from typing import Any
 from urllib import error, request
 from urllib.parse import urlparse
@@ -78,7 +79,7 @@ def validate_ai_settings(settings: dict[str, Any]) -> None:
     _chat_completions_url(str(settings.get("ai_base_url") or ""))
 
 
-def _chat_completion(settings: dict[str, Any], system_prompt: str, user_prompt: str) -> str:
+def _chat_completion_once(settings: dict[str, Any], system_prompt: str, user_prompt: str) -> str:
     validate_ai_settings(settings)
     model = str(settings["ai_model"]).strip()
     endpoint = _chat_completions_url(str(settings.get("ai_base_url") or ""))
@@ -122,6 +123,58 @@ def _chat_completion(settings: dict[str, Any], system_prompt: str, user_prompt: 
     if not isinstance(response_payload, dict):
         raise ValueError("AI 服务返回格式无效")
     return _response_text(response_payload)
+
+
+_RETRYABLE_MARKERS = (
+    "HTTP 408",
+    "HTTP 429",
+    "HTTP 500",
+    "HTTP 502",
+    "HTTP 503",
+    "HTTP 504",
+    "无法连接 AI 服务",
+    "AI 请求失败",
+    "AI 服务返回的不是有效 JSON",
+    "AI 服务返回格式无效",
+    "AI 返回中缺少 choices",
+    "AI 返回中缺少文本内容",
+    "AI 未返回可识别的 JSON",
+    "AI 返回的 JSON 格式无效",
+    "aiOrder.invalidAIResponse",
+)
+
+
+def _is_retryable_ai_error(exc: Exception) -> bool:
+    text = str(exc)
+    return any(marker in text for marker in _RETRYABLE_MARKERS)
+
+
+def _retry_delay(attempt: int) -> float:
+    return min(5.0, 0.5 * (2**attempt))
+
+
+def _chat_completion(
+    settings: dict[str, Any],
+    system_prompt: str,
+    user_prompt: str,
+    *,
+    retries: int = 0,
+    on_retry: Any = None,
+) -> str:
+    """Call the model, retrying transient failures with bounded backoff."""
+    attempts = max(0, retries) + 1
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            return _chat_completion_once(settings, system_prompt, user_prompt)
+        except (ValueError, OSError, TimeoutError, TypeError) as exc:  # retry policy below decides whether to re-raise
+            last_error = exc
+            if attempt >= attempts - 1 or not _is_retryable_ai_error(exc):
+                raise
+            if on_retry is not None:
+                on_retry(attempt + 1, exc)
+            time.sleep(_retry_delay(attempt))
+    raise last_error or RuntimeError("AI request failed")
 
 
 def generate_mod_user_data(asset: ModAsset, settings: dict[str, Any]) -> dict[str, str]:
@@ -285,12 +338,17 @@ _ORDER_RELATIONS = {"must_before", "should_before", "conflict"}
 
 
 def analyze_mod_order_relations(
-    mods: list[dict[str, Any]], settings: dict[str, Any]
+    mods: list[dict[str, Any]],
+    settings: dict[str, Any],
+    *,
+    retries: int = 10,
+    on_retry: Any = None,
 ) -> list[dict[str, Any]]:
     """Ask the model for load-order relations between the supplied MODs.
 
     The model only supplies relations; deterministic rules still produce the
-    final order and the caller validates cycles and ids.
+    final order and the caller validates cycles and ids. Transient failures and
+    malformed JSON are retried up to ``retries`` times.
     """
     language = _ANALYSIS_LANGUAGES.get(str(settings.get("language")), "English")
     system_prompt = (
@@ -311,45 +369,52 @@ def analyze_mod_order_relations(
         '"confidence":0.0}]}. confidence must be between 0 and 1. '
         "An empty relations array is valid."
     )
-    payload = _parse_json_object(
-        _chat_completion(
-            settings,
-            system_prompt,
-            json.dumps({"mods": mods}, ensure_ascii=False),
-        )
-    )
-    relations = payload.get("relations")
-    if not isinstance(relations, list):
-        raise ValueError("aiOrder.invalidAIResponse")
-    ids = {str(mod.get("id") or "") for mod in mods}
-    parsed: list[dict[str, Any]] = []
-    for item in relations:
-        if not isinstance(item, dict):
-            raise ValueError("aiOrder.invalidAIResponse")
-        before = str(item.get("before") or "")
-        after = str(item.get("after") or "")
-        relation = str(item.get("relation") or "")
-        reason = str(item.get("reason") or "").strip()
+    user_prompt = json.dumps({"mods": mods}, ensure_ascii=False)
+    attempts = max(0, retries) + 1
+    last_error: Exception | None = None
+    for attempt in range(attempts):
         try:
-            confidence = float(item.get("confidence", 0.0))
-        except (TypeError, ValueError) as exc:
-            raise ValueError("aiOrder.invalidAIResponse") from exc
-        if (
-            before not in ids
-            or after not in ids
-            or before == after
-            or relation not in _ORDER_RELATIONS
-            or not reason
-            or not 0.0 <= confidence <= 1.0
-        ):
-            raise ValueError("aiOrder.invalidAIResponse")
-        parsed.append(
-            {
-                "before": before,
-                "after": after,
-                "relation": relation,
-                "reason": reason[:300],
-                "confidence": confidence,
-            }
-        )
-    return parsed
+            payload = _parse_json_object(_chat_completion_once(settings, system_prompt, user_prompt))
+            relations = payload.get("relations")
+            if not isinstance(relations, list):
+                raise ValueError("aiOrder.invalidAIResponse")
+            ids = {str(mod.get("id") or "") for mod in mods}
+            parsed: list[dict[str, Any]] = []
+            for item in relations:
+                if not isinstance(item, dict):
+                    raise ValueError("aiOrder.invalidAIResponse")
+                before = str(item.get("before") or "")
+                after = str(item.get("after") or "")
+                relation = str(item.get("relation") or "")
+                reason = str(item.get("reason") or "").strip()
+                try:
+                    confidence = float(item.get("confidence", 0.0))
+                except (TypeError, ValueError) as exc:
+                    raise ValueError("aiOrder.invalidAIResponse") from exc
+                if (
+                    before not in ids
+                    or after not in ids
+                    or before == after
+                    or relation not in _ORDER_RELATIONS
+                    or not reason
+                    or not 0.0 <= confidence <= 1.0
+                ):
+                    raise ValueError("aiOrder.invalidAIResponse")
+                parsed.append(
+                    {
+                        "before": before,
+                        "after": after,
+                        "relation": relation,
+                        "reason": reason[:300],
+                        "confidence": confidence,
+                    }
+                )
+            return parsed
+        except (ValueError, OSError, TimeoutError, TypeError) as exc:  # retry policy below decides whether to re-raise
+            last_error = exc
+            if attempt >= attempts - 1 or not _is_retryable_ai_error(exc):
+                raise
+            if on_retry is not None:
+                on_retry(attempt + 1, exc)
+            time.sleep(_retry_delay(attempt))
+    raise last_error or RuntimeError("AI request failed")

@@ -252,7 +252,8 @@ class API:
         self.diagnostics = ModDiagnosticsService(self)
         self.mod_ai_analysis = ModAIAnalysisService(self.data_dir / "mod_ai_analysis_cache")
         self.mod_order_analysis = ModOrderAnalysisService(
-            self.data_dir / "mod_order_analysis_cache"
+            self.data_dir / "mod_order_analysis_cache",
+            history_path=self.data_dir / "mod_order_history.json",
         )
         self.launch_history = LaunchHistoryService(self)
         self._rpc: dict[str, Callable[..., Any]] = {
@@ -264,6 +265,10 @@ class API:
             "get_mod_order_analysis": self.mod_order_analysis.status,
             "cancel_mod_order_analysis": self.mod_order_analysis.cancel,
             "apply_mod_order_analysis": self._apply_mod_order_analysis,
+            "list_mod_order_history": self.mod_order_analysis.list_history,
+            "get_mod_order_history": self.mod_order_analysis.get_history,
+            "apply_mod_order_history": self._apply_mod_order_history,
+            "delete_mod_order_history": self._delete_mod_order_history,
             "dismiss_crash_diagnosis": self.diagnostics.dismiss,
             "start_mod_diagnostics": self.diagnostics.start,
             "get_mod_diagnostics": self.diagnostics.status,
@@ -1398,11 +1403,15 @@ class API:
             game = self._active_game()
             return self.mod_ai_analysis.start(assets, self.settings_service.get(), game.id, int(game.app_id))
 
-    def _start_mod_order_analysis(self, mod_ids: list[str] | None = None) -> dict[str, Any]:
+    def _start_mod_order_analysis(
+        self, mod_ids: list[str] | None = None, baseline: str = "current"
+    ) -> dict[str, Any]:
         if mod_ids is None:
             mod_ids = []
         if not isinstance(mod_ids, list) or any(not isinstance(value, str) for value in mod_ids):
             raise ValueError("aiOrder.invalidSelection")
+        if baseline not in {"current", "default"}:
+            raise ValueError("aiOrder.invalidBaseline")
         with self._context_lock:
             selected_ids = self._canonicalize_mod_ids(mod_ids) if mod_ids else self._current_enabled_mod_ids()
             assets = [self._require_asset(value) for value in dict.fromkeys(selected_ids)]
@@ -1426,6 +1435,7 @@ class API:
                 current_order=current_order,
                 expected_token=token,
                 workshop_service=self.workshop_service,
+                baseline=baseline,
             )
 
     def _apply_mod_order_analysis(self, session_id: str) -> dict[str, Any]:
@@ -1435,12 +1445,29 @@ class API:
             ordered_mod_ids,
             str(state.get("expected_token") or ""),
         )
+        applied_order = list(saved.get("plan", {}).get("ordered_mod_ids") or ordered_mod_ids)
+        self.mod_order_analysis.mark_applied(session_id, applied_order)
         return {
-            "ordered_mod_ids": list(saved.get("plan", {}).get("ordered_mod_ids") or ordered_mod_ids),
+            "ordered_mod_ids": applied_order,
             "plan": saved.get("plan", {}),
             "backup": saved.get("backup"),
             "order_token": saved.get("order_token", ""),
         }
+
+    def _apply_mod_order_history(self, record_id: str) -> dict[str, Any]:
+        ordered_mod_ids = self.mod_order_analysis.apply_history(record_id)
+        saved = self._save_load_order(ordered_mod_ids, "")
+        applied_order = list(saved.get("plan", {}).get("ordered_mod_ids") or ordered_mod_ids)
+        self.mod_order_analysis.mark_applied(record_id, applied_order)
+        return {
+            "ordered_mod_ids": applied_order,
+            "plan": saved.get("plan", {}),
+            "backup": saved.get("backup"),
+            "order_token": saved.get("order_token", ""),
+        }
+
+    def _delete_mod_order_history(self, record_id: str) -> dict[str, bool]:
+        return {"deleted": self.mod_order_analysis.history.delete(record_id)}
 
     def _reorder_mod_types(self, type_ids: list[str]) -> dict[str, Any]:
         return {"items": self.state_repository.reorder_mod_types(type_ids)}
