@@ -150,7 +150,7 @@ python scripts/check.py --full
 
 Missing local dependencies are reported as `SKIP` with setup commands; the script never installs anything.
 
-GitHub Actions provides two workflows: `CI` runs tests and static checks; `Build Windows EXE` produces the single-file `Wyccc's Mod Manager.exe` on `main`, version tags, or manual dispatch, and uploads it as a build artifact.
+GitHub Actions provides one **manually triggered** workflow, `CI and Windows EXE`: it runs backend/frontend tests and static checks first, then builds the single-file `Wyccc's Mod Manager.exe` and uploads it as a build artifact. Pushes do not trigger it automatically.
 
 The project build entry point performs checks and generates production frontend assets:
 
