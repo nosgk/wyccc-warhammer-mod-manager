@@ -460,6 +460,10 @@ const closeSettings = () => {
                   {{ t('settings.clearSecret') }}
                 </label>
               </div>
+              <label class="switch-row">
+                <input v-model="draft.encrypt_ai_api_key" type="checkbox" data-testid="ai-encrypt-key" />
+                <span><strong>{{ t('settings.encryptApiKey') }}</strong><small>{{ t('settings.encryptApiKeyHelp') }}</small></span>
+              </label>
             </div>
             <p class="settings-page-note">{{ t('settings.aiNote') }}</p>
           </section>
