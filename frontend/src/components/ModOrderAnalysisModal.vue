@@ -205,6 +205,7 @@ onBeforeUnmount(reset)
           {{ session.ai_enabled ? t('aiOrder.aiDisclosure') : t('aiOrder.aiDisabled') }}
         </p>
         <p class="ai-order-muted">{{ t('aiOrder.analyzingHint') }}</p>
+        <p class="ai-order-warning">{{ t('aiOrder.noAutoSubscribe') }}</p>
         <p v-if="!store.activeIds.length && session.status === 'idle'" class="ai-order-error" role="alert">
           {{ t('aiOrder.empty') }}
         </p>

@@ -167,6 +167,14 @@ export const modOrderEntries = {
     'AIを無効にすると、ローカルルールとワークショップのメタデータのみを使用します。',
     'Con la IA desactivada, solo se usan reglas locales y metadatos de Workshop.',
   ],
+  'aiOrder.noAutoSubscribe': [
+    '分析不会订阅或启用任何额外 MOD。工坊必需物品只作为提示；部分汉化 MOD 可能已包含原 MOD 本体，请以工坊简介为准。',
+    'Analysis never subscribes to or enables extra MODs. Workshop required items are hints only; some translation MODs already bundle the original MOD, so check the Workshop description.',
+    '분석은 추가 MOD를 구독하거나 활성화하지 않습니다. 창작마당 필수 항목은 참고용이며, 일부 번역 MOD는 원본 MOD를 포함하므로 창작마당 설명을 확인하세요.',
+    'Анализ никогда не подписывается на дополнительные MOD и не включает их. Обязательные элементы Мастерской — только подсказка; некоторые переводы уже содержат оригинальный MOD, проверьте описание.',
+    '分析は追加MODの購読や有効化を一切行いません。ワークショップの必須アイテムは参考情報であり、一部の翻訳MODは元MODを同梱しているため、説明を確認してください。',
+    'El análisis nunca suscribe ni activa MODs adicionales. Los elementos requeridos de Workshop son solo indicios; algunas traducciones ya incluyen el MOD original, así que revisa la descripción.',
+  ],
   'aiOrder.applied': [
     '已应用建议顺序',
     'Suggested order applied',
