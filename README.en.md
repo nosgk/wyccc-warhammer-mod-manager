@@ -130,7 +130,15 @@ cd frontend
 pnpm test
 ```
 
-The unified local check entry validates version sources, all six language catalogs, documentation links, and the frontend/backend RPC contract, then runs ruff, pytest, and vitest when the dependencies are available:
+Frontend static checks:
+
+```powershell
+cd frontend
+pnpm lint
+pnpm format:check
+```
+
+The unified local check entry validates version sources, all six language catalogs, documentation links, and the frontend/backend RPC contract, then runs ruff, pytest, ESLint, Prettier, and vitest when the dependencies are available:
 
 ```powershell
 cd <repository root>

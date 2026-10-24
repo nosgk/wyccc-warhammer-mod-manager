@@ -130,7 +130,15 @@ cd frontend
 pnpm test
 ```
 
-统一的本地检查入口会依次校验版本号、六语言词条、文档链接、前后端 RPC 契约，并在依赖可用时运行 ruff、pytest 与 vitest：
+前端静态检查：
+
+```powershell
+cd frontend
+pnpm lint
+pnpm format:check
+```
+
+统一的本地检查入口会依次校验版本号、六语言词条、文档链接、前后端 RPC 契约，并在依赖可用时运行 ruff、pytest、ESLint、Prettier 与 vitest：
 
 ```powershell
 cd <项目根目录>
