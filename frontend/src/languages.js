@@ -6,6 +6,7 @@ import { schemaEntries } from './schemaLanguages'
 import { launchComparisonEntries } from './launchComparisonLanguages'
 import { exceptionProbeEntries } from './exceptionProbeLanguages'
 import { aiAnalysisEntries } from './aiAnalysisLanguages'
+import { modOrderEntries } from './modOrderLanguages'
 import { voiceCompatibilityEntries } from './voiceCompatibilityLanguages'
 
 export const DEFAULT_LANGUAGE = 'en-US'
@@ -1834,7 +1835,7 @@ for (const [key, variants] of Object.entries(diagnosticsEntries)) {
   spanishEntries[key] = variants[5]
 }
 
-for (const [key, variants] of Object.entries({ ...folderEntries, ...schemaEntries, ...launchComparisonEntries, ...exceptionProbeEntries, ...aiAnalysisEntries, ...voiceCompatibilityEntries })) {
+for (const [key, variants] of Object.entries({ ...folderEntries, ...schemaEntries, ...launchComparisonEntries, ...exceptionProbeEntries, ...aiAnalysisEntries, ...modOrderEntries, ...voiceCompatibilityEntries })) {
   entries[key] = variants.slice(0, 5)
   spanishEntries[key] = variants[5]
 }
