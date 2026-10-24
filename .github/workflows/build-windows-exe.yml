@@ -50,11 +50,15 @@ jobs:
           where.exe pnpm
       - name: Build single-file executable
         shell: pwsh
+        env:
+          PYTHONUNBUFFERED: "1"
+          PYTHONIOENCODING: "utf-8"
         run: |
-          python scripts/build.py --package --output-dir dist/release --skip-install --skip-tests 2>&1 | Tee-Object -FilePath build-exe.log
+          python scripts/build.py --package --output-dir dist/release --skip-install --skip-tests 1> build-out.log 2> build-err.log
           $code = $LASTEXITCODE
           if ($code -ne 0) {
-            Get-Content build-exe.log -Tail 60 | ForEach-Object { Write-Host "::error::$_" }
+            Get-Content build-err.log -Tail 80 | ForEach-Object { Write-Host "::error::$_" }
+            Get-Content build-out.log -Tail 40 | ForEach-Object { Write-Host "::error::$_" }
             exit $code
           }
       - name: Upload build log
@@ -62,7 +66,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-exe-build-log
-          path: build-exe.log
+          path: |
+            build-out.log
+            build-err.log
           if-no-files-found: ignore
       - name: Record SHA-256
         shell: pwsh
