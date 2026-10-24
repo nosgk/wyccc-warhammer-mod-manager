@@ -220,6 +220,79 @@ def test_mixed_layout_does_not_copy_a_different_language_vanilla_fallback_into_t
         ])
 
 
+@pytest.mark.parametrize("reverse", [False, True])
+def test_mixed_layout_accepts_single_language_baseline_extensions(reverse):
+    # Player report 3643531796: Audio Mixer exists only under english(uk),
+    # whereas the other MOD has identical copies in several language folders.
+    localized = DbSource("local", tuple(
+        entry for scope in ("english(uk)", "chinese")
+        for entry in source("local", {1: 111, 2: 20}, event_id=3643531796,
+                            filename=PREFIX + scope + "\\local.bnk").entries
+    ))
+    mods = [source("global", {4: 444}, event_id=3643531796), localized,
+            source("mixer", {1: 10, 2: 20, 3: 300}, event_id=3643531796,
+                   filename=PREFIX + "english(uk)\\mixer.bnk")]
+    entries, stats = build_voice_compatibility_entries([
+        *(reversed(mods) if reverse else mods),
+        *(source("base_" + scope, {1: 10, 2: 20}, role="vanilla", event_id=3643531796,
+                 filename=PREFIX + scope + "\\frontend_vo__core.bnk")
+          for scope in ("english(uk)", "chinese")),
+    ])
+    copies = {parse_soundbank(entry.payload).dialogues()[3643531796] for entry in entries}
+    assert len(entries) == 4 and len(copies) == 1
+    assert event_paths(copies.pop()) == {
+        (1,): (111, 50, 100), (2,): (20, 50, 100),
+        (3,): (300, 50, 100), (4,): (444, 50, 100),
+    }
+    assert stats["merged_event_count"] == 1 and stats["conflicting_path_count"] == 0
+
+
+@pytest.mark.parametrize("difference", ["audio", "missing", "weight", "probability", "mode",
+                                        "suffix", "branch_metadata", "explicit", "no_baseline"])
+def test_mixed_layout_rejects_unproven_cross_language_extensions(difference):
+    baseline = event({1: {2: 20}}, arguments=(123, 456))
+    extension = event({1: {2: 20}, 3: {4: 40}}, arguments=(123, 456))
+    if difference == "audio":
+        extension = event({1: {2: 999}, 3: {4: 40}}, arguments=(123, 456))
+    elif difference == "missing":
+        extension = event({3: {4: 40}}, arguments=(123, 456))
+    elif difference == "weight":
+        branch = extension.root.children[0]
+        branch = replace(branch, children=(replace(branch.children[0], weight=99),))
+        extension = replace(extension, root=replace(extension.root, children=(branch, extension.root.children[1])))
+    elif difference == "branch_metadata":
+        branch = replace(extension.root.children[0], probability=99)
+        extension = replace(extension, root=replace(extension.root, children=(branch, extension.root.children[1])))
+    elif difference in {"probability", "mode", "suffix"}:
+        extension = replace(extension, **{difference: {"probability": 90, "mode": 1, "suffix": b"\1\0"}[difference]})
+    name = "extra_for_merging.bnk" if difference == "explicit" else "extra.bnk"
+    sources = [
+        source("global", {5: {6: 60}}, arguments=(123, 456)),
+        DbSource("local", tuple(GameDataEntry(PREFIX + scope + "\\local.bnk", bank([baseline]))
+                                for scope in ("english(uk)", "chinese"))),
+        DbSource("extra", (GameDataEntry(PREFIX + "english(uk)\\" + name, bank([extension])),)),
+    ]
+    if difference != "no_baseline":
+        sources.append(DbSource("base", tuple(
+            GameDataEntry(PREFIX + scope + "\\campaign_vo__core.bnk", bank([baseline]))
+            for scope in ("english(uk)", "chinese")
+        ), role="vanilla"))
+    with pytest.raises(ValueError) as caught:
+        build_voice_compatibility_entries(sources)
+    assert caught.value.details["reason"] == "mixedLayout"
+
+
+def test_mixed_layout_does_not_combine_separate_language_additions():
+    with pytest.raises(ValueError) as caught:
+        build_voice_compatibility_entries([
+            source("global", {4: 444}),
+            source("cn", {1: 10, 2: 222}, filename=PREFIX + "chinese\\local.bnk"),
+            source("en", {1: 10, 2: 999}, filename=PREFIX + "english(uk)\\local.bnk"),
+            source("base", {1: 10}, role="vanilla", filename=BASE_NAME),
+        ])
+    assert caught.value.details["reason"] == "mixedLayout"
+
+
 @pytest.mark.parametrize("broken", [b"", b"BKHD\x18\0\0\0short", bank([event({1: 111})])[:-1]])
 def test_rejects_truncated_banks(broken):
     with pytest.raises(ValueError):

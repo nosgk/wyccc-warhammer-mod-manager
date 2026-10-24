@@ -21,6 +21,7 @@ let playsetWriteQueue = Promise.resolve()
 let collectionImportPollTimer = 0
 const COLLECTION_IMPORT_POLL_INTERVAL_MS = 4_000
 const LIST_UNDO_HISTORY_LIMIT = 30
+const WORKSHOP_ELIGIBILITY_BATCH_SIZE = 500
 
 const defaultGameDataFeatures = () => ({
   unit_size: {
@@ -91,7 +92,7 @@ const sameListState = (left, right) => (
 export const useAppStore = defineStore('app', {
   state: () => ({
     appName: "Wyccc's Mod Manager",
-    appVersion: '1.3.0',
+    appVersion: '1.3.1',
     settings: {},
     paths: {},
     gameContextRevision: 0,
@@ -2139,19 +2140,25 @@ export const useAppStore = defineStore('app', {
       }
       const requestId = ++this.workshopEligibilityRequestId
       try {
-        const data = await invoke('get_workshop_update_eligibility', pendingIds)
-        if (requestId !== this.workshopEligibilityRequestId) return []
-        const eligible = Array.isArray(data?.eligible_mod_ids) ? data.eligible_mod_ids : []
-        const eligibleIds = new Set(eligible.map(id => String(id)))
-        const nextEligibility = new Set(this.workshopUpdateEligibility)
-        pendingIds.forEach(id => nextEligibility.delete(id))
-        eligibleIds.forEach(id => nextEligibility.add(id))
-        this.workshopEligibilityKnownIds = new Set([
-          ...this.workshopEligibilityKnownIds,
-          ...pendingIds,
-        ])
-        this.workshopUpdateEligibility = nextEligibility
-        return eligible
+        for (let start = 0; start < pendingIds.length; start += WORKSHOP_ELIGIBILITY_BATCH_SIZE) {
+          const batch = pendingIds.slice(start, start + WORKSHOP_ELIGIBILITY_BATCH_SIZE)
+          const data = await invoke('get_workshop_update_eligibility', batch)
+          if (requestId !== this.workshopEligibilityRequestId) return []
+          const checked = new Set((Array.isArray(data?.checked_mod_ids) ? data.checked_mod_ids : []).map(String))
+          const checkedIds = batch.filter(id => checked.has(id))
+          const eligible = new Set((Array.isArray(data?.eligible_mod_ids) ? data.eligible_mod_ids : []).map(String))
+          const nextEligibility = new Set(this.workshopUpdateEligibility)
+          checkedIds.forEach(id => {
+            if (eligible.has(id)) nextEligibility.add(id)
+            else nextEligibility.delete(id)
+          })
+          this.workshopEligibilityKnownIds = new Set([
+            ...this.workshopEligibilityKnownIds,
+            ...checkedIds,
+          ])
+          this.workshopUpdateEligibility = nextEligibility
+        }
+        return requestedIds.filter(id => this.workshopUpdateEligibility.has(id))
       } catch {
         return []
       }

@@ -282,6 +282,47 @@ def _baseline_event(base, key):
             or next((event for (_, base_id), event in base.items() if base_id == event_id), None))
 
 
+def _only_adds_branches(event: DialogueEvent, baseline: DialogueEvent) -> bool:
+    if replace(event, root=baseline.root) != baseline:
+        return False
+
+    def preserves(node, original):
+        if replace(node, children=original.children) != original:
+            return False
+        children = {child.key: child for child in node.children}
+        return all(child.key in children and preserves(children[child.key], child)
+                   for child in original.children)
+
+    return preserves(event.root, baseline.root)
+
+
+def _localized_copies_agree(localized, candidates, base) -> bool:
+    baselines = [_baseline_event(base, key) for key in localized]
+    baseline = baselines[0].event if baselines[0] else None
+    if any((item.event if item else None) != baseline for item in baselines[1:]):
+        return False
+    selected = [_source_events(candidates[key]) for key in localized]
+    priorities = {priority for group in selected for priority in group}
+    # Use a language that already contains the complete source combination;
+    # do not synthesize a union of separate language-specific voice packs.
+    if not any(set(group) == priorities for group in selected):
+        return False
+    for priority in priorities:
+        copies = [group[priority] for group in selected if priority in group]
+        if any(item.event != copies[0].event for item in copies[1:]):
+            return False
+        # Missing language folders alone are not conflicting voice definitions.
+        # Only propagate pre-merged additions that preserve the entire shared
+        # vanilla tree; localized replacements and explicit author edits remain
+        # language-specific. This covers English-only Audio Mixer scaffolding.
+        if len(copies) != len(selected) and (
+            baseline is None or any("_for_merging" in item.bank for item in copies)
+            or not _only_adds_branches(copies[0].event, baseline)
+        ):
+            return False
+    return True
+
+
 def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list[GameDataEntry], dict]:
     """Sources are ordered from highest to lowest Pack priority; vanilla is fallback."""
     banks = []
@@ -363,9 +404,7 @@ def build_voice_compatibility_entries(sources: Sequence[DbSource]) -> tuple[list
                 raise VoiceCompatibilityError("argumentMismatch", [expected.diagnostic(), item.diagnostic()], event_id)
         localized = [key for key in target_keys if key[0]]
         if len(localized) > 1:
-            signatures = [({priority: item.event for priority, item in _source_events(candidates[key]).items()},
-                           baseline.event if (baseline := _baseline_event(base, key)) else None) for key in localized]
-            if any(signature != signatures[0] for signature in signatures[1:]):
+            if not _localized_copies_agree(localized, candidates, base):
                 involved = [*items, *(baseline for target in localized
                                       if (baseline := _baseline_event(base, target)))]
                 raise VoiceCompatibilityError("mixedLayout", [item.diagnostic() for item in involved], event_id)
