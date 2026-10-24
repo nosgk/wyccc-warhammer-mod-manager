@@ -60,8 +60,14 @@ def _backend_deps_ready() -> tuple[bool, str]:
     return True, ""
 
 
-def _pnpm() -> str:
-    return shutil.which("pnpm.cmd") or shutil.which("pnpm") or ""
+def _pnpm_command() -> list[str]:
+    found = shutil.which("pnpm.cmd") or shutil.which("pnpm")
+    if found:
+        return [found]
+    corepack = shutil.which("corepack")
+    if corepack:
+        return [corepack, "pnpm"]
+    return []
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -101,15 +107,17 @@ def main(argv: list[str] | None = None) -> int:
         results.append(Result("pytest", "skip", backend_detail))
 
     frontend = ROOT / "frontend"
-    pnpm = _pnpm()
+    pnpm = _pnpm_command()
     if not (frontend / "node_modules").is_dir():
         results.append(Result("vitest", "skip", "frontend/node_modules is missing"))
     elif not pnpm:
         results.append(Result("vitest", "skip", "pnpm is not installed"))
     else:
-        results.append(_run("vitest", [pnpm, "test"], cwd=frontend))
+        results.append(_run("eslint", [*pnpm, "lint"], cwd=frontend))
+        results.append(_run("prettier", [*pnpm, "format:check"], cwd=frontend))
+        results.append(_run("vitest", [*pnpm, "test"], cwd=frontend))
         if args.full:
-            results.append(_run("frontend build", [pnpm, "build"], cwd=frontend))
+            results.append(_run("frontend build", [*pnpm, "build"], cwd=frontend))
 
     print("\n== summary ==")
     for result in results:

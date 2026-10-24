@@ -19,7 +19,9 @@ const root = ref(null)
 const trigger = ref(null)
 const open = ref(false)
 const activeIndex = ref(-1)
-const listboxId = `themed-select-${++nextThemedSelectId}`
+const listboxId = `themed-select-${nextThemedSelectId}`
+// eslint-disable-next-line no-useless-assignment -- module-level instance counter
+nextThemedSelectId += 1
 
 const selectedIndex = computed(() => (
   props.options.findIndex(option => Object.is(option.value, props.modelValue))

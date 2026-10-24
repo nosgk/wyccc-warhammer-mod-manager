@@ -114,7 +114,7 @@ export const matchesSearchTokens = (mod, tokens = [], logic = 'AND', typeMap = {
 }
 
 const suggestionValues = (key, mods, typeMap) => {
-  if (key === 'type') return Object.entries(typeMap).map(([value, label]) => ({ value: label, label }))
+  if (key === 'type') return Object.entries(typeMap).map(([, label]) => ({ value: label, label }))
   if (key === 'source') {
     return [
       { value: 'data', label: t('details.sourceData') },
