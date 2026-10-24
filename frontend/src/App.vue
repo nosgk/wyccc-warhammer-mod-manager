@@ -16,6 +16,7 @@ import ModContextMenu from './components/ModContextMenu.vue'
 import ModDetails from './components/ModDetails.vue'
 import ModDiagnosticsModal from './components/ModDiagnosticsModal.vue'
 import ModAIAnalysisModal from './components/ModAIAnalysisModal.vue'
+import ModOrderAnalysisModal from './components/ModOrderAnalysisModal.vue'
 import SchemaUpdateModal from './components/SchemaUpdateModal.vue'
 import ModList from './components/ModList.vue'
 import OfficialProfileImportModal from './components/OfficialProfileImportModal.vue'
@@ -43,6 +44,7 @@ const openingUnitDataModification = ref(false)
 const showCompatibilityPatch = ref(false)
 const showDiagnostics = ref(false)
 const showAIAnalysis = ref(false)
+const showModOrderAnalysis = ref(false)
 const diagnosticsBusy = ref(false)
 const diagnosticSession = ref({ status: 'idle', running: false })
 const crashDiagnosis = ref({})
@@ -509,6 +511,7 @@ const shortcutsBlocked = () => (
   showGameDataModification.value
   || showDiagnostics.value
   || showAIAnalysis.value
+  || showModOrderAnalysis.value
   || showUnitDataModification.value
   || showUnitEncyclopedia.value
   || showSettings.value
@@ -1346,6 +1349,9 @@ onBeforeUnmount(() => {
           <button type="button" class="secondary-button sync-data-button footer-ai-analysis-button"
             :disabled="!!store.busy" data-testid="ai-analysis-button"
             @click="showAIAnalysis = true">{{ t('aiAnalysis.title') }}</button>
+          <button type="button" class="secondary-button sync-data-button footer-ai-analysis-button"
+            :disabled="!!store.busy" data-testid="ai-order-button"
+            @click="showModOrderAnalysis = true">{{ t('aiOrder.button') }}</button>
         </div>
       </div>
 
@@ -1462,6 +1468,7 @@ onBeforeUnmount(() => {
 
     <ModAIAnalysisModal :open="showAIAnalysis" @close="showAIAnalysis = false"
       @settings="showAIAnalysis = false; showSettings = true" />
+    <ModOrderAnalysisModal :open="showModOrderAnalysis" @close="showModOrderAnalysis = false" />
     <ModDiagnosticsModal
       :open="showDiagnostics" :session="diagnosticSession" :diagnosis="crashDiagnosis"
       :history="diagnosticHistory" :busy="diagnosticsBusy" :game-running="store.runtime.running"
