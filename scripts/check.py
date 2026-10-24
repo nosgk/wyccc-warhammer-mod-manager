@@ -78,6 +78,7 @@ def main(argv: list[str] | None = None) -> int:
         ("i18n", [PYTHON, "scripts/check_i18n.py"]),
         ("docs", [PYTHON, "scripts/check_docs.py"]),
         ("rpc contract", [PYTHON, "scripts/check_rpc_contract.py"]),
+        ("exceptions", [PYTHON, "scripts/check_exceptions.py"]),
     ]
     for label, command in static_checks:
         results.append(_run(label, command))

@@ -90,5 +90,7 @@ jobs:
         run: python scripts/check_docs.py
       - name: RPC contract
         run: python scripts/check_rpc_contract.py
+      - name: Broad exception budget
+        run: python scripts/check_exceptions.py
       - name: Metrics snapshot
         run: python scripts/harness_metrics.py > /dev/null
