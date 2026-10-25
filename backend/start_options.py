@@ -111,6 +111,7 @@ class GameDataSourceSnapshotEntry:
             "pack_name": self.spec.path.name,
             "source": str(asset.source) if asset is not None else self.spec.role,
             "workshop_id": str(asset.workshop_id) if asset is not None else "",
+            "voice_units_table_compatibility": self.source.voice_units_table_compatibility,
             "file": {
                 "path": str(self.spec.path),
                 "size": self.size,
@@ -551,12 +552,27 @@ def _changed_game_data_rows(stats: dict[str, int | float]) -> int:
             "unit_friendly_fire_kv_rules_changed",
             "unit_max_drag_width_changed",
             "spell_friendly_fire_rows_changed",
+            "voice_units_table_rows_changed",
         )
     )
 
 
 def _path_key(path: Path) -> str:
     return os.path.normcase(str(path.resolve(strict=False)))
+
+
+def voice_units_table_compatibility_requested(
+    data_path: str | Path,
+    assets: Mapping[str, ModAsset],
+    active_ids: Sequence[str],
+) -> bool:
+    # Movie Packs can be loaded automatically even when unchecked in the list.
+    if not any(asset.voice_units_table_compatibility for asset in assets.values()):
+        return False
+    return any(
+        spec.asset is not None and spec.asset.voice_units_table_compatibility
+        for spec in resolve_game_data_source_specs(data_path, assets, active_ids)
+    )
 
 
 def _movie_pack_paths(directory: Path) -> list[Path]:
@@ -731,7 +747,12 @@ def _read_game_data_source_snapshot_entry(
         entries.append(GameDataEntry(entry.name, entry.payload))
     return GameDataSourceSnapshotEntry(
         spec=spec,
-        source=DbSource(source_name, tuple(entries), role=spec.role),
+        source=DbSource(
+            source_name, tuple(entries), role=spec.role,
+            voice_units_table_compatibility=(
+                spec.asset.voice_units_table_compatibility if spec.asset is not None else False
+            ),
+        ),
         size=after.st_size,
         mtime_ns=after.st_mtime_ns,
         content_sha256=digest.hexdigest(),
@@ -811,7 +832,12 @@ def build_game_data_patch(
 ) -> dict[str, Any]:
     effective_settings = _effective_game_data_settings(settings, subscribed_workshop_ids)
     output_path = Path(output_dir) / GAME_DATA_PATCH_NAME
-    if not _game_data_enabled(effective_settings):
+    voice_compatibility = (
+        any(source.voice_units_table_compatibility for source in source_snapshot.sources)
+        if source_snapshot is not None
+        else voice_units_table_compatibility_requested(data_path, assets, active_ids)
+    )
+    if not _game_data_enabled(effective_settings) and not voice_compatibility:
         output_path.unlink(missing_ok=True)
         return {
             "path": "",
@@ -829,6 +855,9 @@ def build_game_data_patch(
     )
     sources = snapshot.sources
     diagnostics = snapshot.diagnostics()
+    options = _enabled_game_data_options(effective_settings)
+    if voice_compatibility:
+        options.append("voice_units_table_compatibility")
     game_data = build_game_data_entries(sources, effective_settings)
     entries = [PackEntry(entry.name, entry.payload) for entry in game_data.entries]
     diagnostics["output_table_names"] = [entry.name for entry in entries]
@@ -836,7 +865,7 @@ def build_game_data_patch(
         output_path.unlink(missing_ok=True)
         return {
             "path": "",
-            "options": _enabled_game_data_options(effective_settings),
+            "options": options,
             "entry_count": 0,
             "game_data": game_data.stats,
             "source_diagnostics": diagnostics,
@@ -844,7 +873,7 @@ def build_game_data_patch(
     write_pfh5_pack(output_path, entries)
     return {
         "path": str(output_path.resolve(strict=False)),
-        "options": _enabled_game_data_options(effective_settings),
+        "options": options,
         "entry_count": len(entries),
         "game_data": game_data.stats,
         "source_diagnostics": diagnostics,

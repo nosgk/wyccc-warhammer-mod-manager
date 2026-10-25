@@ -319,6 +319,7 @@ class API:
             "set_mod_types": self._set_mod_types,
             "set_mod_hidden": self._set_mod_hidden,
             "set_mod_warning_ignored": self._set_mod_warning_ignored,
+            "set_voice_units_table_compatibility": self._set_voice_units_table_compatibility,
             "preview_load_order": self._preview_load_order,
             "save_load_order": self._save_load_order,
             "launch_game": self._launch_game,
@@ -1297,6 +1298,9 @@ class API:
                         if isinstance(raw_ignored_warning_codes, list)
                         else []
                     )
+                    mod.voice_units_table_compatibility = bool(
+                        custom.get("voice_units_table_compatibility", False)
+                    )
                 if published_assets:
                     # These links are restored after the scanner reads Workshop metadata.
                     # Restore ownership from the same cache, including after an online refresh.
@@ -1537,6 +1541,24 @@ class API:
             asset.id,
             warning_code,
             bool(ignored),
+        )
+        return asset.to_dict()
+
+    def _set_voice_units_table_compatibility(
+        self,
+        mod_id: str,
+        enabled: bool,
+    ) -> dict[str, Any]:
+        self._require_game_capability(
+            "supports_game_data_modification",
+            "Voice/unit table compatibility",
+        )
+        asset = self._require_asset(mod_id)
+        asset.voice_units_table_compatibility = (
+            self.state_repository.set_voice_units_table_compatibility(
+                asset.id,
+                bool(enabled),
+            )
         )
         return asset.to_dict()
 
@@ -1808,6 +1830,7 @@ class API:
                     settings=settings,
                     subscription_state=subscription_state,
                     unit_data_patch_path=unit_data_path,
+                    game_id=paths.game_id,
                 )
             except Exception:
                 logger.exception("Game data patch status=generation_failed")

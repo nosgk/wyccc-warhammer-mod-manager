@@ -18,6 +18,7 @@ const props = defineProps({
   busy: { type: Boolean, default: false },
   keyboardShortcuts: { type: Object, default: () => ({}) },
   packActions: { type: Boolean, default: true },
+  voiceUnitsTableCompatibilitySupported: { type: Boolean, default: true },
   folders: { type: Array, default: () => [] },
 })
 
@@ -25,7 +26,8 @@ const emit = defineEmits(['close', 'action'])
 
 const menuStyle = computed(() => {
   const width = 246
-  const height = (props.mod?.workshop_id ? 580 : 540) + (showAiGenerate.value ? 44 : 0) + (props.packActions ? 36 : 0)
+  const height = (props.mod?.workshop_id ? 580 : 540) + (showAiGenerate.value ? 44 : 0)
+    + (props.packActions ? 36 : 0) + (showVoiceUnitsCompatibility.value ? 44 : 0)
   const viewportWidth = typeof window === 'undefined' ? 1440 : window.innerWidth
   const viewportHeight = typeof window === 'undefined' ? 900 : window.innerHeight
   return {
@@ -40,6 +42,7 @@ const submenuToLeft = computed(() => {
 })
 
 const hasWorkshop = computed(() => !!props.mod?.workshop_id)
+const showVoiceUnitsCompatibility = computed(() => props.packActions && props.voiceUnitsTableCompatibilitySupported)
 const sources = computed(() => new Set(props.mod?.sources?.length ? props.mod.sources : [props.mod?.source]))
 const canCopyToData = computed(() => (
   props.packActions && !props.gameRunning && !!props.mod?.path && !sources.value.has('data')
@@ -389,6 +392,23 @@ const run = (action, value = null, close = true) => {
         <span class="context-menu-icon">AI</span>
         <span>{{ batchLabel(t('context.aiGenerate')) }}</span>
       </button>
+      <template v-if="showVoiceUnitsCompatibility">
+        <div class="context-menu-divider"></div>
+        <button
+          type="button"
+          class="context-menu-item"
+          role="menuitemcheckbox"
+          data-testid="context-voice-units-table-compatibility"
+          :aria-checked="!!mod.voice_units_table_compatibility"
+          :class="{ checked: mod.voice_units_table_compatibility }"
+          :disabled="busy"
+          :title="t('context.voiceUnitsTableCompatibilityHint')"
+          @click.stop="run('toggle-voice-units-table-compatibility', null, false)"
+        >
+          <span class="context-menu-check">{{ mod.voice_units_table_compatibility ? '✓' : '' }}</span>
+          <span>{{ batchLabel(t('context.voiceUnitsTableCompatibility')) }}</span>
+        </button>
+      </template>
     </nav>
   </div>
 </template>

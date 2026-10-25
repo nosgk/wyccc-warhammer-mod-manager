@@ -110,6 +110,7 @@ class StateRepository:
                     published_workshop_id TEXT NOT NULL DEFAULT '',
                     hidden INTEGER NOT NULL DEFAULT 0,
                     ignored_warning_codes TEXT NOT NULL DEFAULT '[]',
+                    voice_units_table_compatibility INTEGER NOT NULL DEFAULT 0,
                     updated_at INTEGER NOT NULL
                 );
 
@@ -206,6 +207,10 @@ class StateRepository:
             if "ignored_warning_codes" not in user_data_columns:
                 connection.execute(
                     "ALTER TABLE user_mod_data ADD COLUMN ignored_warning_codes TEXT NOT NULL DEFAULT '[]'"
+                )
+            if "voice_units_table_compatibility" not in user_data_columns:
+                connection.execute(
+                    "ALTER TABLE user_mod_data ADD COLUMN voice_units_table_compatibility INTEGER NOT NULL DEFAULT 0"
                 )
             for row in connection.execute(
                 "SELECT mod_id, mod_type, mod_types FROM user_mod_data"
@@ -688,7 +693,7 @@ class StateRepository:
         with self._lock, self._connect() as connection:
             rows = connection.execute(
                 "SELECT mod_id, alias, notes, mod_type, mod_types, published_workshop_id, hidden, "
-                "ignored_warning_codes "
+                "ignored_warning_codes, voice_units_table_compatibility "
                 "FROM user_mod_data"
             ).fetchall()
         return {
@@ -701,6 +706,9 @@ class StateRepository:
                 "hidden": bool(row["hidden"]),
                 "ignored_warning_codes": self._decode_ignored_warning_codes(
                     row["ignored_warning_codes"]
+                ),
+                "voice_units_table_compatibility": bool(
+                    row["voice_units_table_compatibility"]
                 ),
             }
             for row in rows
@@ -985,6 +993,24 @@ class StateRepository:
                 (str(mod_id), json.dumps(ordered, ensure_ascii=False), now),
             )
         return ordered
+
+    def set_voice_units_table_compatibility(self, mod_id: str, enabled: bool) -> bool:
+        normalized = bool(enabled)
+        now = int(time.time() * 1000)
+        with self._lock, self._connect() as connection:
+            connection.execute(
+                """
+                INSERT INTO user_mod_data(
+                    mod_id, voice_units_table_compatibility, updated_at
+                )
+                VALUES(?, ?, ?)
+                ON CONFLICT(mod_id) DO UPDATE SET
+                    voice_units_table_compatibility = excluded.voice_units_table_compatibility,
+                    updated_at = excluded.updated_at
+                """,
+                (str(mod_id), int(normalized), now),
+            )
+        return normalized
 
     def get_data_sync_item(
         self, pack_name: str, *, game_id: str = DEFAULT_GAME_ID, target_path: str = "",

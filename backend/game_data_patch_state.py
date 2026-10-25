@@ -22,12 +22,13 @@ from .start_options import (
     GameDataSourceSnapshot,
     build_game_data_patch,
     collect_game_data_source_snapshot,
+    voice_units_table_compatibility_requested,
 )
 
 
 GAME_DATA_PATCH_MANIFEST_NAME = "!!!!wyccc_game_data_patch.json"
 FINGERPRINT_SCHEMA_VERSION = 2
-GAME_DATA_BUILDER_VERSION = 13
+GAME_DATA_BUILDER_VERSION = 14
 
 
 def _coerce_bool(value: Any) -> bool:
@@ -67,10 +68,15 @@ def _normalized_settings(settings: Mapping[str, Any]) -> dict[str, int | bool | 
     }
 
 
-def game_data_settings_requested(settings: Mapping[str, Any]) -> bool:
+def game_data_settings_requested(
+    settings: Mapping[str, Any],
+    *,
+    voice_units_table_compatibility: bool = False,
+) -> bool:
     normalized = _normalized_settings(settings)
     return (
-        not math.isclose(
+        voice_units_table_compatibility
+        or not math.isclose(
             float(normalized["unit_model_multiplier"]),
             1.0,
             rel_tol=0.0,
@@ -105,12 +111,19 @@ def build_game_data_inputs(
     settings: Mapping[str, Any],
     subscription_state: Mapping[str, bool],
     source_snapshot: GameDataSourceSnapshot | None = None,
+    game_id: str | None = None,
 ) -> dict[str, Any]:
     ordered_ids = [str(mod_id) for mod_id in active_ids]
-    requested = game_data_settings_requested(settings)
+    requested = game_data_settings_requested(
+        settings, voice_units_table_compatibility=(
+            any(source.voice_units_table_compatibility for source in source_snapshot.sources)
+            if source_snapshot is not None
+            else voice_units_table_compatibility_requested(data_path, assets, active_ids)
+        ),
+    )
     snapshot = source_snapshot
     if requested and snapshot is None:
-        snapshot = collect_game_data_source_snapshot(data_path, assets, active_ids)
+        snapshot = collect_game_data_source_snapshot(data_path, assets, active_ids, game_id=game_id)
 
     sources: list[dict[str, Any]] = []
     auto_movie_sources: list[dict[str, Any]] = []
@@ -136,6 +149,7 @@ def build_game_data_inputs(
                     "pack_name": str(asset.pack_name),
                     "source": str(asset.source),
                     "workshop_id": str(asset.workshop_id),
+                    "voice_units_table_compatibility": asset.voice_units_table_compatibility,
                     "file": _file_signature(Path(asset.path)),
                 }
             )
@@ -144,6 +158,7 @@ def build_game_data_inputs(
         "fingerprint_schema_version": FINGERPRINT_SCHEMA_VERSION,
         "builder_version": GAME_DATA_BUILDER_VERSION,
         "playset_id": str(playset_id),
+        "game_id": str(game_id or "warhammer3"),
         "active_ids": ordered_ids,
         "settings": _normalized_settings(settings),
         "subscription_state": {
@@ -180,6 +195,7 @@ def classify_input_changes(
         ("builder", "builder_version"),
         ("settings", "settings"),
         ("playset", "playset_id"),
+        ("game", "game_id"),
         ("order", "active_ids"),
         ("subscription", "subscription_state"),
         ("sources", "sources"),
@@ -272,15 +288,21 @@ def ensure_game_data_patch(
     settings: Mapping[str, Any],
     subscription_state: Mapping[str, bool],
     unit_data_patch_path: str | Path | None = None,
+    game_id: str | None = None,
 ) -> dict[str, Any]:
     output_dir = Path(output_dir)
-    requested = game_data_settings_requested(settings)
+    requested = game_data_settings_requested(
+        settings, voice_units_table_compatibility=(
+            voice_units_table_compatibility_requested(data_path, assets, active_ids)
+        ),
+    )
     source_snapshot = (
         collect_game_data_source_snapshot(
             data_path,
             assets,
             active_ids,
             unit_data_patch_path=unit_data_patch_path,
+            game_id=game_id,
         )
         if requested
         else None
@@ -293,6 +315,7 @@ def ensure_game_data_patch(
         settings,
         subscription_state,
         source_snapshot,
+        game_id=game_id,
     )
     fingerprint = fingerprint_game_data_inputs(inputs)
     store = _manifest_store(output_dir)
@@ -332,12 +355,14 @@ def ensure_game_data_patch(
                 ],
                 source_snapshot=source_snapshot,
                 unit_data_patch_path=unit_data_patch_path,
+                game_id=game_id,
             )
             verified_snapshot = collect_game_data_source_snapshot(
                 data_path,
                 assets,
                 active_ids,
                 unit_data_patch_path=unit_data_patch_path,
+                game_id=game_id,
             )
             verified_inputs = build_game_data_inputs(
                 data_path,
@@ -347,6 +372,7 @@ def ensure_game_data_patch(
                 settings,
                 subscription_state,
                 verified_snapshot,
+                game_id=game_id,
             )
             verified_fingerprint = fingerprint_game_data_inputs(verified_inputs)
             if verified_fingerprint == fingerprint:

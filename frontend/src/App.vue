@@ -813,6 +813,21 @@ const handleContextAction = async ({ action, value, mod }) => {
           warning: warningLabel,
         }),
       )
+    } else if (action === 'toggle-voice-units-table-compatibility') {
+      const enabled = !mod.voice_units_table_compatibility
+      const revision = store.gameContextRevision
+      let changed = 0
+      for (const modId of actionIds) {
+        if (revision !== store.gameContextRevision) return
+        const target = store.modMap.get(modId)
+        if (target && Boolean(target.voice_units_table_compatibility) !== enabled) {
+          if (await store.setVoiceUnitsTableCompatibility(modId, enabled)) changed += 1
+        }
+      }
+      if (revision !== store.gameContextRevision) return
+      store.notify(t(enabled
+        ? 'app.voiceUnitsTableCompatibilityEnabled'
+        : 'app.voiceUnitsTableCompatibilityDisabled', { count: changed }))
     } else if (action === 'copy-to-data') {
       const targets = actionIds
         .map(modId => store.modMap.get(modId))
@@ -1675,6 +1690,7 @@ onBeforeUnmount(() => {
       :keyboard-shortcuts="store.settings.keyboard_shortcuts"
       :busy="!!store.busy"
       :pack-actions="supportsPackActions"
+      :voice-units-table-compatibility-supported="supportsWh3Tools"
       :folders="store.modFolders"
       @close="closeModContextMenu"
       @action="handleContextAction"

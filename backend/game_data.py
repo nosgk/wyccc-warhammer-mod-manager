@@ -799,6 +799,7 @@ class DbSource:
     # user-visible or generated MOD layer and must override it regardless of
     # the DB entry's internal file name.
     role: str = "mod"
+    voice_units_table_compatibility: bool = False
 
 
 @dataclass(frozen=True)
@@ -841,6 +842,23 @@ class _Candidate:
     source_is_vanilla: bool
     entry_rank: int
     row_rank: int
+    voice_units_table_compatibility: bool = False
+
+
+VOICE_UNITS_TABLE_FIELDS = frozenset({
+    "audio_voiceover_culture",
+    "audio_voiceover_culture_override",
+    "audio_voiceover_actor_group",
+    "has_spoken_vo",
+    "vo_is_dragon",
+    "vo_is_dinosaur",
+})
+VOICE_UNIT_TABLE_FIELDS = {
+    "main_units_tables": VOICE_UNITS_TABLE_FIELDS,
+    "land_units_tables": frozenset({
+        "selection_vo", "selected_vo_secondary", "selected_vo_tertiary",
+    }),
+}
 
 
 @dataclass(frozen=True)
@@ -1124,6 +1142,50 @@ def _has_higher_priority(candidate: _Candidate, existing: _Candidate) -> bool:
     return _compare_candidate_priority(candidate, existing) < 0
 
 
+def _compare_unit_field_priority(
+    first: _Candidate,
+    second: _Candidate,
+    *,
+    voice_field: bool,
+) -> int:
+    """Compare one unit-table field with the voice compatibility rule."""
+    if first.source_is_vanilla != second.source_is_vanilla:
+        return 1 if first.source_is_vanilla else -1
+    first_compat = first.voice_units_table_compatibility
+    second_compat = second.voice_units_table_compatibility
+    if first_compat != second_compat:
+        if voice_field:
+            return -1 if first_compat else 1
+        return 1 if first_compat else -1
+    return _compare_candidate_priority(first, second)
+
+
+def _merge_voice_unit_candidates(
+    candidates: Sequence[_Candidate],
+    voice_fields: frozenset[str],
+) -> _Candidate:
+    """Merge one unit row while keeping ordinary and voice fields independent."""
+    ordinary = candidates[0]
+    for candidate in candidates[1:]:
+        if _compare_unit_field_priority(
+            candidate, ordinary, voice_field=False
+        ) < 0:
+            ordinary = candidate
+    merged = ordinary.row
+    for field_name in voice_fields.intersection(merged.fields):
+        field_candidates = [candidate for candidate in candidates if field_name in candidate.row.fields]
+        preferred = field_candidates[0]
+        for candidate in field_candidates[1:]:
+            if _compare_unit_field_priority(
+                candidate, preferred, voice_field=True
+            ) < 0:
+                preferred = candidate
+        source_field = preferred.row.fields.get(field_name)
+        if source_field is not None and source_field.value != merged.fields[field_name].value:
+            merged = patch_db_row_value(merged, field_name, source_field.value)
+    return replace(ordinary, row=merged)
+
+
 def _entry_table_name(name: str) -> tuple[str, str] | None:
     normalized = name.replace("/", "\\")
     parts = normalized.split("\\", 2)
@@ -1173,6 +1235,9 @@ def _collect_effective_rows(
     all_candidates: dict[str, dict[str, list[_Candidate]]] | None = None,
 ) -> dict[str, dict[str, _Candidate]]:
     effective = {table_name: {} for table_name in needed_tables}
+    candidate_groups: dict[str, dict[str, list[_Candidate]]] = {
+        table_name: {} for table_name in needed_tables.intersection(VOICE_UNIT_TABLE_FIELDS)
+    } if any(source.voice_units_table_compatibility for source in sources) else {}
     if all_candidates is not None:
         for table_name in needed_tables:
             all_candidates.setdefault(table_name, {})
@@ -1204,12 +1269,23 @@ def _collect_effective_rows(
                     str(getattr(source, "role", "")).casefold() == "vanilla",
                     entry_rank,
                     row_rank,
+                    bool(getattr(source, "voice_units_table_compatibility", False)),
                 )
+                if table_name in candidate_groups:
+                    candidate_groups[table_name].setdefault(key, []).append(candidate)
                 if all_candidates is not None:
                     all_candidates[table_name].setdefault(key, []).append(candidate)
                 existing = effective[table_name].get(key)
                 if existing is None or _has_higher_priority(candidate, existing):
                     effective[table_name][key] = candidate
+    for table_name, voice_fields in VOICE_UNIT_TABLE_FIELDS.items():
+        for key, candidates in candidate_groups.get(table_name, {}).items():
+            if any(
+                candidate.voice_units_table_compatibility
+                and not candidate.source_is_vanilla
+                for candidate in candidates
+            ):
+                effective[table_name][key] = _merge_voice_unit_candidates(candidates, voice_fields)
     return effective
 
 
@@ -1342,7 +1418,10 @@ def _serialize_effective_table(
     table_name: str,
     candidates: Mapping[str, _Candidate],
     patched: Mapping[str, ParsedDbRow],
+    *,
+    priority_candidates: Mapping[str, _Candidate] | None = None,
 ) -> list[GameDataEntry]:
+    naming_candidates = candidates if priority_candidates is None else priority_candidates
     grouped: dict[int, list[tuple[str, ParsedDbRow]]] = {}
     for key, candidate in candidates.items():
         grouped.setdefault(candidate.version, []).append((key, patched.get(key, candidate.row)))
@@ -1363,7 +1442,7 @@ def _serialize_effective_table(
             GameDataEntry(
                 (
                     f"db\\{table_name}\\"
-                    f"{_generated_internal_name(candidates, version)}"
+                    f"{_generated_internal_name(naming_candidates, version)}"
                 ),
                 payload,
             )
@@ -1622,6 +1701,7 @@ def build_game_data_entries(
     disable_spell = _coerce_bool(settings.get("disable_spell_friendly_fire", False))
     scale_units = not math.isclose(multiplier, 1.0, rel_tol=0.0, abs_tol=1e-9)
     adjust_recruitment_capacity = recruitment_capacity_multiplier != 1
+    voice_compatibility = any(source.voice_units_table_compatibility for source in sources)
 
     stats: dict[str, int | float] = {
         "unit_model_multiplier": multiplier,
@@ -1637,6 +1717,7 @@ def build_game_data_entries(
         "unit_friendly_fire_kv_rules_changed": 0,
         "unit_max_drag_width_changed": 0,
         "spell_friendly_fire_rows_changed": 0,
+        "voice_units_table_rows_changed": 0,
         "source_table_priority_markers": 0,
         "patch_table_priority_markers": 0,
     }
@@ -1645,6 +1726,8 @@ def build_game_data_entries(
     if scale_units or adjust_recruitment_capacity:
         needed_tables.add("main_units_tables")
         output_tables.add("main_units_tables")
+    if voice_compatibility:
+        needed_tables.update(VOICE_UNIT_TABLE_FIELDS)
     if scale_units:
         needed_tables.add("land_units_tables")
         output_tables.add("land_units_tables")
@@ -1671,17 +1754,39 @@ def build_game_data_entries(
     if not needed_tables:
         return GameDataBuildResult((), stats)
 
+    all_candidates: dict[str, dict[str, list[_Candidate]]] = {}
     effective = _collect_effective_rows(
         sources,
         needed_tables,
         skip_main_unit_compatibility_placeholders=(
-            "main_units_tables" in output_tables
+            "main_units_tables" in output_tables or voice_compatibility
         ),
+        all_candidates=all_candidates if voice_compatibility else None,
     )
+    compatibility_rows: dict[str, dict[str, _Candidate]] = {}
+    if voice_compatibility:
+        for table_name in VOICE_UNIT_TABLE_FIELDS:
+            changed = {}
+            for key, candidates in all_candidates[table_name].items():
+                original = candidates[0]
+                for candidate in candidates[1:]:
+                    if _has_higher_priority(candidate, original):
+                        original = candidate
+                merged = effective[table_name][key]
+                if merged.row.raw != original.row.raw:
+                    changed[key] = merged
+            compatibility_rows[table_name] = changed
+            if changed:
+                output_tables.add(table_name)
+                stats["voice_units_table_rows_changed"] += len(changed)
     for table_name in needed_tables:
         if table_name == "_kv_rules_tables":
             continue
         if not effective[table_name]:
+            if table_name in VOICE_UNIT_TABLE_FIELDS and not scale_units and not (
+                table_name == "main_units_tables" and adjust_recruitment_capacity
+            ):
+                continue
             raise ValueError(f"未能从当前游戏和启用 MOD 中读取 {table_name}")
 
     patched_by_table: dict[str, dict[str, ParsedDbRow]] = {
@@ -1939,6 +2044,15 @@ def build_game_data_entries(
         ):
             continue
         table_candidates = effective[table_name]
+        if table_name in compatibility_rows and not scale_units and not (
+            table_name == "main_units_tables" and adjust_recruitment_capacity
+        ):
+            table_candidates = compatibility_rows[table_name]
+        priority_candidates = {
+            f"{key}:{index}": candidate
+            for key, candidates in all_candidates.get(table_name, {}).items()
+            for index, candidate in enumerate(candidates)
+        } if voice_compatibility else table_candidates
         if table_name == "_kv_rules_tables":
             table_entries = [_serialize_non_spell_friendly_fire_kv_rules(
                 table_candidates,
@@ -1949,6 +2063,7 @@ def build_game_data_entries(
                 table_name,
                 table_candidates,
                 patched_by_table[table_name],
+                priority_candidates=priority_candidates,
             )
         entries.extend(table_entries)
         stats["source_table_priority_markers"] = max(
@@ -1956,7 +2071,7 @@ def build_game_data_entries(
             max(
                 (
                     _leading_priority_markers(candidate.internal_name)
-                    for candidate in table_candidates.values()
+                    for candidate in priority_candidates.values()
                 ),
                 default=0,
             ),
