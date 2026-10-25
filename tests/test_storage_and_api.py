@@ -92,6 +92,7 @@ class StorageContractTests(unittest.TestCase):
                     "published_workshop_id": "",
                     "hidden": False,
                     "ignored_warning_codes": [],
+                    "voice_units_table_compatibility": False,
                 },
             )
             with closing(sqlite3.connect(database)) as connection:
@@ -330,6 +331,7 @@ class StorageContractTests(unittest.TestCase):
                     "published_workshop_id": "",
                     "hidden": False,
                     "ignored_warning_codes": [],
+                    "voice_units_table_compatibility": False,
                 },
             )
 

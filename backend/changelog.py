@@ -9,6 +9,13 @@ SUPPORTED_CHANGELOG_LANGUAGES = frozenset({"zh-CN", "en-US", "ko-KR", "ru-RU", "
 
 CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
     {
+        "version": "1.3.2",
+        "date": "2026-10-25",
+        "entries": (
+            ("v132_added_title", (("feature", "v132_voice_units_table_compatibility"),)),
+        ),
+    },
+    {
         "version": "1.3.1",
         "date": "2026-10-24",
         "entries": (
@@ -764,6 +771,8 @@ CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
 
 CHANGELOG_TEXT: dict[str, dict[str, str]] = {
     "zh-CN": {
+        "v132_added_title": "新增",
+        "v132_voice_units_table_compatibility": "新增-语音单位表兼容功能。目前有个问题， 许多语音MOD，为了修改原版单位的语音，修改了units_table， 就仅仅为了改语音字段，但这会导致严重的冲突，因为units_table可能被很多MOD修改，为了解决这个问题，我推出了这个功能， 只需要在语音MOD上右键-勾选 语音-单位表兼容 选项，启动器将该MOD对units_table的修改视为最低优先级，但是对语音字段的修改设置为最高优先级",
         "v131_fixed_title": "修复",
         "v131_many_mods_upload": "修复-MOD过多的情况下出现上传不了MOD的问题",
         "v131_voice_compatibility": "修复-语音兼容补丁存在的问题，大幅缓解了不兼容的情况",
@@ -1039,6 +1048,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。",
     },
     "en-US": {
+        "v132_added_title": "Added",
+        "v132_voice_units_table_compatibility": "Added - Voice unit-table compatibility. Many voice MODs edit units_table just to change the voice fields of vanilla units. This causes serious conflicts because many other MODs may also edit units_table. To address this, right-click a voice MOD and check Voice - Unit-table compatibility. The launcher treats that MOD's units_table changes as the lowest priority, while giving its voice-field changes the highest priority.",
         "v131_fixed_title": "Fixed",
         "v131_many_mods_upload": "Fixed - Being unable to upload MODs when too many MODs are installed.",
         "v131_voice_compatibility": "Fixed - Issues with the voice compatibility patch, greatly reducing incompatibility.",
@@ -1314,6 +1325,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog.",
     },
     "ko-KR": {
+        "v132_added_title": "추가",
+        "v132_voice_units_table_compatibility": "추가 - 음성 유닛 테이블 호환 기능. 많은 음성 MOD가 원본 유닛의 음성 필드만 바꾸기 위해 units_table을 수정합니다. 하지만 units_table은 다른 여러 MOD도 수정할 수 있어 심각한 충돌이 발생합니다. 이 문제를 해결하려면 음성 MOD를 우클릭한 뒤 음성 - 유닛 테이블 호환 옵션을 체크하세요. 런처는 해당 MOD의 units_table 변경 사항을 가장 낮은 우선순위로 처리하되, 음성 필드 변경 사항에는 가장 높은 우선순위를 적용합니다.",
         "v131_fixed_title": "수정",
         "v131_many_mods_upload": "수정 - MOD가 너무 많을 때 MOD를 업로드할 수 없던 문제.",
         "v131_voice_compatibility": "수정 - 음성 호환 패치의 문제를 수정하여 비호환 현상을 크게 줄였습니다.",
@@ -1589,6 +1602,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다.",
     },
     "ru-RU": {
+        "v132_added_title": "Добавлено",
+        "v132_voice_units_table_compatibility": "Добавлено — совместимость таблицы отрядов для озвучки. Многие MOD озвучки изменяют units_table только ради полей озвучки стандартных отрядов. Это вызывает серьёзные конфликты, поскольку многие другие MOD также могут изменять units_table. Чтобы решить эту проблему, щёлкните правой кнопкой мыши по MOD озвучки и включите опцию «Озвучка — совместимость таблицы отрядов». Лаунчер назначает изменениям units_table из этого MOD самый низкий приоритет, а изменениям полей озвучки — самый высокий.",
         "v131_fixed_title": "Исправлено",
         "v131_many_mods_upload": "Исправлено — невозможность загрузить MOD при слишком большом количестве установленных MOD.",
         "v131_voice_compatibility": "Исправлено — проблемы патча совместимости озвучки; число случаев несовместимости значительно сокращено.",
@@ -1864,6 +1879,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении.",
     },
     "ja-JP": {
+        "v132_added_title": "追加",
+        "v132_voice_units_table_compatibility": "追加 - 音声ユニットテーブル互換機能。多くの音声MODは、バニラユニットの音声フィールドだけを変更するためにunits_tableを編集しています。しかし、units_tableはほかの多くのMODでも編集されるため、深刻な競合が発生します。この問題に対応するには、音声MODを右クリックして「音声 - ユニットテーブル互換」にチェックを入れてください。ランチャーはそのMODによるunits_tableの変更を最低優先度で扱い、音声フィールドの変更を最高優先度で扱います。",
         "v131_fixed_title": "修正",
         "v131_many_mods_upload": "修正 - MODの数が多すぎる場合にMODをアップロードできない問題。",
         "v131_voice_compatibility": "修正 - 音声互換パッチの問題を修正し、互換性の問題を大幅に軽減しました。",
@@ -2139,6 +2156,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。",
     },
     "es-ES": {
+        "v132_added_title": "Añadido",
+        "v132_voice_units_table_compatibility": "Añadido - Compatibilidad de la tabla de unidades para voces. Muchos MOD de voces modifican units_table solo para cambiar los campos de voz de las unidades originales. Esto provoca conflictos graves, ya que muchos otros MOD también pueden modificar units_table. Para resolverlo, haz clic derecho en el MOD de voces y marca Voz - Compatibilidad de tabla de unidades. El lanzador asigna la prioridad más baja a los cambios de ese MOD en units_table y la prioridad más alta a sus cambios en los campos de voz.",
         "v131_fixed_title": "Corregido",
         "v131_many_mods_upload": "Corregido - No se podían subir MOD cuando había demasiados instalados.",
         "v131_voice_compatibility": "Corregido - Problemas del parche de compatibilidad de voces, reduciendo considerablemente las incompatibilidades.",

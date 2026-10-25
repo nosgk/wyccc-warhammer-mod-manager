@@ -92,7 +92,7 @@ const sameListState = (left, right) => (
 export const useAppStore = defineStore('app', {
   state: () => ({
     appName: "Wyccc's Mod Manager",
-    appVersion: '1.3.1',
+    appVersion: '1.3.2',
     settings: {},
     paths: {},
     gameContextRevision: 0,
@@ -2083,6 +2083,16 @@ export const useAppStore = defineStore('app', {
         const index = this.mods.findIndex(mod => mod.id === updated.id)
         if (index >= 0) this.mods[index] = updated
         this.refreshMissingDependencyWarnings()
+        return updated
+      })
+    },
+    async setVoiceUnitsTableCompatibility(modId, enabled) {
+      const revision = this.gameContextRevision
+      return this.withBusy(t('context.voiceUnitsTableCompatibility'), async () => {
+        const updated = await invoke('set_voice_units_table_compatibility', modId, enabled)
+        if (revision !== this.gameContextRevision) return null
+        const index = this.mods.findIndex(mod => mod.id === updated.id)
+        if (index >= 0) this.mods[index] = updated
         return updated
       })
     },

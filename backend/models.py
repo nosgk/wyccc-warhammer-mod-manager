@@ -67,6 +67,7 @@ class ModAsset:
     missing_dependencies: list[dict[str, str]] = field(default_factory=list)
     warnings: list[dict[str, Any]] = field(default_factory=list)
     ignored_warning_codes: list[str] = field(default_factory=list)
+    voice_units_table_compatibility: bool = False
     unit_data_tables: list[str] = field(default_factory=list)
     provides_variant_selector: bool = False
     is_launcher_runtime_pack: bool = False
