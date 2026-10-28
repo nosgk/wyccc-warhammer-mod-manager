@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from .json_store import AtomicJsonStore
+from .network_diagnostics import log_transport_failure
 from .steam_friends import (
     SteamFriendsError,
     query_steam_persona_names_isolated as query_steam_persona_names,
@@ -580,8 +581,14 @@ class WorkshopMetadataService:
                 },
                 method="POST",
             )
-            with urllib.request.urlopen(request, timeout=20) as response:
-                result = json.loads(response.read().decode("utf-8"))
+            stage = "open"
+            try:
+                with urllib.request.urlopen(request, timeout=20) as response:
+                    stage = "read"
+                    result = json.loads(response.read().decode("utf-8"))
+            except OSError as exc:
+                log_transport_failure(logger, exc, stage)
+                raise
             details = result.get("response", {}).get("publishedfiledetails", [])
             fetched_at = int(time.time() * 1000)
             for detail in details:
@@ -800,8 +807,10 @@ class WorkshopMetadataService:
                 timeout = min(AUTHOR_HTTP_TIMEOUT_SECONDS, max(0.1, remaining))
             else:
                 timeout = AUTHOR_HTTP_TIMEOUT_SECONDS
+            stage = "open"
             try:
                 with urllib.request.urlopen(request, timeout=timeout) as response:
+                    stage = "read"
                     root = ET.fromstring(response.read())
                 name = str(root.findtext("steamID") or "").strip()
                 if not name:
@@ -817,6 +826,8 @@ class WorkshopMetadataService:
                     "fetched_at": int(time.time() * 1000),
                 }
             except Exception as exc:
+                if isinstance(exc, OSError):
+                    log_transport_failure(logger, exc, stage)
                 classified = cls._classify_author_profile_error(exc, steam_id)
                 if not classified.retryable or attempt + 1 >= AUTHOR_HTTP_MAX_ATTEMPTS:
                     raise classified from exc
