@@ -4,6 +4,7 @@ import argparse
 import os
 import re
 import shutil
+import ssl
 import subprocess
 import sys
 from pathlib import Path
@@ -162,6 +163,11 @@ def package_desktop(output_dir: Path) -> Path:
     build_root = ROOT / "build"
     build_root.mkdir(parents=True, exist_ok=True)
     separator = ";" if os.name == "nt" else ":"
+    # The build runtime's ssl module reads this PEM in SSLContext.__new__.
+    # PyInstaller collects ssl.py but does not discover its adjacent data file.
+    ssl.create_default_context()
+    ssl_pem = Path(ssl.__file__).with_name("codex-rejected-cas.pem")
+    ssl_data_args = ["--add-data", f"{ssl_pem}{separator}."] if ssl_pem.is_file() else []
     node_executable = find_node_for_packaging()
     if node_executable is None:
         raise SystemExit("找不到 Node.js，无法把 Steamworks 工坊查询运行时加入发布版。")
@@ -221,6 +227,7 @@ def package_desktop(output_dir: Path) -> Path:
             str(version_file),
             "--collect-all",
             "webview",
+            *ssl_data_args,
             "--add-data",
             f"{static_root}{separator}frontend/dist",
             "--add-data",

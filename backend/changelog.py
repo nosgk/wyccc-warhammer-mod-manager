@@ -9,6 +9,13 @@ SUPPORTED_CHANGELOG_LANGUAGES = frozenset({"zh-CN", "en-US", "ko-KR", "ru-RU", "
 
 CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
     {
+        "version": "1.3.5",
+        "date": "2026-10-28",
+        "entries": (
+            ("v135_fixed_title", (("fix", "v135_network_file_not_found"),)),
+        ),
+    },
+    {
         "version": "1.3.4",
         "date": "2026-10-28",
         "entries": (
@@ -785,6 +792,8 @@ CHANGELOG_STRUCTURE: tuple[dict[str, Any], ...] = (
 
 CHANGELOG_TEXT: dict[str, dict[str, str]] = {
     "zh-CN": {
+        "v135_fixed_title": "修复",
+        "v135_network_file_not_found": "修复-启动器一些功能使用后报错“`[Errno 2] No such file or directory`  ”的问题",
         "v134_adjusted_title": "调整",
         "v134_network_error_logs": "调整-为了进一步分析某些玩家存在的“[Errno 2] No such file or directory”报错，加入了更详细的日志，遇到该问题可以将启动器目录data下的logs发我",
         "v133_added_title": "新增",
@@ -1066,6 +1075,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。",
     },
     "en-US": {
+        "v135_fixed_title": "Fixed",
+        "v135_network_file_not_found": "Fixed - Resolved the `[Errno 2] No such file or directory` error when using some launcher features.",
         "v134_adjusted_title": "Adjusted",
         "v134_network_error_logs": "Adjusted - Added more detailed logs to help investigate the “[Errno 2] No such file or directory” error affecting some players. If you encounter this issue, please send me the logs from the launcher’s data/logs directory.",
         "v133_added_title": "Added",
@@ -1347,6 +1358,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog.",
     },
     "ko-KR": {
+        "v135_fixed_title": "수정",
+        "v135_network_file_not_found": "수정 - 런처의 일부 기능을 사용할 때 `[Errno 2] No such file or directory` 오류가 발생하던 문제를 수정했습니다.",
         "v134_adjusted_title": "조정",
         "v134_network_error_logs": "조정 - 일부 플레이어에게 발생하는 “[Errno 2] No such file or directory” 오류를 자세히 분석하기 위해 로그를 추가했습니다. 문제가 발생하면 런처 디렉터리의 data/logs 폴더를 보내 주세요.",
         "v133_added_title": "추가",
@@ -1628,6 +1641,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다.",
     },
     "ru-RU": {
+        "v135_fixed_title": "Исправлено",
+        "v135_network_file_not_found": "Исправлено — ошибка `[Errno 2] No such file or directory` при использовании некоторых функций лаунчера.",
         "v134_adjusted_title": "Изменено",
         "v134_network_error_logs": "Изменено — добавлены подробные журналы для анализа ошибки “[Errno 2] No such file or directory”, возникающей у некоторых игроков. Если вы столкнулись с ней, отправьте мне папку logs из каталога data лаунчера.",
         "v133_added_title": "Добавлено",
@@ -1909,6 +1924,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении.",
     },
     "ja-JP": {
+        "v135_fixed_title": "修正",
+        "v135_network_file_not_found": "修正 - ランチャーの一部機能を使用すると `[Errno 2] No such file or directory` エラーが発生する問題を修正しました。",
         "v134_adjusted_title": "調整",
         "v134_network_error_logs": "調整 - 一部のプレイヤーに発生する「[Errno 2] No such file or directory」エラーを詳しく調査するため、ログを追加しました。問題が発生した場合は、ランチャーの data フォルダー内にある logs を送ってください。",
         "v133_added_title": "追加",
@@ -2190,6 +2207,8 @@ CHANGELOG_TEXT: dict[str, dict[str, str]] = {
         "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。",
     },
     "es-ES": {
+        "v135_fixed_title": "Corregido",
+        "v135_network_file_not_found": "Corregido - Se ha resuelto el error `[Errno 2] No such file or directory` al utilizar algunas funciones del lanzador.",
         "v134_adjusted_title": "Ajustado",
         "v134_network_error_logs": "Ajustado - Se han añadido registros más detallados para investigar el error “[Errno 2] No such file or directory” que afecta a algunos jugadores. Si te ocurre, envíame la carpeta logs dentro de data del lanzador.",
         "v133_added_title": "Añadido",
