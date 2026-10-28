@@ -29,7 +29,7 @@ AUX_FILES = sorted(
 )
 
 KEY_RE = re.compile(
-    r"""(?P<quote>['"])(?P<key>[A-Za-z][A-Za-z0-9_]*(?:\.[A-Za-z0-9_]+)+)(?P=quote)\s*:\s*"""
+    r"""(?P<quote>['"])(?P<key>[A-Za-z][A-Za-z0-9_]*(?:\.[A-Za-z0-9_]+)+)(?P=quote)[ \t]*:[ \t]*"""
 )
 PLACEHOLDER_RE = re.compile(r"\{([A-Za-z0-9_]+)\}")
 ARRAY_FILL_RE = re.compile(r"Array\(\s*(\d+)\s*\)\.fill\(\s*(['\"])(.*?)\2\s*\)", re.S)

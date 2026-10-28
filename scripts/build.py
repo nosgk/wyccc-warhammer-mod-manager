@@ -4,6 +4,7 @@ import argparse
 import os
 import re
 import shutil
+import ssl
 import subprocess
 import sys
 from pathlib import Path
@@ -166,11 +167,17 @@ def package_desktop(output_dir: Path) -> Path:
     build_root = ROOT / "build"
     build_root.mkdir(parents=True, exist_ok=True)
     separator = ";" if os.name == "nt" else ":"
+    # The build runtime's ssl module reads this PEM in SSLContext.__new__.
+    # PyInstaller collects ssl.py but does not discover its adjacent data file.
+    ssl.create_default_context()
+    ssl_pem = Path(ssl.__file__).with_name("codex-rejected-cas.pem")
+    ssl_data_args = ["--add-data", f"{ssl_pem}{separator}."] if ssl_pem.is_file() else []
     node_executable = find_node_for_packaging()
     if node_executable is None:
         raise SystemExit("找不到 Node.js，无法把 Steamworks 工坊查询运行时加入发布版。")
     bridge_script = STEAM_RUNTIME / "workshop_bridge.js"
     schema_path = ROOT / "backend" / "wh3_db_schema.json"
+    tower_schema_path = ROOT / "backend" / "tower_compatibility_schema.json"
     bundled_schemas = ROOT / "backend" / "schemas"
     changelog_path = ROOT / "backend" / "resources" / "changelog.json"
     native_binding = (
@@ -202,6 +209,8 @@ def package_desktop(output_dir: Path) -> Path:
         raise SystemExit("缺少战锤 3 DB 架构资源，无法打包。")
     if not changelog_path.is_file():
         raise SystemExit("缺少更新日志资源，无法打包。")
+    if not tower_schema_path.is_file():
+        raise SystemExit("缺少爬塔兼容架构资源，无法打包。")
     if not all(
         (bundled_schemas / name).is_file()
         for name in ("LICENSE.txt", "manifest.json", *(f"schema_{game}.ron.gz" for game in SCHEMA_NAMES.values()))
@@ -225,10 +234,13 @@ def package_desktop(output_dir: Path) -> Path:
             str(version_file),
             "--collect-all",
             "webview",
+            *ssl_data_args,
             "--add-data",
             f"{static_root}{separator}frontend/dist",
             "--add-data",
             f"{schema_path}{separator}backend",
+            "--add-data",
+            f"{tower_schema_path}{separator}backend",
             "--add-data",
             f"{bundled_schemas}{separator}backend/schemas",
             "--add-data",

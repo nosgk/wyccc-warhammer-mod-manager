@@ -846,6 +846,7 @@ class API:
                 "dynamic_ror_compatibility_patch_enabled",
                 "variant_selector_compatibility_patch_enabled",
                 "tier5_compatibility_patch_enabled",
+                "tower_compatibility_patch_enabled",
                 "voice_compatibility_patch_enabled",
             )
             if key in changes
@@ -856,6 +857,8 @@ class API:
             )["available"]
         if filtered.get("voice_compatibility_patch_enabled"):
             filtered["voice_compatibility_patch_enabled"] = self._get_voice_feature_status()["subscribed"]
+        if filtered.get("tower_compatibility_patch_enabled"):
+            filtered["tower_compatibility_patch_enabled"] = self._tower_compatibility_available()
         self.settings_service.save(filtered)
         return {"settings": self.settings_service.get_public()}
 
@@ -864,6 +867,22 @@ class API:
         current_playset = self.state_repository.get_current_playset(game_id)
         raw_ids = list(current_playset.get("mod_ids") or [])
         return self._canonicalize_mod_ids(raw_ids)
+
+    def _tower_compatibility_available(self) -> bool:
+        tower_pack = "wyccc_roguelike_tower.pack"
+        tower_names = ("standalone roguelike sts mode", "独立肉鸽爬塔模式")
+        for mod_id in self._current_enabled_mod_ids():
+            asset = self._assets.get(mod_id)
+            if asset is None:
+                continue
+            if str(asset.pack_name or "").casefold() == tower_pack:
+                return True
+            if str(asset.workshop_id or "") == "3825304740":
+                return True
+            names = f"{asset.effective_name} {asset.display_name}".casefold()
+            if any(name in names for name in tower_names):
+                return True
+        return False
 
     def _unit_data_source_ids(self) -> list[str]:
         """Enabled mods excluding Wyccc's internal runtime/feature Packs so the
@@ -1794,6 +1813,9 @@ class API:
                     path_map,
                 )
             subscription_state = self._resolve_game_data_subscription_state(settings)
+            game_data_settings = dict(settings)
+            if not self._tower_compatibility_available():
+                game_data_settings["tower_compatibility_patch_enabled"] = False
             try:
                 unit_data_patch = ensure_unit_data_patch(
                     output_dir=self.data_dir / "runtime",
@@ -1827,7 +1849,7 @@ class API:
                     assets=self._assets,
                     active_ids=saved["plan"]["ordered_mod_ids"],
                     playset_id=self.state_repository.get_current_playset_id(paths.game_id),
-                    settings=settings,
+                    settings=game_data_settings,
                     subscription_state=subscription_state,
                     unit_data_patch_path=unit_data_path,
                     game_id=paths.game_id,

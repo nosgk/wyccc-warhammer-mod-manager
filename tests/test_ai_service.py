@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import errno
 import json
 import unittest
 from dataclasses import replace
+from io import BytesIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
+from urllib import error
 
 from backend.ai_service import analyze_mod_order_relations, generate_mod_user_data
 from backend.models import ModAsset
@@ -40,6 +43,110 @@ class AiServiceTests(unittest.TestCase):
             author="Example",
             description="Adds several custom units.",
         )
+
+    def test_missing_file_diagnostic_preserves_call_site_without_secrets(self) -> None:
+        def fail_open(*_args, **_kwargs):
+            raise FileNotFoundError(errno.ENOENT, "No such file or directory")
+
+        with patch("backend.ai_service.request.urlopen", side_effect=fail_open):
+            with self.assertLogs("backend.ai_service", level="ERROR") as captured:
+                with self.assertRaisesRegex(ValueError, r"AI 请求失败：\[Errno 2\]"):
+                    generate_mod_user_data(self.asset, {
+                        "ai_enabled": True,
+                        "ai_base_url": "https://example.invalid/private-url-token/v1",
+                        "ai_api_key": "diagnostic-secret-key",
+                        "ai_model": "diagnostic-model",
+                    })
+
+        diagnostic = json.loads(captured.records[0].getMessage().split(" ", 1)[1])
+        self.assertEqual(diagnostic["stage"], "open")
+        self.assertEqual(diagnostic["errors"][0]["type"], "FileNotFoundError")
+        self.assertEqual(diagnostic["errors"][0]["errno"], errno.ENOENT)
+        self.assertTrue(any(frame["function"] == "fail_open"
+                            for frame in diagnostic["errors"][0]["frames"]))
+        self.assertTrue(diagnostic["python"])
+        self.assertTrue(diagnostic["openssl"])
+        for secret in ("diagnostic-secret-key", "private-url-token", "Adds several custom units."):
+            self.assertNotIn(secret, captured.output[0])
+
+    def test_read_failure_diagnostic_is_distinct_from_connection_failure(self) -> None:
+        response = _Response({})
+
+        def fail_read():
+            raise FileNotFoundError(errno.ENOENT, "No such file or directory")
+
+        with patch.object(response, "read", side_effect=fail_read):
+            with patch("backend.ai_service.request.urlopen", return_value=response):
+                with self.assertLogs("backend.ai_service", level="ERROR") as captured:
+                    with self.assertRaisesRegex(ValueError, r"AI 请求失败：\[Errno 2\]"):
+                        generate_mod_user_data(self.asset, {
+                            "ai_enabled": True,
+                            "ai_base_url": "https://example.invalid/v1",
+                            "ai_model": "diagnostic-model",
+                        })
+
+        diagnostic = json.loads(captured.records[0].getMessage().split(" ", 1)[1])
+        self.assertEqual(diagnostic["stage"], "read")
+        self.assertTrue(any(frame["function"] == "fail_read"
+                            for frame in diagnostic["errors"][0]["frames"]))
+
+    def test_url_error_diagnostic_retains_wrapped_cause_without_raw_exception_text(self) -> None:
+        def fail_open(*_args, **_kwargs):
+            try:
+                raise FileNotFoundError(errno.ENOENT, "secret-in-error-message", "secret-in-filename")
+            except FileNotFoundError as exc:
+                raise error.URLError(exc) from exc
+
+        with patch("backend.ai_service.request.urlopen", side_effect=fail_open):
+            with self.assertLogs("backend.ai_service", level="ERROR") as captured:
+                with self.assertRaisesRegex(ValueError, "无法连接 AI 服务"):
+                    generate_mod_user_data(self.asset, {
+                        "ai_enabled": True,
+                        "ai_base_url": "https://example.invalid/v1",
+                        "ai_model": "diagnostic-model",
+                    })
+
+        diagnostic = json.loads(captured.records[0].getMessage().split(" ", 1)[1])
+        self.assertEqual([item["type"] for item in diagnostic["errors"]],
+                         ["URLError", "FileNotFoundError"])
+        self.assertEqual(diagnostic["errors"][1]["errno"], errno.ENOENT)
+        self.assertNotIn("secret-in-error-message", captured.output[0])
+        self.assertNotIn("secret-in-filename", captured.output[0])
+
+    def test_http_error_response_is_logged_without_the_response_body(self) -> None:
+        failure = error.HTTPError("https://example.invalid/private-url", 401, "Unauthorized", {},
+                                  BytesIO(b'{"error":{"message":"private-response-body"}}'))
+        with patch("backend.ai_service.request.urlopen", side_effect=failure):
+            with self.assertLogs("backend.ai_service", level="ERROR") as captured:
+                with self.assertRaisesRegex(ValueError, "HTTP 401"):
+                    generate_mod_user_data(self.asset, {
+                        "ai_enabled": True, "ai_base_url": "https://example.invalid/v1",
+                        "ai_model": "diagnostic-model",
+                    })
+
+        diagnostic = json.loads(captured.records[0].getMessage().split(" ", 1)[1])
+        self.assertEqual(diagnostic["phase"], "http_response")
+        self.assertEqual(diagnostic["errors"][0]["http_status"], 401)
+        self.assertNotIn("private-response-body", captured.output[0])
+        self.assertNotIn("private-url", captured.output[0])
+
+    def test_errno2_reading_http_error_body_is_also_logged(self) -> None:
+        class BrokenErrorBody(BytesIO):
+            def read(self, *_args):
+                raise FileNotFoundError(errno.ENOENT, "No such file or directory")
+
+        failure = error.HTTPError("https://example.invalid/v1", 502, "Bad Gateway", {}, BrokenErrorBody())
+        with patch("backend.ai_service.request.urlopen", side_effect=failure):
+            with self.assertLogs("backend.ai_service", level="ERROR") as captured:
+                with self.assertRaises(FileNotFoundError):
+                    generate_mod_user_data(self.asset, {
+                        "ai_enabled": True, "ai_base_url": "https://example.invalid/v1",
+                        "ai_model": "diagnostic-model",
+                    })
+
+        diagnostics = [json.loads(record.getMessage().split(" ", 1)[1]) for record in captured.records]
+        self.assertEqual(diagnostics[-1]["phase"], "read_response")
+        self.assertEqual(diagnostics[-1]["errors"][0]["errno"], errno.ENOENT)
 
     def test_openai_compatible_generation_parses_json_and_sends_local_config(self) -> None:
         response = _Response(

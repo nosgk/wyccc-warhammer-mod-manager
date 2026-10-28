@@ -112,10 +112,11 @@ class StartOptionsPackTests(unittest.TestCase):
                     {},
                     [],
                     {
-                        "unit_model_multiplier": 2.0,
+                        "unit_model_multiplier": 2,
                         "scale_lord_hero_health": True,
                         "disable_unit_friendly_fire": True,
                         "disable_spell_friendly_fire": True,
+                        "tower_compatibility_patch_enabled": False,
                     },
                 )
 
@@ -142,10 +143,11 @@ class StartOptionsPackTests(unittest.TestCase):
                     {},
                     [],
                     {
-                        "unit_model_multiplier": 1.0,
+                        "unit_model_multiplier": 1,
                         "scale_lord_hero_health": False,
                         "disable_unit_friendly_fire": False,
                         "disable_spell_friendly_fire": False,
+                        "tower_compatibility_patch_enabled": False,
                     },
                 )
 
@@ -175,7 +177,7 @@ class StartOptionsPackTests(unittest.TestCase):
                 (
                     UNIT_SIZE_FEATURE_WORKSHOP_ID,
                     {
-                        "unit_model_multiplier": 2.0,
+                        "unit_model_multiplier": 2,
                         "unit_recruitment_capacity_multiplier": 1,
                         "single_entity_unit_mode": "health",
                         "artillery_unit_mode": "half",
@@ -183,12 +185,13 @@ class StartOptionsPackTests(unittest.TestCase):
                         "scale_lord_hero_health": True,
                         "disable_unit_friendly_fire": False,
                         "disable_spell_friendly_fire": False,
+                        "tower_compatibility_patch_enabled": False,
                     },
                 ),
                 (
                     FRIENDLY_FIRE_FEATURE_WORKSHOP_ID,
                     {
-                        "unit_model_multiplier": 1.0,
+                        "unit_model_multiplier": 1,
                         "unit_recruitment_capacity_multiplier": 1,
                         "single_entity_unit_mode": "scale",
                         "artillery_unit_mode": "full",
@@ -196,12 +199,13 @@ class StartOptionsPackTests(unittest.TestCase):
                         "scale_lord_hero_health": False,
                         "disable_unit_friendly_fire": True,
                         "disable_spell_friendly_fire": True,
+                        "tower_compatibility_patch_enabled": False,
                     },
                 ),
                 (
                     UNIT_CAP_FEATURE_WORKSHOP_ID,
                     {
-                        "unit_model_multiplier": 1.0,
+                        "unit_model_multiplier": 1,
                         "single_entity_unit_mode": "scale",
                         "artillery_unit_mode": "full",
                         "war_machine_unit_mode": "full",
@@ -209,6 +213,7 @@ class StartOptionsPackTests(unittest.TestCase):
                         "unit_recruitment_capacity_multiplier": 4,
                         "disable_unit_friendly_fire": False,
                         "disable_spell_friendly_fire": False,
+                        "tower_compatibility_patch_enabled": False,
                     },
                 ),
             ):
@@ -220,7 +225,7 @@ class StartOptionsPackTests(unittest.TestCase):
                             {},
                             [],
                             {
-                                "unit_model_multiplier": 2.0,
+                                "unit_model_multiplier": 2,
                                 "single_entity_unit_mode": "health",
                                 "artillery_unit_mode": "half",
                                 "war_machine_unit_mode": "health",
@@ -228,6 +233,7 @@ class StartOptionsPackTests(unittest.TestCase):
                                 "unit_recruitment_capacity_multiplier": 4,
                                 "disable_unit_friendly_fire": True,
                                 "disable_spell_friendly_fire": True,
+                        "tower_compatibility_patch_enabled": False,
                             },
                             subscribed_workshop_ids=(workshop_id,),
                         )
@@ -577,9 +583,10 @@ class StartOptionsPackTests(unittest.TestCase):
                     {},
                     [],
                     {
-                        "unit_model_multiplier": 1.0,
+                        "unit_model_multiplier": 1,
                         "disable_unit_friendly_fire": True,
                         "disable_spell_friendly_fire": False,
+                        "tower_compatibility_patch_enabled": False,
                     },
                     subscribed_workshop_ids=(FRIENDLY_FIRE_FEATURE_WORKSHOP_ID,),
                 )
@@ -608,7 +615,7 @@ class StartOptionsPackTests(unittest.TestCase):
             unchanged = GameDataBuildResult(
                 (GameDataEntry("db\\main_units_tables\\!!!!wyccc_game_data_v0007", b"unchanged"),),
                 {
-                    "unit_model_multiplier": 2.0,
+                    "unit_model_multiplier": 2,
                     "unit_rows_scaled": 0,
                     "land_rows_scaled": 0,
                     "unit_friendly_fire_rows_changed": 0,

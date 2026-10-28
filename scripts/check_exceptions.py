@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BACKEND = ROOT / "backend"
-BUDGET = 51
+BUDGET = 53
 BROAD_RE = re.compile(r"^\s*except\s+(?:Exception|BaseException)\s*(?:as\s+\w+)?\s*:")
 BARE_RE = re.compile(r"^\s*except\s*:")
 

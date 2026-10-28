@@ -1,6 +1,51 @@
 {
   "structure": [
     {
+      "version": "1.3.5",
+      "date": "2026-10-28",
+      "entries": [
+        [
+          "v135_fixed_title",
+          [
+            [
+              "fix",
+              "v135_network_file_not_found"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.3.4",
+      "date": "2026-10-28",
+      "entries": [
+        [
+          "v134_adjusted_title",
+          [
+            [
+              "improvement",
+              "v134_network_error_logs"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "version": "1.3.3",
+      "date": "2026-10-28",
+      "entries": [
+        [
+          "v133_added_title",
+          [
+            [
+              "feature",
+              "v133_tower_compatibility"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
       "version": "1.3.2",
       "date": "2026-10-25",
       "entries": [
@@ -1412,6 +1457,12 @@
   ],
   "text": {
     "zh-CN": {
+      "v135_fixed_title": "修复",
+      "v135_network_file_not_found": "修复-启动器一些功能使用后报错“`[Errno 2] No such file or directory`  ”的问题",
+      "v134_adjusted_title": "调整",
+      "v134_network_error_logs": "调整-为了进一步分析某些玩家存在的“[Errno 2] No such file or directory”报错，加入了更详细的日志，遇到该问题可以将启动器目录data下的logs发我",
+      "v133_added_title": "新增",
+      "v133_tower_compatibility": "新增-独立肉鸽爬塔模式（Standalone Roguelike STS Mode）动态兼容补丁， 开启后，将对拥有传奇角色的MOD有更好的兼容性（例如与龙同行）",
       "v132_added_title": "新增",
       "v132_voice_units_table_compatibility": "新增-语音单位表兼容功能。目前有个问题， 许多语音MOD，为了修改原版单位的语音，修改了units_table， 就仅仅为了改语音字段，但这会导致严重的冲突，因为units_table可能被很多MOD修改，为了解决这个问题，我推出了这个功能， 只需要在语音MOD上右键-勾选 语音-单位表兼容 选项，启动器将该MOD对units_table的修改视为最低优先级，但是对语音字段的修改设置为最高优先级",
       "v131_fixed_title": "修复",
@@ -1689,6 +1740,12 @@
       "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。"
     },
     "en-US": {
+      "v135_fixed_title": "Fixed",
+      "v135_network_file_not_found": "Fixed - Resolved the `[Errno 2] No such file or directory` error when using some launcher features.",
+      "v134_adjusted_title": "Adjusted",
+      "v134_network_error_logs": "Adjusted - Added more detailed logs to help investigate the “[Errno 2] No such file or directory” error affecting some players. If you encounter this issue, please send me the logs from the launcher’s data/logs directory.",
+      "v133_added_title": "Added",
+      "v133_tower_compatibility": "Added - Dynamic compatibility patch for Standalone Roguelike STS Mode. When enabled, it improves compatibility with MODs that have legendary characters, such as With the Dragon.",
       "v132_added_title": "Added",
       "v132_voice_units_table_compatibility": "Added - Voice unit-table compatibility. Many voice MODs edit units_table just to change the voice fields of vanilla units. This causes serious conflicts because many other MODs may also edit units_table. To address this, right-click a voice MOD and check Voice - Unit-table compatibility. The launcher treats that MOD's units_table changes as the lowest priority, while giving its voice-field changes the highest priority.",
       "v131_fixed_title": "Fixed",
@@ -1966,6 +2023,12 @@
       "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog."
     },
     "ko-KR": {
+      "v135_fixed_title": "수정",
+      "v135_network_file_not_found": "수정 - 런처의 일부 기능을 사용할 때 `[Errno 2] No such file or directory` 오류가 발생하던 문제를 수정했습니다.",
+      "v134_adjusted_title": "조정",
+      "v134_network_error_logs": "조정 - 일부 플레이어에게 발생하는 “[Errno 2] No such file or directory” 오류를 자세히 분석하기 위해 로그를 추가했습니다. 문제가 발생하면 런처 디렉터리의 data/logs 폴더를 보내 주세요.",
+      "v133_added_title": "추가",
+      "v133_tower_compatibility": "추가 - Standalone Roguelike STS Mode 동적 호환 패치. 활성화하면 전설적인 캐릭터가 있는 MOD(예: With the Dragon)와의 호환성이 개선됩니다.",
       "v132_added_title": "추가",
       "v132_voice_units_table_compatibility": "추가 - 음성 유닛 테이블 호환 기능. 많은 음성 MOD가 원본 유닛의 음성 필드만 바꾸기 위해 units_table을 수정합니다. 하지만 units_table은 다른 여러 MOD도 수정할 수 있어 심각한 충돌이 발생합니다. 이 문제를 해결하려면 음성 MOD를 우클릭한 뒤 음성 - 유닛 테이블 호환 옵션을 체크하세요. 런처는 해당 MOD의 units_table 변경 사항을 가장 낮은 우선순위로 처리하되, 음성 필드 변경 사항에는 가장 높은 우선순위를 적용합니다.",
       "v131_fixed_title": "수정",
@@ -2243,6 +2306,12 @@
       "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다."
     },
     "ru-RU": {
+      "v135_fixed_title": "Исправлено",
+      "v135_network_file_not_found": "Исправлено — ошибка `[Errno 2] No such file or directory` при использовании некоторых функций лаунчера.",
+      "v134_adjusted_title": "Изменено",
+      "v134_network_error_logs": "Изменено — добавлены подробные журналы для анализа ошибки “[Errno 2] No such file or directory”, возникающей у некоторых игроков. Если вы столкнулись с ней, отправьте мне папку logs из каталога data лаунчера.",
+      "v133_added_title": "Добавлено",
+      "v133_tower_compatibility": "Добавлено — динамический патч совместимости для Standalone Roguelike STS Mode. При включении улучшается совместимость с MOD, содержащими легендарных персонажей, например With the Dragon.",
       "v132_added_title": "Добавлено",
       "v132_voice_units_table_compatibility": "Добавлено — совместимость таблицы отрядов для озвучки. Многие MOD озвучки изменяют units_table только ради полей озвучки стандартных отрядов. Это вызывает серьёзные конфликты, поскольку многие другие MOD также могут изменять units_table. Чтобы решить эту проблему, щёлкните правой кнопкой мыши по MOD озвучки и включите опцию «Озвучка — совместимость таблицы отрядов». Лаунчер назначает изменениям units_table из этого MOD самый низкий приоритет, а изменениям полей озвучки — самый высокий.",
       "v131_fixed_title": "Исправлено",
@@ -2520,6 +2589,12 @@
       "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении."
     },
     "ja-JP": {
+      "v135_fixed_title": "修正",
+      "v135_network_file_not_found": "修正 - ランチャーの一部機能を使用すると `[Errno 2] No such file or directory` エラーが発生する問題を修正しました。",
+      "v134_adjusted_title": "調整",
+      "v134_network_error_logs": "調整 - 一部のプレイヤーに発生する「[Errno 2] No such file or directory」エラーを詳しく調査するため、ログを追加しました。問題が発生した場合は、ランチャーの data フォルダー内にある logs を送ってください。",
+      "v133_added_title": "追加",
+      "v133_tower_compatibility": "追加 - Standalone Roguelike STS Mode の動的互換パッチ。有効にすると、With the Dragon などの伝説キャラクターを含む MOD との互換性が向上します。",
       "v132_added_title": "追加",
       "v132_voice_units_table_compatibility": "追加 - 音声ユニットテーブル互換機能。多くの音声MODは、バニラユニットの音声フィールドだけを変更するためにunits_tableを編集しています。しかし、units_tableはほかの多くのMODでも編集されるため、深刻な競合が発生します。この問題に対応するには、音声MODを右クリックして「音声 - ユニットテーブル互換」にチェックを入れてください。ランチャーはそのMODによるunits_tableの変更を最低優先度で扱い、音声フィールドの変更を最高優先度で扱います。",
       "v131_fixed_title": "修正",
@@ -2797,6 +2872,12 @@
       "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。"
     },
     "es-ES": {
+      "v135_fixed_title": "Corregido",
+      "v135_network_file_not_found": "Corregido - Se ha resuelto el error `[Errno 2] No such file or directory` al utilizar algunas funciones del lanzador.",
+      "v134_adjusted_title": "Ajustado",
+      "v134_network_error_logs": "Ajustado - Se han añadido registros más detallados para investigar el error “[Errno 2] No such file or directory” que afecta a algunos jugadores. Si te ocurre, envíame la carpeta logs dentro de data del lanzador.",
+      "v133_added_title": "Añadido",
+      "v133_tower_compatibility": "Añadido - Parche de compatibilidad dinámica para Standalone Roguelike STS Mode. Al activarlo, mejora la compatibilidad con MOD que incluyen personajes legendarios, como With the Dragon.",
       "v132_added_title": "Añadido",
       "v132_voice_units_table_compatibility": "Añadido - Compatibilidad de la tabla de unidades para voces. Muchos MOD de voces modifican units_table solo para cambiar los campos de voz de las unidades originales. Esto provoca conflictos graves, ya que muchos otros MOD también pueden modificar units_table. Para resolverlo, haz clic derecho en el MOD de voces y marca Voz - Compatibilidad de tabla de unidades. El lanzador asigna la prioridad más baja a los cambios de ese MOD en units_table y la prioridad más alta a sus cambios en los campos de voz.",
       "v131_fixed_title": "Corregido",

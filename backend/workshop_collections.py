@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+import logging
 import urllib.parse
 import urllib.request
 from typing import Any
 
 from .constants import APP_VERSION
 from .httputil import request_json
+from .network_diagnostics import log_transport_failure
 
 
 COLLECTION_DETAILS_ENDPOINT = (
@@ -14,6 +16,7 @@ COLLECTION_DETAILS_ENDPOINT = (
     "GetCollectionDetails/v1/"
 )
 MAX_COLLECTION_ITEMS = 1_000
+logger = logging.getLogger(__name__)
 
 
 def parse_workshop_collection_id(value: str) -> str:
@@ -55,6 +58,7 @@ def fetch_workshop_collection(value: str, *, app_id: int | str) -> dict[str, Any
             retries=2,
             backoff=0.5,
             urlopen_func=urllib.request.urlopen,
+            on_failure=lambda exc, stage: log_transport_failure(logger, exc, stage),
         )
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"无法读取 Steam 创意工坊合集：{exc}") from exc

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 import time
 from typing import Any
@@ -9,10 +10,12 @@ from urllib.parse import urlparse
 
 from .app_settings import DEFAULT_LANGUAGE
 from .models import ModAsset
+from .network_diagnostics import log_transport_failure
 from .warhammer_translation import build_mod_translation_prompts
 
 
 _JSON_FENCE_RE = re.compile(r"^```(?:json)?\s*|\s*```$", re.IGNORECASE)
+logger = logging.getLogger(__name__)
 
 
 def _chat_completions_url(base_url: str) -> str:
@@ -102,11 +105,18 @@ def _chat_completion_once(settings: dict[str, Any], system_prompt: str, user_pro
         headers=headers,
         method="POST",
     )
+    stage = "open"
     try:
         with request.urlopen(http_request, timeout=60) as response:
+            stage = "read"
             response_payload = json.loads(response.read().decode("utf-8", errors="replace"))
     except error.HTTPError as exc:
-        detail = exc.read(2048).decode("utf-8", errors="replace")
+        log_transport_failure(logger, exc, "http")
+        try:
+            detail = exc.read(2048).decode("utf-8", errors="replace")
+        except OSError as read_exc:
+            log_transport_failure(logger, read_exc, "read")
+            raise
         try:
             error_payload = json.loads(detail)
             detail = str(error_payload.get("error", {}).get("message") or detail)
@@ -114,8 +124,10 @@ def _chat_completion_once(settings: dict[str, Any], system_prompt: str, user_pro
             pass
         raise ValueError(f"AI 请求失败（HTTP {exc.code}）：{detail[:300]}") from exc
     except error.URLError as exc:
+        log_transport_failure(logger, exc, stage)
         raise ValueError(f"无法连接 AI 服务：{exc.reason}") from exc
     except (OSError, TimeoutError) as exc:
+        log_transport_failure(logger, exc, stage)
         raise ValueError(f"AI 请求失败：{exc}") from exc
     except json.JSONDecodeError as exc:
         raise ValueError("AI 服务返回的不是有效 JSON") from exc

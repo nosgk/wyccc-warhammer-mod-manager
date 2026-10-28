@@ -28,7 +28,7 @@ from .start_options import (
 
 GAME_DATA_PATCH_MANIFEST_NAME = "!!!!wyccc_game_data_patch.json"
 FINGERPRINT_SCHEMA_VERSION = 2
-GAME_DATA_BUILDER_VERSION = 14
+GAME_DATA_BUILDER_VERSION = 15
 
 
 def _coerce_bool(value: Any) -> bool:
@@ -65,6 +65,9 @@ def _normalized_settings(settings: Mapping[str, Any]) -> dict[str, int | bool | 
         "disable_spell_friendly_fire": _coerce_bool(
             settings.get("disable_spell_friendly_fire", False)
         ),
+        "tower_compatibility_patch_enabled": _coerce_bool(
+            settings.get("tower_compatibility_patch_enabled", False)
+        ),
     }
 
 
@@ -85,6 +88,7 @@ def game_data_settings_requested(
         or int(normalized["unit_recruitment_capacity_multiplier"]) != 1
         or bool(normalized["disable_unit_friendly_fire"])
         or bool(normalized["disable_spell_friendly_fire"])
+        or bool(normalized["tower_compatibility_patch_enabled"])
     )
 
 

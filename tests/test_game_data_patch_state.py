@@ -24,7 +24,7 @@ UNIT_SIZE_WORKSHOP_ID = "3765783838"
 
 class GameDataPatchStateTests(unittest.TestCase):
     def test_builder_version_invalidates_pre_voice_units_compatibility_patches(self) -> None:
-        self.assertEqual(GAME_DATA_BUILDER_VERSION, 14)
+        self.assertEqual(GAME_DATA_BUILDER_VERSION, 15)
 
     def setUp(self) -> None:
         self.temporary = tempfile.TemporaryDirectory()
