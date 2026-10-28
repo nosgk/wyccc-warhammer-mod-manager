@@ -12,6 +12,8 @@ const props = defineProps({
   variantSelectorMissingPacks: { type: Array, default: () => [] },
   tier5PacksEnabled: { type: Boolean, default: false },
   tier5MissingPacks: { type: Array, default: () => [] },
+  towerPacksEnabled: { type: Boolean, default: false },
+  towerMissingPacks: { type: Array, default: () => [] },
   voicePatchSubscribed: { type: Boolean, default: false },
 })
 
@@ -21,6 +23,7 @@ const draft = reactive({
   dynamic_ror_compatibility_patch_enabled: false,
   variant_selector_compatibility_patch_enabled: false,
   tier5_compatibility_patch_enabled: false,
+  tower_compatibility_patch_enabled: false,
   voice_compatibility_patch_enabled: false,
 })
 
@@ -38,6 +41,9 @@ const resetDraft = () => {
   )
   draft.tier5_compatibility_patch_enabled = Boolean(
     props.tier5PacksEnabled && props.settings.tier5_compatibility_patch_enabled,
+  )
+  draft.tower_compatibility_patch_enabled = Boolean(
+    props.towerPacksEnabled && props.settings.tower_compatibility_patch_enabled,
   )
 }
 
@@ -58,7 +64,7 @@ watch(
 )
 
 watch(
-  () => [props.requiredPacksEnabled, props.variantSelectorPacksEnabled, props.tier5PacksEnabled, props.voicePatchSubscribed],
+  () => [props.requiredPacksEnabled, props.variantSelectorPacksEnabled, props.tier5PacksEnabled, props.towerPacksEnabled, props.voicePatchSubscribed],
   () => {
     if (props.open) resetDraft()
   },
@@ -75,6 +81,9 @@ const currentSettings = () => ({
   ),
   tier5_compatibility_patch_enabled: Boolean(
     props.tier5PacksEnabled && draft.tier5_compatibility_patch_enabled,
+  ),
+  tower_compatibility_patch_enabled: Boolean(
+    props.towerPacksEnabled && draft.tower_compatibility_patch_enabled,
   ),
 })
 
@@ -109,6 +118,23 @@ const submit = () => {
       </header>
 
       <div class="modal-body compatibility-patch-body">
+        <section class="compatibility-patch-card">
+          <label class="switch-row compatibility-patch-option">
+            <input
+              v-model="draft.tower_compatibility_patch_enabled"
+              type="checkbox"
+              :disabled="!!busy || !towerPacksEnabled"
+              data-testid="tower-compatibility-patch-enabled"
+            />
+            <span>
+              <strong>{{ t('compatibilityPatch.towerTitle') }}</strong>
+              <small>{{ t('compatibilityPatch.towerDescription') }}</small>
+            </span>
+          </label>
+          <p v-if="!towerPacksEnabled" class="compatibility-patch-requirement" data-testid="tower-required-packs">
+            {{ t('compatibilityPatch.towerRequired', { mods: towerMissingPacks.join(', ') }) }}
+          </p>
+        </section>
         <section class="compatibility-patch-card">
           <label class="switch-row compatibility-patch-option">
             <input

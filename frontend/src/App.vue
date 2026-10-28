@@ -162,6 +162,26 @@ const variantSelectorPackRequirement = computed(() => {
   return { allEnabled: missing.length === 0, missing }
 })
 const tier5Requirement = computed(() => tier5PackRequirement(store.mods, store.activeIds))
+const towerCompatibilityRequirement = computed(() => {
+  const active = new Set(store.activeIds)
+  const tower = store.mods.find(mod => {
+    if (!active.has(mod.id) && mod.pack_type !== 'movie') return false
+    const pack = String(mod.pack_name || '').toLocaleLowerCase()
+    const names = [mod.effective_name, mod.display_name, mod.name]
+      .map(value => String(value || '').toLocaleLowerCase())
+      .join(' ')
+    return (
+      pack === 'wyccc_roguelike_tower.pack'
+      || String(mod.workshop_id || '') === '3825304740'
+      || names.includes('standalone roguelike sts mode')
+      || names.includes('独立肉鸽爬塔模式')
+    )
+  })
+  return {
+    allEnabled: Boolean(tower),
+    missing: tower ? [] : ['Standalone Roguelike STS Mode'],
+  }
+})
 const workshopPublishMod = computed(() => store.modMap.get(workshopPublish.modId) || null)
 const inactiveSearchFocusId = computed(() => (
   store.inactiveSearchHighlightActive
@@ -1496,6 +1516,8 @@ onBeforeUnmount(() => {
       :variant-selector-missing-packs="variantSelectorPackRequirement.missing"
       :tier5-packs-enabled="tier5Requirement.allEnabled"
       :tier5-missing-packs="tier5Requirement.missing"
+      :tower-packs-enabled="towerCompatibilityRequirement.allEnabled"
+      :tower-missing-packs="towerCompatibilityRequirement.missing"
       :voice-patch-subscribed="store.voiceFeatureSubscribed"
       @close="showCompatibilityPatch = false"
       @save="saveCompatibilityPatch"

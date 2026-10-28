@@ -650,9 +650,19 @@ ALL_TABLE_ORDER = tuple(dict.fromkeys((
     *TABLE_ORDER, *THREE_KINGDOMS_TABLE_ORDER, *VARIANT_SELECTOR_TABLE_ORDER, *ENCYCLOPEDIA_SCHEMAS,
     *SETTLEMENT_SCHEMAS,
 )))
+TOWER_COMPATIBILITY_TABLES = (
+    "campaign_group_unique_agents_tables",
+    "unique_agents_tables",
+    "ancillaries_tables",
+    "ancillaries_included_agent_subtypes_tables",
+    "ancillary_to_included_agents_tables",
+    "ancillaries_required_skills_tables",
+)
 TABLE_PREFIXES = tuple(
     f"db\\{table_name}\\"
-    for table_name in dict.fromkeys((*TABLE_ORDER, *THREE_KINGDOMS_TABLE_ORDER))
+    for table_name in dict.fromkeys(
+        (*TABLE_ORDER, *THREE_KINGDOMS_TABLE_ORDER, *TOWER_COMPATIBILITY_TABLES)
+    )
 )
 CURRENT_TABLE_VERSIONS = {
     # GUID-only legacy building tables use v0; current v3 tables carry a version marker.

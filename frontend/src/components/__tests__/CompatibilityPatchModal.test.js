@@ -4,6 +4,20 @@ import { describe, expect, it } from 'vitest'
 import CompatibilityPatchModal from '../CompatibilityPatchModal.vue'
 
 describe('compatibility patch modal', () => {
+  it('enables Standalone Roguelike STS Mode compatibility only after the Tower pack is active', async () => {
+    const wrapper = mount(CompatibilityPatchModal, {
+      props: { open: true, towerPacksEnabled: false, towerMissingPacks: ['Standalone Roguelike STS Mode'], settings: {} },
+    })
+    const checkbox = wrapper.get('[data-testid="tower-compatibility-patch-enabled"]')
+    expect(checkbox.attributes('disabled')).toBeDefined()
+    expect(wrapper.get('[data-testid="tower-required-packs"]').text()).toContain('Standalone Roguelike STS Mode')
+    await wrapper.setProps({ towerPacksEnabled: true })
+    expect(checkbox.attributes('disabled')).toBeUndefined()
+    await checkbox.setValue(true)
+    await wrapper.get('form').trigger('submit')
+    expect(wrapper.emitted('save')[0][0].tower_compatibility_patch_enabled).toBe(true)
+  })
+
   it('saves voice compatibility after subscribing and restores the preference', async () => {
     const wrapper = mount(CompatibilityPatchModal, {
       props: { open: true, requiredPacksEnabled: false, voicePatchSubscribed: true, settings: {} },
@@ -135,6 +149,7 @@ describe('compatibility patch modal', () => {
       dynamic_ror_compatibility_patch_enabled: false,
       variant_selector_compatibility_patch_enabled: false,
       tier5_compatibility_patch_enabled: false,
+      tower_compatibility_patch_enabled: false,
       voice_compatibility_patch_enabled: false,
     })
   })
@@ -156,6 +171,7 @@ describe('compatibility patch modal', () => {
       dynamic_ror_compatibility_patch_enabled: true,
       variant_selector_compatibility_patch_enabled: false,
       tier5_compatibility_patch_enabled: false,
+      tower_compatibility_patch_enabled: false,
       voice_compatibility_patch_enabled: false,
     })
   })
@@ -179,6 +195,7 @@ describe('compatibility patch modal', () => {
       dynamic_ror_compatibility_patch_enabled: false,
       variant_selector_compatibility_patch_enabled: false,
       tier5_compatibility_patch_enabled: false,
+      tower_compatibility_patch_enabled: false,
       voice_compatibility_patch_enabled: false,
     })
   })

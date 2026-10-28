@@ -1,0 +1,1524 @@
+{
+  "campaign_group_unique_agents_tables": [
+    {
+      "version": 0,
+      "fields": [
+        {
+          "name": "base_charges",
+          "type": "I32",
+          "default": "0",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "campaign_group",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_agent",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    }
+  ],
+  "unique_agents_tables": [
+    {
+      "version": 3,
+      "fields": [
+        {
+          "name": "agent_subtype",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "clan_name",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "forename",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "other_name",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "surname",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "agent_type",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "spawn_behaviour",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "spawn_via_ui",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "fields": [
+        {
+          "name": "agent_subtype",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "surname",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "forename",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "other_name",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "clan_name",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "agent_type",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "spawn_behaviour",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    }
+  ],
+  "ancillaries_tables": [
+    {
+      "version": 18,
+      "fields": [
+        {
+          "name": "key",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "type",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "applies_to",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "transferrable",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_to_world",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_to_faction",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "precedence",
+          "type": "I32",
+          "default": "0",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "start_date",
+          "type": "I32",
+          "default": "1700",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "end_date",
+          "type": "I32",
+          "default": "1900",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "avatar_skill",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "avatar_special_ability",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "legendary_item",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "mp_exclusive",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "is_wife_ancillary",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "category",
+          "type": "StringU8",
+          "default": "general",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_starting_age",
+          "type": "I32",
+          "default": "16",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_starting_age",
+          "type": "I32",
+          "default": "30",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_expiry_age",
+          "type": "I32",
+          "default": "30",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_expiry_age",
+          "type": "I32",
+          "default": "50",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "immortal",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "provided_bodyguard_unit",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "provided_banner",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "uniqueness_score",
+          "type": "I32",
+          "default": "1",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "turns_before_swap_allowed",
+          "type": "I32",
+          "default": "0",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "subcategory",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "randomly_dropped",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "can_be_stolen",
+          "type": "Boolean",
+          "default": "true",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "can_be_destroyed",
+          "type": "Boolean",
+          "default": "true",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    },
+    {
+      "version": 16,
+      "fields": [
+        {
+          "name": "key",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "type",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "applies_to",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "transferrable",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_to_world",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_to_faction",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "precedence",
+          "type": "I32",
+          "default": "0",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "start_date",
+          "type": "I32",
+          "default": "1700",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "end_date",
+          "type": "I32",
+          "default": "1900",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "avatar_skill",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "avatar_special_ability",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "legendary_item",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "mp_exclusive",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "is_wife_ancillary",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "category",
+          "type": "StringU8",
+          "default": "general",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_starting_age",
+          "type": "I32",
+          "default": "16",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_starting_age",
+          "type": "I32",
+          "default": "30",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_expiry_age",
+          "type": "I32",
+          "default": "30",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_expiry_age",
+          "type": "I32",
+          "default": "50",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "immortal",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "provided_bodyguard_unit",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "provided_banner",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "uniqueness_score",
+          "type": "I32",
+          "default": "1",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "turns_before_swap_allowed",
+          "type": "I32",
+          "default": "0",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "subcategory",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "randomly_dropped",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    },
+    {
+      "version": 15,
+      "fields": [
+        {
+          "name": "key",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "type",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "applies_to",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "transferrable",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_to_world",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_to_faction",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "precedence",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "start_date",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "end_date",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "avatar_skill",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "avatar_special_ability",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "legendary_item",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "mp_exclusive",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "is_wife_ancillary",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "category",
+          "type": "StringU8",
+          "default": "general",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_starting_age",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_starting_age",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_expiry_age",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_expiry_age",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "immortal",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "provided_bodyguard_unit",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "provided_banner",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "uniqueness_score",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "turns_before_swap_allowed",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "subcategory",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    },
+    {
+      "version": 0,
+      "fields": [
+        {
+          "name": "key",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "type",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "applies_to",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "transferrable",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_to_world",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unique_to_faction",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "precedence",
+          "type": "I32",
+          "default": "0",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "start_date",
+          "type": "I32",
+          "default": "1700",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "end_date",
+          "type": "I32",
+          "default": "1900",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "avatar_skill",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "avatar_special_ability",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "legendary_item",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "mp_exclusive",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "is_wife_ancillary",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "category",
+          "type": "StringU8",
+          "default": "general",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_starting_age",
+          "type": "I32",
+          "default": "16",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_starting_age",
+          "type": "I32",
+          "default": "30",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_expiry_age",
+          "type": "I32",
+          "default": "30",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_expiry_age",
+          "type": "I32",
+          "default": "50",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "immortal",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "provided_bodyguard_unit",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "provided_banner",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "uniqueness_score",
+          "type": "I32",
+          "default": "1",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "turns_before_swap_allowed",
+          "type": "I32",
+          "default": "0",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "subcategory",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "randomly_dropped",
+          "type": "Boolean",
+          "default": "false",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "can_be_stolen",
+          "type": "Boolean",
+          "default": "true",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "can_be_destroyed",
+          "type": "Boolean",
+          "default": "true",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "faction_set",
+          "type": "StringU8",
+          "default": "all",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    }
+  ],
+  "ancillaries_included_agent_subtypes_tables": [
+    {
+      "version": 0,
+      "fields": [
+        {
+          "name": "agent_subtype",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "ancillary",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    }
+  ],
+  "ancillary_to_included_agents_tables": [
+    {
+      "version": 0,
+      "fields": [
+        {
+          "name": "ancillary",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "agent",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    }
+  ],
+  "ancillaries_required_skills_tables": [
+    {
+      "version": 1,
+      "fields": [
+        {
+          "name": "ancillary",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "required_skill",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "required_skill_level",
+          "type": "I32",
+          "default": "1",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    },
+    {
+      "version": 0,
+      "fields": [
+        {
+          "name": "ancillary",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "required_skill",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "required_skill_level",
+          "type": "I32",
+          "default": "1",
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    }
+  ],
+  "main_units_tables": [
+    {
+      "version": 7,
+      "fields": [
+        {
+          "name": "additional_building_requirement",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "campaign_cap",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "caste",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "create_time",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "is_naval",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "land_unit",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "num_men",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "multiplayer_cap",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "multiplayer_cost",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "naval_unit",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "num_ships",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "min_men_per_ship",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "max_men_per_ship",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "recruitment_cost",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "unit",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "upkeep_cost",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "weight",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "resource_requirement",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "special_edition_mask",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "in_encyclopedia",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "audio_voiceover_culture",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "ui_unit_group_land",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "tier",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "is_high_threat",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "porthole_camera",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "mount",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "use_hitpoints_in_campaign",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "porthole_composite_scene",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "melee_cp",
+          "type": "F32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "missile_cp",
+          "type": "F32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "can_siege",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "audio_voiceover_culture_override",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "restrict_xp_gain_in_campaign",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "audio_voiceover_actor_group",
+          "type": "StringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "food_cost",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "has_spoken_vo",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "is_monstrous",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "multiplayer_qb_cap",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "vo_is_dragon",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "vo_is_dinosaur",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "optional_ui_element",
+          "type": "OptionalStringU8",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "barrier_health",
+          "type": "F32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "can_be_bribed",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "point_allowance_weight",
+          "type": "I32",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        },
+        {
+          "name": "is_renown",
+          "type": "Boolean",
+          "default": null,
+          "bitwise": 0,
+          "enum": {},
+          "colour": null
+        }
+      ]
+    }
+  ]
+}

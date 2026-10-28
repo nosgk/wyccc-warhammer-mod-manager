@@ -28,6 +28,7 @@ from .game_data import (
     build_game_data_entries,
 )
 from .dynamic_ror_compatibility import build_dynamic_ror_compatibility_entries
+from .tower_compatibility import build_tower_compatibility_entries
 from .tier5_compatibility import TIER5_SOURCE_PREFIXES, build_tier5_compatibility_entries
 from .variant_selector_compatibility import (
     VARIANT_SELECTOR_FRAMEWORK_SCRIPT,
@@ -505,6 +506,9 @@ def _effective_game_data_settings(
         "disable_spell_friendly_fire": (
             bool(settings.get("disable_spell_friendly_fire")) if friendly_fire_available else False
         ),
+        "tower_compatibility_patch_enabled": bool(
+            settings.get("tower_compatibility_patch_enabled", False)
+        ),
     }
 
 
@@ -519,6 +523,7 @@ def _game_data_enabled(settings: dict[str, int | bool | str]) -> bool:
         or int(settings["unit_recruitment_capacity_multiplier"]) != 1
         or bool(settings["disable_unit_friendly_fire"])
         or bool(settings["disable_spell_friendly_fire"])
+        or bool(settings.get("tower_compatibility_patch_enabled", False))
     )
 
 
@@ -545,6 +550,8 @@ def _enabled_game_data_options(settings: dict[str, int | bool | str]) -> list[st
         options.append("disable_unit_friendly_fire")
     if settings["disable_spell_friendly_fire"]:
         options.append("disable_spell_friendly_fire")
+    if settings.get("tower_compatibility_patch_enabled", False):
+        options.append("tower_compatibility_patch_enabled")
     return options
 
 
@@ -564,6 +571,10 @@ def _changed_game_data_rows(stats: dict[str, int | float]) -> int:
             "unit_max_drag_width_changed",
             "spell_friendly_fire_rows_changed",
             "voice_units_table_rows_changed",
+            "tower_unique_agents_added",
+            "tower_mod_equipment_unlocked",
+            "tower_equipment_restriction_rows_removed",
+            "tower_mod_unit_caps_removed",
         )
     )
 
@@ -870,15 +881,25 @@ def build_game_data_patch(
     if voice_compatibility:
         options.append("voice_units_table_compatibility")
     game_data = build_game_data_entries(sources, effective_settings)
-    entries = [PackEntry(entry.name, entry.payload) for entry in game_data.entries]
+    tower_entries: tuple[GameDataEntry, ...] = ()
+    tower_stats: dict[str, int | float] = {}
+    if effective_settings.get("tower_compatibility_patch_enabled", False):
+        tower = build_tower_compatibility_entries(sources)
+        tower_entries = tower.entries
+        tower_stats = dict(tower.stats)
+    entries = [
+        PackEntry(entry.name, entry.payload)
+        for entry in (*game_data.entries, *tower_entries)
+    ]
+    stats = {**game_data.stats, **tower_stats}
     diagnostics["output_table_names"] = [entry.name for entry in entries]
-    if not entries or _changed_game_data_rows(game_data.stats) == 0:
+    if not entries or _changed_game_data_rows(stats) == 0:
         output_path.unlink(missing_ok=True)
         return {
             "path": "",
             "options": options,
             "entry_count": 0,
-            "game_data": game_data.stats,
+            "game_data": stats,
             "source_diagnostics": diagnostics,
         }
     write_pfh5_pack(output_path, entries)
@@ -886,7 +907,7 @@ def build_game_data_patch(
         "path": str(output_path.resolve(strict=False)),
         "options": options,
         "entry_count": len(entries),
-        "game_data": game_data.stats,
+        "game_data": stats,
         "source_diagnostics": diagnostics,
     }
 
