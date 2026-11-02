@@ -47,6 +47,17 @@ describe('voice compatibility failure delivery', () => {
     expect(formatVoiceCompatibilityError({ reason: 'unknown' })).toBe('')
   })
 
+  it('explains unavailable audio language without blaming MOD versions in all six languages', () => {
+    for (const language of ['zh-CN', 'en-US', 'ko-KR', 'ru-RU', 'ja-JP', 'es-ES']) {
+      applyInterfaceLanguage(language)
+      const message = formatVoiceCompatibilityError({ reason: 'languageUnavailable', sources: [], event_id: null })
+      expect(message).toContain(t('voiceError.languageUnavailable'))
+      expect(message).toContain(t('voiceError.languageHelp'))
+      expect(message).not.toContain(t('voiceError.help'))
+      expect(message).not.toContain('voiceError.')
+    }
+  })
+
   it('keeps a voice failure readable until dismissed instead of hiding it after 3.2 seconds', async () => {
     vi.useFakeTimers()
     setActivePinia(createPinia())

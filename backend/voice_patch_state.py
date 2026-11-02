@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import os
 import re
+import time
 from collections.abc import Mapping, Sequence
 from dataclasses import replace
 from pathlib import Path
@@ -14,17 +16,19 @@ from .game_data import DbSource, GameDataEntry
 from .json_store import AtomicJsonStore
 from .models import ModAsset
 from .pack_reader import read_pack_index
-from .steam_paths import parse_vdf
+from .steam_paths import _case_insensitive_value, parse_vdf
 from .start_options import PackEntry, read_pack_entries, resolve_game_data_source_specs, write_pfh5_pack
 from .voice_compatibility import (
     VOICE_RUNTIME_MARKER,
     VOICE_SETTING_KEY,
+    VoiceCompatibilityError,
     bank_scope,
     build_voice_compatibility_entries,
     normalized_name,
 )
 
-BUILDER_VERSION = 7
+BUILDER_VERSION = 9
+LOGGER = logging.getLogger(__name__)
 MANIFEST_NAME = "!!!!wyccc_voice_compatibility.json"
 _LANGUAGE_PACKS = {
     "english(uk)": "audio_en_bnk.pack", "chinese": "audio_cn_bnk.pack",
@@ -49,26 +53,48 @@ _VOICE_LANGUAGE_CODES = {
 
 def _voice_language(data_path: str | Path) -> str:
     appdata = os.environ.get("APPDATA", "")
-    if appdata:
-        preferences = Path(appdata) / "The Creative Assembly" / "Warhammer3" / "scripts" / "preferences.script.txt"
-        try:
-            raw = preferences.read_bytes()
-            text = raw.decode("utf-16" if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else "utf-8-sig", errors="replace")
-            match = re.search(r'^\s*language_audio\s+"([^"]*)"\s*;', text, re.MULTILINE)
-            if match and match[1].strip():
-                return _VOICE_LANGUAGE_CODES.get(match[1].strip().casefold(), "")
-        except OSError:
-            pass
+    preferences = (Path(appdata) / "The Creative Assembly" / "Warhammer3" / "scripts" / "preferences.script.txt"
+                   if appdata else None)
     steamapps = Path(data_path).parent.parent.parent
-    try:
-        parsed = parse_vdf((steamapps / f"appmanifest_{WH3_APP_ID}.acf")
-                           .read_text(encoding="utf-8-sig", errors="replace"))
-        state = parsed.get("AppState", parsed.get("appstate", {}))
-        config = state.get("UserConfig", {}) if isinstance(state, dict) else {}
-        language = config.get("language", "") if isinstance(config, dict) else ""
-        return _VOICE_LANGUAGE_CODES.get(str(language).strip().casefold(), "")
-    except (OSError, ValueError):
-        return ""
+    manifest = steamapps / f"appmanifest_{WH3_APP_ID}.acf"
+    failure = "Steam manifest has no configured language"
+    for attempt in range(5):
+        try:
+            if preferences is not None:
+                try:
+                    raw = preferences.read_bytes()
+                except FileNotFoundError:
+                    raw = b""
+                text = raw.decode("utf-16" if raw.startswith((b"\xff\xfe", b"\xfe\xff")) else "utf-8-sig", errors="replace")
+                match = re.search(r'^\s*language_audio\s+"([^"]*)"\s*;', text, re.MULTILINE)
+                if match and match[1].strip():
+                    code = match[1].strip().casefold()
+                    scope = _VOICE_LANGUAGE_CODES.get(code, "")
+                    LOGGER.log(logging.INFO if scope else logging.WARNING,
+                               "Voice audio language=%s code=%s source=%s field=language_audio attempt=%s",
+                               scope or "unsupported", code, preferences, attempt + 1)
+                    return scope
+            parsed = parse_vdf(manifest.read_text(encoding="utf-8-sig", errors="replace"))
+            state = _case_insensitive_value(parsed, "AppState", {})
+            for config_key in ("UserConfig", "MountedConfig"):
+                config = _case_insensitive_value(state, config_key, {}) if isinstance(state, dict) else {}
+                code = str(_case_insensitive_value(config, "language", "")).strip().casefold() if isinstance(config, dict) else ""
+                if code:
+                    scope = _VOICE_LANGUAGE_CODES.get(code, "")
+                    LOGGER.log(logging.INFO if scope else logging.WARNING,
+                               "Voice audio language=%s code=%s source=%s field=%s.language attempt=%s",
+                               scope or "unsupported", code, manifest, config_key, attempt + 1)
+                    return scope
+            failure = "Steam manifest has no configured language"
+        except (OSError, ValueError) as exc:
+            failure = f"{type(exc).__name__}: {exc}"
+            if isinstance(exc, FileNotFoundError) and steamapps.name.casefold() != "steamapps":
+                break
+        if attempt < 4:
+            time.sleep(0.25)
+    LOGGER.warning("Voice audio language unavailable: data=%s preferences=%s manifest=%s attempts=%s reason=%s",
+                   data_path, preferences, manifest, attempt + 1, failure)
+    return ""
 
 
 def voice_compatibility_requested(settings: Mapping[str, Any]) -> bool:
@@ -193,7 +219,12 @@ def ensure_voice_compatibility_patch(
             ):
                 return {**result, "status": "reused" if output_hash else "zero_modification"}
 
-        entries, stats = build_voice_compatibility_entries(sources, language_scope=language_scope)
+        try:
+            entries, stats = build_voice_compatibility_entries(sources, language_scope=language_scope)
+        except VoiceCompatibilityError as exc:
+            if not language_scope and exc.details["reason"] == "mixedLayout":
+                raise VoiceCompatibilityError("languageUnavailable", [], detail=str(data_path)) from exc
+            raise
         if entries and not any(source.entries for source in sources if source.role == "vanilla"):
             raise ValueError("语音兼容未找到原版对话事件库，无法保留原版语音分支")
         verified_language = _voice_language(data_path)

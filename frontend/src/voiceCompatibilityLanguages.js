@@ -35,6 +35,22 @@ export const voiceCompatibilityEntries = {
     '공용 폴더와 언어별 폴더의 음성이 다릅니다', 'Общие и языковые банки содержат разную озвучку',
     '共通フォルダーと各言語フォルダーの音声が異なります', 'Los bancos generales y de idiomas contienen voces distintas',
   ],
+  'voiceError.languageUnavailable': [
+    '未能确定游戏语音语言，无法选择当前语言的音库',
+    'The game audio language could not be determined, so its voice banks could not be selected',
+    '게임 음성 언어를 확인할 수 없어 해당 언어의 뱅크를 선택할 수 없습니다',
+    'Не удалось определить язык озвучки игры и выбрать соответствующие банки',
+    'ゲームの音声言語を確認できないため、対応する音声バンクを選択できません',
+    'No se pudo determinar el idioma de audio del juego ni seleccionar sus bancos de voz',
+  ],
+  'voiceError.languageHelp': [
+    '请确认 Steam 中的游戏语言或游戏内的语音语言设置，退出游戏后重试。配置读取详情已记录到启动器日志。',
+    'Check the game language in Steam or the audio language in the game, then close the game and retry. Configuration read details are in the launcher log.',
+    'Steam의 게임 언어 또는 게임 내 음성 언어 설정을 확인한 뒤 게임을 종료하고 다시 시도하세요. 설정 읽기 정보는 런처 로그에 기록되어 있습니다.',
+    'Проверьте язык игры в Steam или язык озвучки в игре, закройте игру и повторите попытку. Сведения о чтении настроек записаны в журнал запуска.',
+    'Steam のゲーム言語またはゲーム内の音声言語設定を確認し、ゲームを終了して再試行してください。設定の読み取り状況はランチャーログに記録されています。',
+    'Comprueba el idioma del juego en Steam o el idioma de audio dentro del juego, ciérralo y vuelve a intentarlo. Los detalles de lectura están en el registro del gestor.',
+  ],
   'voiceError.bankConflict': [
     '同名音库的播放对象或音频资源冲突', 'Playback objects or audio resources conflict in banks with the same name',
     '같은 이름의 뱅크에서 재생 객체 또는 오디오 리소스가 충돌합니다',

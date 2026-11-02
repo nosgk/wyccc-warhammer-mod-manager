@@ -3,6 +3,8 @@
 The binary layout is checked against WH3's 0x80000088 banks. Each conflicting
 MOD bank keeps its name, BKHD and non-dialogue objects; all copies of a shared
 event receive the same merged tree, regardless of which bank loads first.
+Global voice banks are also exposed in the current audio-language directory
+so cached global file listings cannot hide their events or playback objects.
 """
 
 from __future__ import annotations
@@ -71,6 +73,7 @@ class VoiceCompatibilityError(ValueError):
             "ambiguousCopies": "同一 MOD 的多份同优先级语音定义不同，无法确定合并来源",
             "treeMismatch": "决策树层级不一致，无法合并",
             "mixedLayout": "通用目录与多个语言目录的语音不同，暂不支持这种混合布局",
+            "languageUnavailable": "未能确定游戏语音语言，无法选择当前语言的音库",
             "bankConflict": "同名语音库包含冲突的播放对象或音频资源，无法仅合并对话事件",
             "invalidBank": "语音库损坏或格式不受支持",
             "encodeFailed": "合并后的语音决策树无法写入或回读",
@@ -554,9 +557,19 @@ def build_voice_compatibility_entries(
                    if (scope, event_id) in replacements}
         changed.update({event_id: encode_dialogue_event(event) for event_id, event in events.items()
                         if event_id not in original_ids and event_id not in changed})
+        payload = entry.payload
         if changed or bank != original_bank:
             payload = bank.replace_dialogues(changed)
             if payload != entry.payload:
                 entries.append(GameDataEntry(entry.name, payload))
+        basename = normalized_name(entry.name).rpartition("\\")[2]
+        if (language_scope and not scope
+                and basename.startswith(("campaign_vo_", "battle_vo_", "frontend_vo_"))
+                and basename not in localized_bank_names):
+            # The engine may cache audio\wwise before MOD files are mounted.
+            # Its localized listing can see later files. Include unchanged,
+            # playback-only banks too; merged events cannot play without them.
+            # An existing same-name localized file keeps the engine's priority.
+            entries.append(GameDataEntry(f"audio\\wwise\\{language_scope}\\{basename}", payload))
     stats["patched_bank_count"] = len(entries)
     return entries, stats

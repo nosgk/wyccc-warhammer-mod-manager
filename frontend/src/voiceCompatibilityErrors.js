@@ -2,7 +2,7 @@ import { t } from './languages'
 
 const reasons = new Set([
   'argumentMismatch', 'ambiguousCopies', 'treeMismatch', 'mixedLayout',
-  'bankConflict', 'invalidBank', 'encodeFailed',
+  'bankConflict', 'invalidBank', 'encodeFailed', 'languageUnavailable',
 ])
 
 export const formatVoiceCompatibilityError = details => {
@@ -16,5 +16,6 @@ export const formatVoiceCompatibilityError = details => {
     name: source.source,
     bank: source.bank,
   }))
-  return [title, ...new Set(sources), t('voiceError.help')].join('\n')
+  const help = details.reason === 'languageUnavailable' ? 'voiceError.languageHelp' : 'voiceError.help'
+  return [title, ...new Set(sources), t(help)].join('\n')
 }

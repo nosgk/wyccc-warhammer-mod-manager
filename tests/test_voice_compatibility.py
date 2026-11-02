@@ -162,6 +162,67 @@ def test_bank_header_and_non_dialogue_objects_are_unchanged():
     assert [(k, p) for k, p in actual.objects if k != 15] == [(k, p) for k, p in parsed.objects if k != 15]
 
 
+@pytest.mark.parametrize("family", ["campaign_vo", "battle_vo_orders", "frontend_vo"])
+def test_current_language_patch_exposes_merged_events_and_their_playback_banks(family):
+    # The running game can list localized files while its cached global listing
+    # still omits MOD banks. Event-only output then points at missing sounds.
+    sources = []
+    originals = {}
+    for label, actor, audio_id in (("high", 1, 111), ("low", 2, 222)):
+        event_name = PREFIX + family + "_0_" + label + ".bnk"
+        sound_name = PREFIX + family + "_" + label + ".bnk"
+        playback = bank([], extras=[(2, struct.pack("<I", audio_id) + b"sound")])
+        originals[sound_name] = playback
+        sources.append(DbSource(label, (
+            GameDataEntry(event_name, bank([event({actor: audio_id})])),
+            GameDataEntry(sound_name, playback),
+        )))
+    sources.append(source("vanilla", {9: 900}, role="vanilla",
+                          filename=PREFIX + "chinese\\" + family + "__core.bnk"))
+    entries, _ = build_voice_compatibility_entries(sources, language_scope="chinese")
+    visible = {entry.name: entry.payload for entry in entries
+               if entry.name.startswith(PREFIX + "chinese\\")}
+    assert len(visible) == 4
+    for name, payload in originals.items():
+        assert visible[PREFIX + "chinese\\" + name.rpartition("\\")[2]] == payload
+    trees = {parsed.dialogues()[100] for payload in visible.values()
+             if (parsed := parse_soundbank(payload)).dialogues()}
+    merged, = trees
+    assert {p: v[0] for p, v in event_paths(merged).items()} == {
+        (1,): 111, (2,): 222, (9,): 900,
+    }
+
+
+def test_single_global_voice_mod_still_exposes_unchanged_playback():
+    name = PREFIX + "campaign_vo_solo.bnk"
+    original = bank([event({1: 111})], extras=[(2, struct.pack("<I", 111) + b"sound")])
+    entries, stats = build_voice_compatibility_entries([
+        DbSource("solo", (GameDataEntry(name, original),)),
+    ], language_scope="chinese")
+    assert entries == [GameDataEntry(PREFIX + "chinese\\campaign_vo_solo.bnk", original)]
+    assert stats["merged_event_count"] == 0
+
+
+def test_global_voice_mirror_keeps_existing_localized_file_and_pack_priority():
+    name = PREFIX + "campaign_vo_shared.bnk"
+    high = bank([], extras=[(2, b"abcdhigh")])
+    low = bank([], extras=[(2, b"abcdlow")])
+    sources = [DbSource("high", (GameDataEntry(name, high),)),
+               DbSource("low", (GameDataEntry(name, low),))]
+    entries, _ = build_voice_compatibility_entries(sources, language_scope="chinese")
+    assert entries == [GameDataEntry(PREFIX + "chinese\\campaign_vo_shared.bnk", high)]
+    localized = DbSource("localized", (GameDataEntry(PREFIX + "chinese\\campaign_vo_shared.bnk", low),))
+    entries, _ = build_voice_compatibility_entries([*sources, localized], language_scope="chinese")
+    assert entries == []  # Existing Chinese bank already supplies this filename.
+
+
+def test_voice_visibility_does_not_guess_language_or_relocate_other_audio():
+    voice = source("voice", {1: 111}, filename=PREFIX + "campaign_vo_solo.bnk")
+    assert build_voice_compatibility_entries([voice])[0] == []
+    other = source("ambience", {1: 111}, filename=PREFIX + "global_custom.bnk")
+    assert build_voice_compatibility_entries([other], language_scope="chinese")[0] == []
+
+
 def test_language_scopes_are_isolated():
     entries, stats = build_voice_compatibility_entries([
         source("cn1", {1: 111}, filename=PREFIX + "chinese\\one.bnk"),
@@ -731,6 +792,112 @@ def test_voice_language_uses_audio_override_before_steam_and_never_interface_lan
     preferences.parent.mkdir(parents=True)
     preferences.write_text('language_audio "' + audio + '"; # audio override\nlanguage_text "en";\n', encoding="utf-8")
     assert _voice_language(data) == expected
+
+
+@pytest.mark.parametrize("config,expected", [
+    ('"MountedConfig" { "language" "schinese" }', "chinese"),
+    ('"UserConfig" { "language" "" } "MountedConfig" { "language" "german" }', "german"),
+    ('"userconfig" { "LANGUAGE" "english" } "mountedconfig" { "language" "schinese" }', "english(uk)"),
+    ('"UserConfig" { "language" "unknown" } "MountedConfig" { "language" "schinese" }', ""),
+])
+def test_voice_language_reads_mounted_config_without_overriding_explicit_user_language(tmp_path, config, expected):
+    from backend.voice_patch_state import _voice_language
+
+    data = tmp_path / "steamapps" / "common" / "WH3" / "data"
+    data.mkdir(parents=True)
+    (tmp_path / "steamapps" / "appmanifest_1142710.acf").write_text(
+        '"APPSTATE" { ' + config + ' }', encoding="utf-8")
+    assert _voice_language(data) == expected
+
+
+@pytest.mark.parametrize("first_read", [PermissionError("sharing violation"), FileNotFoundError("manifest replaced"),
+                                       '"AppState" {', ""])
+def test_voice_language_recovers_from_a_transient_manifest_read(tmp_path, monkeypatch, first_read, caplog):
+    import time
+    from backend.voice_patch_state import _voice_language
+
+    data = tmp_path / "steamapps" / "common" / "WH3" / "data"
+    data.mkdir(parents=True)
+    manifest = tmp_path / "steamapps" / "appmanifest_1142710.acf"
+    manifest.write_text('"AppState" { "UserConfig" { "language" "schinese" } }', encoding="utf-8")
+    read_text, reads = Path.read_text, []
+
+    def transient_read(path, *args, **kwargs):
+        if path == manifest:
+            reads.append(path)
+            if len(reads) == 1:
+                if isinstance(first_read, Exception):
+                    raise first_read
+                return first_read
+        return read_text(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", transient_read)
+    monkeypatch.setattr(time, "sleep", lambda seconds: None)
+    with caplog.at_level("INFO", logger="backend.voice_patch_state"):
+        assert _voice_language(data) == "chinese"
+    assert len(reads) >= 2
+    assert str(manifest) in caplog.text and "chinese" in caplog.text
+
+
+def test_voice_language_retries_unreadable_preferences_before_using_steam(tmp_path, monkeypatch):
+    import time
+    from backend.voice_patch_state import _voice_language
+
+    data = tmp_path / "steamapps" / "common" / "WH3" / "data"
+    data.mkdir(parents=True)
+    (tmp_path / "steamapps" / "appmanifest_1142710.acf").write_text(
+        '"AppState" { "UserConfig" { "language" "schinese" } }', encoding="utf-8")
+    preferences = Path(os.environ["APPDATA"]) / "The Creative Assembly" / "Warhammer3" / "scripts" / "preferences.script.txt"
+    preferences.parent.mkdir(parents=True)
+    preferences.write_text('language_audio "en";', encoding="utf-8")
+    read_bytes, reads = Path.read_bytes, []
+
+    def transient_read(path):
+        if path == preferences:
+            reads.append(path)
+            if len(reads) == 1:
+                raise PermissionError("sharing violation")
+        return read_bytes(path)
+
+    monkeypatch.setattr(Path, "read_bytes", transient_read)
+    monkeypatch.setattr(time, "sleep", lambda seconds: None)
+    assert _voice_language(data) == "english(uk)"
+
+
+@pytest.mark.parametrize("available", [True, False])
+def test_mixed_voice_playset_handles_missing_user_config_at_the_runtime_entry(tmp_path, monkeypatch, available, caplog):
+    import time
+
+    data = tmp_path / "steamapps" / "common" / "WH3" / "data"
+    mods = [source("english", {1: 111}, event_id=165328208, filename=PREFIX + "english(uk)\\voice.bnk"),
+            source("translation", {1: 222}, event_id=165328208, filename=PREFIX + "chinese\\voice.bnk"),
+            source("global", {4: 444}, event_id=165328208, filename=PREFIX + "global_for_merging.bnk")]
+    assets = {}
+    for mod in mods:
+        path = write_pack(tmp_path / "mods" / (mod.name + ".pack"), byte_mask=3,
+                          entries=[(entry.name, entry.payload) for entry in mod.entries])
+        assets[mod.name] = make_asset(path, mod.name, "workshop")
+    for scope, filename, value in [("english(uk)", "audio_en_bnk.pack", 10), ("chinese", "audio_cn_bnk.pack", 20)]:
+        write_pack(data / filename, entries=[(PREFIX + scope + "\\campaign_vo__core.bnk",
+                                             bank([event({1: value}, event_id=165328208)]))])
+    manifest = tmp_path / "steamapps" / "appmanifest_1142710.acf"
+    manifest.write_text('"AppState" { ' + ('"MountedConfig" { "language" "schinese" }' if available else '') + ' }',
+                        encoding="utf-8")
+    monkeypatch.setattr(time, "sleep", lambda seconds: None)
+    if available:
+        generated = ensure(tmp_path, data, assets)
+        assert generated["source_diagnostics"]["voice_language"] == "chinese"
+        entries = [entry for entry in read_pack_entries(Path(generated["path"])) if entry.name.endswith(".bnk")]
+        merged, = {parse_soundbank(entry.payload).dialogues()[165328208] for entry in entries}
+        assert event_paths(merged) == {(1,): (222, 50, 100), (4,): (444, 50, 100)}
+    else:
+        with pytest.raises(ValueError) as caught:
+            ensure(tmp_path, data, assets)
+        assert caught.value.details["reason"] == "languageUnavailable"
+        assert caught.value.details["sources"] == []
+        assert caught.value.__cause__.details["event_id"] == 165328208
+        assert str(manifest) in caplog.text
+        assert not (tmp_path / "runtime" / VOICE_COMPATIBILITY_PATCH_NAME).exists()
 
 
 def test_voice_language_change_rebuilds_cache_and_selects_the_matching_translation(tmp_path):
