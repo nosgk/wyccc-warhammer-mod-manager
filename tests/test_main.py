@@ -170,15 +170,15 @@ class PackagedRuntimeTests(unittest.TestCase):
         )
         changelog = get_all_changelogs()
 
-        self.assertEqual(APP_VERSION, "1.3.7")
+        self.assertEqual(APP_VERSION, "1.3.8")
         self.assertEqual(project["project"]["version"], APP_VERSION)
         self.assertEqual(frontend["version"], APP_VERSION)
-        self.assertIn("appVersion: '1.3.7'", frontend_store)
-        self.assertIn("filevers=(1, 3, 7, 0)", version_info)
-        self.assertIn("prodvers=(1, 3, 7, 0)", version_info)
-        self.assertIn("StringStruct('ProductVersion', '1.3.7')", version_info)
-        self.assertIn("`1.3.7`", readme)
-        self.assertIn("`1.3.7`", readme_en)
+        self.assertIn("appVersion: '1.3.8'", frontend_store)
+        self.assertIn("filevers=(1, 3, 8, 0)", version_info)
+        self.assertIn("prodvers=(1, 3, 8, 0)", version_info)
+        self.assertIn("StringStruct('ProductVersion', '1.3.8')", version_info)
+        self.assertIn("`1.3.8`", readme)
+        self.assertIn("`1.3.8`", readme_en)
         self.assertEqual(update_manifest["schema_version"], 1)
         self.assertEqual(update_manifest["app"], APP_NAME)
         self.assertFalse(is_newer_version(update_manifest["version"], APP_VERSION))
@@ -197,8 +197,8 @@ class PackagedRuntimeTests(unittest.TestCase):
         self.assertEqual(len(update_manifest["download"]["sha256"]), 64)
         self.assertGreater(update_manifest["download"]["size"], 0)
         self.assertEqual(
-            [release["version"] for release in changelog[:27]],
-            ["1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2", "1.3.1", "1.3.0", "1.2.9", "1.2.8", "1.2.7", "1.2.6", "1.2.5", "1.2.4", "1.2.3", "1.2.2", "1.2.1", "1.2.0", "1.1.9", "1.1.8", "1.1.7", "1.1.6", "1.1.5", "1.1.1", "1.1.0", "1.0.9", "1.0.8"],
+            [release["version"] for release in changelog[:28]],
+            ["1.3.8", "1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2", "1.3.1", "1.3.0", "1.2.9", "1.2.8", "1.2.7", "1.2.6", "1.2.5", "1.2.4", "1.2.3", "1.2.2", "1.2.1", "1.2.0", "1.1.9", "1.1.8", "1.1.7", "1.1.6", "1.1.5", "1.1.1", "1.1.0", "1.0.9", "1.0.8"],
         )
         self.assertEqual(
             next(item for item in changelog if item["version"] == "1.0.1")["version"],
@@ -206,20 +206,40 @@ class PackagedRuntimeTests(unittest.TestCase):
         )
         self.assertEqual(
             [change["type"] for entry in changelog[0]["entries"] for change in entry["changes"]],
-            ["improvement"],
+            [
+                "feature",
+                "feature",
+                "feature",
+                "improvement",
+                "improvement",
+                "improvement",
+                "improvement",
+                "improvement",
+                "improvement",
+                "improvement",
+            ],
         )
         self.assertEqual(
             [change["text"] for entry in changelog[0]["entries"] for change in entry["changes"]],
             [
-                "优化 - 再次提高了语音补丁的兼容性，经测试，同时开启工坊中二十多个有新语音的MOD，现在可以完全正常的无冲突运行",
+                "未启用和已启用两个列表各自增加了独立的「显示文件夹 / 隐藏文件夹」按钮，默认隐藏；隐藏后列表恢复原来的 MOD 顺序，并清除该列表的文件夹筛选。",
+                "未启用列表顶部可以直接创建空文件夹，不需要先选中 MOD；还没有任何成员的文件夹也会显示在未归类 MOD 上方。",
+                "右键点击文件夹标题会打开文件夹菜单，提供重命名、释放所有 MOD、删除文件夹并释放 MOD、删除文件夹并取消订阅四项操作。",
+                "显示文件夹后，文件夹按当前界面语言的名称顺序排列在列表顶部，名称中的数字按自然顺序比较；未归类的 MOD 在下方保持原有相对顺序。名称排序取代了原先手动拖动文件夹标题调整位置的方式，文件夹标题不再支持拖动，但真实加载顺序仍以 MOD 序号为准。",
+                "「删除文件夹并取消订阅」会先列出影响范围：受影响的 MOD 名称、同一个创意工坊项目包含的其他 Pack，以及引用这些 MOD 的播放集，并说明有多少个本地或未安装的成员会被跳过、其本地文件不会被删除。",
+                "取消订阅使用五分钟内有效、只能使用一次的一次性确认凭证，执行前会重新核对游戏、播放集、成员和影响范围，期间内容发生变化就要求重新确认；游戏运行中禁止执行该操作。",
+                "取消订阅全部成功后才删除文件夹并释放剩余成员；如果有项目失败，文件夹会保留下来并逐项显示失败原因，方便直接重试。",
+                "「释放所有 MOD」只清空 MOD 的文件夹归属并保留空文件夹，不改变 MOD 的启用状态；「删除文件夹并释放 MOD」同样不会取消订阅。",
+                "隐藏文件夹后拖动 MOD 仍然执行原有的排序行为，不会把 MOD 移出文件夹。",
+                "新增的界面文案覆盖六种内置语言，包括文件夹菜单、取消订阅确认和失败提示。",
             ],
         )
         self.assertEqual(
-            [change["type"] for entry in changelog[16]["entries"] for change in entry["changes"]],
+            [change["type"] for entry in changelog[17]["entries"] for change in entry["changes"]],
             ["improvement", "improvement", "feature"],
         )
         self.assertEqual(
-            [change["text"] for entry in changelog[16]["entries"] for change in entry["changes"]],
+            [change["text"] for entry in changelog[17]["entries"] for change in entry["changes"]],
             [
                 "文件夹现在可以拖动排序了",
                 "文件夹现在可以跨播放集保存",
@@ -246,12 +266,12 @@ class PackagedRuntimeTests(unittest.TestCase):
 
         for releases in localized.values():
             self.assertEqual(
-                [release["version"] for release in releases[:27]],
-                ["1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2", "1.3.1", "1.3.0", "1.2.9", "1.2.8", "1.2.7", "1.2.6", "1.2.5", "1.2.4", "1.2.3", "1.2.2", "1.2.1", "1.2.0", "1.1.9", "1.1.8", "1.1.7", "1.1.6", "1.1.5", "1.1.1", "1.1.0", "1.0.9", "1.0.8"],
+                [release["version"] for release in releases[:28]],
+                ["1.3.8", "1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2", "1.3.1", "1.3.0", "1.2.9", "1.2.8", "1.2.7", "1.2.6", "1.2.5", "1.2.4", "1.2.3", "1.2.2", "1.2.1", "1.2.0", "1.1.9", "1.1.8", "1.1.7", "1.1.6", "1.1.5", "1.1.1", "1.1.0", "1.0.9", "1.0.8"],
             )
-            self.assertEqual(len(releases[0]["entries"]), 1)
-            self.assertEqual(len(releases[12]["entries"]), 2)
-            self.assertEqual(len(releases[16]["entries"]), 3)
+            self.assertEqual(len(releases[0]["entries"]), 2)
+            self.assertEqual(len(releases[13]["entries"]), 2)
+            self.assertEqual(len(releases[17]["entries"]), 3)
             release_115 = next(release for release in releases if release["version"] == "1.1.5")
             self.assertEqual(len(release_115["entries"]), 2)
             release_080 = next(release for release in releases if release["version"] == "0.8.0")

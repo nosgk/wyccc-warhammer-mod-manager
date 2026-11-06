@@ -1,6 +1,62 @@
 {
   "structure": [
     {
+      "version": "1.3.8",
+      "date": "2026-11-06",
+      "entries": [
+        [
+          "v138_added_title",
+          [
+            [
+              "feature",
+              "v138_folder_toggle"
+            ],
+            [
+              "feature",
+              "v138_create_empty_folder"
+            ],
+            [
+              "feature",
+              "v138_folder_context_menu"
+            ]
+          ]
+        ],
+        [
+          "v138_adjusted_title",
+          [
+            [
+              "improvement",
+              "v138_name_sorting"
+            ],
+            [
+              "improvement",
+              "v138_unsubscribe_preview"
+            ],
+            [
+              "improvement",
+              "v138_unsubscribe_safety"
+            ],
+            [
+              "improvement",
+              "v138_unsubscribe_result"
+            ],
+            [
+              "improvement",
+              "v138_release_members"
+            ],
+            [
+              "improvement",
+              "v138_drag_behavior"
+            ],
+            [
+              "improvement",
+              "v138_languages"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
       "version": "1.3.7",
       "date": "2026-11-02",
       "entries": [
@@ -1487,6 +1543,18 @@
   ],
   "text": {
     "zh-CN": {
+      "v138_added_title": "新增",
+      "v138_adjusted_title": "调整",
+      "v138_folder_toggle": "未启用和已启用两个列表各自增加了独立的「显示文件夹 / 隐藏文件夹」按钮，默认隐藏；隐藏后列表恢复原来的 MOD 顺序，并清除该列表的文件夹筛选。",
+      "v138_create_empty_folder": "未启用列表顶部可以直接创建空文件夹，不需要先选中 MOD；还没有任何成员的文件夹也会显示在未归类 MOD 上方。",
+      "v138_folder_context_menu": "右键点击文件夹标题会打开文件夹菜单，提供重命名、释放所有 MOD、删除文件夹并释放 MOD、删除文件夹并取消订阅四项操作。",
+      "v138_name_sorting": "显示文件夹后，文件夹按当前界面语言的名称顺序排列在列表顶部，名称中的数字按自然顺序比较；未归类的 MOD 在下方保持原有相对顺序。名称排序取代了原先手动拖动文件夹标题调整位置的方式，文件夹标题不再支持拖动，但真实加载顺序仍以 MOD 序号为准。",
+      "v138_unsubscribe_preview": "「删除文件夹并取消订阅」会先列出影响范围：受影响的 MOD 名称、同一个创意工坊项目包含的其他 Pack，以及引用这些 MOD 的播放集，并说明有多少个本地或未安装的成员会被跳过、其本地文件不会被删除。",
+      "v138_unsubscribe_safety": "取消订阅使用五分钟内有效、只能使用一次的一次性确认凭证，执行前会重新核对游戏、播放集、成员和影响范围，期间内容发生变化就要求重新确认；游戏运行中禁止执行该操作。",
+      "v138_unsubscribe_result": "取消订阅全部成功后才删除文件夹并释放剩余成员；如果有项目失败，文件夹会保留下来并逐项显示失败原因，方便直接重试。",
+      "v138_release_members": "「释放所有 MOD」只清空 MOD 的文件夹归属并保留空文件夹，不改变 MOD 的启用状态；「删除文件夹并释放 MOD」同样不会取消订阅。",
+      "v138_drag_behavior": "隐藏文件夹后拖动 MOD 仍然执行原有的排序行为，不会把 MOD 移出文件夹。",
+      "v138_languages": "新增的界面文案覆盖六种内置语言，包括文件夹菜单、取消订阅确认和失败提示。",
       "v137_adjusted_title": "调整",
       "v137_voice_compatibility": "优化 - 再次提高了语音补丁的兼容性，经测试，同时开启工坊中二十多个有新语音的MOD，现在可以完全正常的无冲突运行",
       "v136_adjusted_title": "调整",
@@ -1774,6 +1842,18 @@
       "v010_updates": "支持自动检查新版本、下载校验、安全替换以及应用内更新日志。"
     },
     "en-US": {
+      "v138_added_title": "Added",
+      "v138_adjusted_title": "Adjusted",
+      "v138_folder_toggle": "The inactive and active lists now each have their own Show folders / Hide folders button, and folders are hidden by default. Hiding them restores the original MOD order and clears the folder filter for that list.",
+      "v138_create_empty_folder": "Empty folders can be created directly from the top of the inactive list without selecting any MOD first, and folders that still have no members are shown above the ungrouped MODs.",
+      "v138_folder_context_menu": "Right-clicking a folder header opens a folder menu with four actions: rename, release all MODs, delete the folder and release its MODs, and delete the folder and unsubscribe.",
+      "v138_name_sorting": "When folders are shown, they are sorted by name in the current interface language at the top of the list, with numbers compared in natural order, while ungrouped MODs keep their previous relative order below. Name sorting replaces the old way of dragging folder headers into position, so folder headers can no longer be dragged; the real load order still follows the MOD numbers.",
+      "v138_unsubscribe_preview": "Delete folder and unsubscribe first lists the impact: the names of the affected MODs, other packs supplied by the same Workshop item, and the playsets that reference these MODs, along with how many local or unavailable members are skipped and will keep their local files.",
+      "v138_unsubscribe_safety": "Unsubscribing uses a one-time confirmation token that is valid for five minutes. Before running, the game, playset, members and impact are checked again, and if anything changed during that time you are asked to confirm again. The action is blocked while the game is running.",
+      "v138_unsubscribe_result": "The folder is deleted and the remaining members are released only after every subscription was removed successfully. If any item fails, the folder is kept and each failure is listed so you can retry directly.",
+      "v138_release_members": "Release all MODs only clears the folder assignment of the MODs and keeps the empty folder, without changing whether the MODs are enabled. Delete the folder and release its MODs likewise does not unsubscribe anything.",
+      "v138_drag_behavior": "Dragging MODs while folders are hidden still performs the usual reordering and never moves a MOD out of its folder.",
+      "v138_languages": "The new interface text is available in all six built-in languages, including the folder menu, the unsubscribe confirmation and the failure messages.",
       "v137_adjusted_title": "Adjusted",
       "v137_voice_compatibility": "Improved - Further improved voice patch compatibility. In testing, more than 20 Workshop MODs with new voice lines could run together normally without conflicts.",
       "v136_adjusted_title": "Adjusted",
@@ -2061,6 +2141,18 @@
       "v010_updates": "Supports automatic update checks, verified downloads, safe replacement, and an in-app changelog."
     },
     "ko-KR": {
+      "v138_added_title": "추가",
+      "v138_adjusted_title": "조정",
+      "v138_folder_toggle": "비활성 및 활성 목록에 각각 폴더 표시 / 폴더 숨기기 버튼이 추가되었으며 기본값은 숨김입니다. 숨기면 목록이 원래 MOD 순서로 돌아가고 해당 목록의 폴더 필터가 해제됩니다.",
+      "v138_create_empty_folder": "비활성 목록 상단에서 MOD를 선택하지 않고 바로 빈 폴더를 만들 수 있으며, 아직 구성원이 없는 폴더도 미분류 MOD 위에 표시됩니다.",
+      "v138_folder_context_menu": "폴더 제목을 마우스 오른쪽 버튼으로 클릭하면 이름 변경, 모든 MOD 꺼내기, 폴더 삭제 및 MOD 꺼내기, 폴더 삭제 및 구독 취소의 네 가지 작업이 있는 폴더 메뉴가 열립니다.",
+      "v138_name_sorting": "폴더를 표시하면 현재 인터페이스 언어의 이름 순서로 목록 상단에 정렬되고 이름 안의 숫자는 자연 순서로 비교됩니다. 미분류 MOD는 아래에서 기존 상대 순서를 유지합니다. 이름 정렬이 기존에 폴더 제목을 끌어 위치를 조정하던 방식을 대체하므로 폴더 제목은 더 이상 끌 수 없지만, 실제 로드 순서는 여전히 MOD 번호를 따릅니다.",
+      "v138_unsubscribe_preview": "폴더 삭제 및 구독 취소는 먼저 영향을 받는 범위를 보여 줍니다. 영향을 받는 MOD 이름, 같은 창작마당 항목에 포함된 다른 Pack, 이 MOD를 참조하는 플레이셋, 그리고 건너뛰어 로컬 파일을 삭제하지 않는 로컬 또는 미설치 구성원의 수입니다.",
+      "v138_unsubscribe_safety": "구독 취소에는 5분 동안 유효하고 한 번만 사용할 수 있는 일회용 확인 토큰이 사용됩니다. 실행 전에 게임, 플레이셋, 구성원, 영향 범위를 다시 확인하며 그 사이 내용이 바뀌면 다시 확인해야 합니다. 게임이 실행 중일 때는 이 작업을 실행할 수 없습니다.",
+      "v138_unsubscribe_result": "모든 구독 취소가 성공한 뒤에만 폴더를 삭제하고 남은 구성원을 꺼냅니다. 일부 항목이 실패하면 폴더를 유지하고 실패 원인을 항목별로 표시하여 바로 다시 시도할 수 있습니다.",
+      "v138_release_members": "모든 MOD 꺼내기는 MOD의 폴더 소속만 지우고 빈 폴더는 유지하며 MOD 활성화 상태는 바꾸지 않습니다. 폴더 삭제 및 MOD 꺼내기도 구독을 취소하지 않습니다.",
+      "v138_drag_behavior": "폴더를 숨긴 상태에서 MOD를 끌어도 기존 정렬 동작이 그대로 적용되며 MOD가 폴더 밖으로 이동하지 않습니다.",
+      "v138_languages": "새로 추가된 인터페이스 문구는 폴더 메뉴, 구독 취소 확인, 실패 안내를 포함해 여섯 가지 기본 언어를 모두 지원합니다.",
       "v137_adjusted_title": "조정",
       "v137_voice_compatibility": "개선 - 음성 패치의 호환성을 다시 높였습니다. 테스트 결과 새로운 음성이 포함된 창작마당 MOD 20개 이상을 동시에 활성화해도 충돌 없이 정상적으로 실행됩니다.",
       "v136_adjusted_title": "조정",
@@ -2348,6 +2440,18 @@
       "v010_updates": "자동 업데이트 확인, 다운로드 검증, 안전한 교체 및 앱 내 변경 내역을 지원합니다."
     },
     "ru-RU": {
+      "v138_added_title": "Добавлено",
+      "v138_adjusted_title": "Изменено",
+      "v138_folder_toggle": "В списках неактивных и активных модов появилась отдельная кнопка «Показать папки / Скрыть папки», по умолчанию папки скрыты. После скрытия список возвращается к исходному порядку модов, а фильтр по папкам для этого списка сбрасывается.",
+      "v138_create_empty_folder": "В верхней части списка неактивных модов можно сразу создать пустую папку, не выбирая мод, а папки без участников отображаются над модами без папки.",
+      "v138_folder_context_menu": "Правый клик по заголовку папки открывает меню папки с четырьмя действиями: переименовать, убрать все моды, удалить папку и убрать моды, удалить папку и отписаться.",
+      "v138_name_sorting": "Когда папки показаны, они сортируются по имени на текущем языке интерфейса в начале списка, а числа в именах сравниваются в естественном порядке; моды без папки сохраняют прежний относительный порядок ниже. Сортировка по имени заменила прежний способ расстановки перетаскиванием заголовков, поэтому заголовки папок больше не перетаскиваются, но реальный порядок загрузки по-прежнему определяется номерами модов.",
+      "v138_unsubscribe_preview": "Перед удалением папки с отпиской показывается область влияния: имена затронутых модов, другие паки того же объекта Мастерской, наборы, которые ссылаются на эти моды, и сколько локальных или отсутствующих участников будет пропущено, а их локальные файлы не удалены.",
+      "v138_unsubscribe_safety": "Отписка использует одноразовый токен подтверждения, действительный пять минут. Перед выполнением игра, набор, участники и область влияния проверяются повторно, и если за это время что-то изменилось, подтверждение нужно запросить заново. При запущенной игре действие запрещено.",
+      "v138_unsubscribe_result": "Папка удаляется и оставшиеся участники освобождаются только после успешной отписки от всех объектов. Если часть объектов не удалось отписать, папка сохраняется, а причины ошибок показываются по каждому пункту, чтобы можно было сразу повторить попытку.",
+      "v138_release_members": "«Убрать все моды» только очищает принадлежность модов к папке и сохраняет пустую папку, не меняя состояние включения модов. «Удалить папку и убрать моды» также не отписывает от объектов.",
+      "v138_drag_behavior": "Перетаскивание модов при скрытых папках по-прежнему выполняет обычную сортировку и не перемещает мод из папки.",
+      "v138_languages": "Новые тексты интерфейса доступны на всех шести встроенных языках, включая меню папки, подтверждение отписки и сообщения об ошибках.",
       "v137_adjusted_title": "Изменено",
       "v137_voice_compatibility": "Улучшено — совместимость голосового патча снова повышена. При проверке более 20 MOD из Мастерской с новой озвучкой работали одновременно без конфликтов.",
       "v136_adjusted_title": "Изменено",
@@ -2635,6 +2739,18 @@
       "v010_updates": "Поддерживаются автоматическая проверка обновлений, проверка загрузки, безопасная замена и журнал изменений в приложении."
     },
     "ja-JP": {
+      "v138_added_title": "追加",
+      "v138_adjusted_title": "調整",
+      "v138_folder_toggle": "無効リストと有効リストにそれぞれ「フォルダーを表示 / フォルダーを非表示」ボタンが追加され、既定では非表示です。非表示にするとリストは元のMOD順に戻り、そのリストのフォルダー絞り込みも解除されます。",
+      "v138_create_empty_folder": "無効リストの上部から、MODを選択せずに空のフォルダーを直接作成できます。まだメンバーのいないフォルダーも未分類のMODの上に表示されます。",
+      "v138_folder_context_menu": "フォルダーの見出しを右クリックするとフォルダーメニューが開き、名前の変更、すべてのMODを取り出す、フォルダーを削除してMODを取り出す、フォルダーを削除して購読解除の4つの操作を選べます。",
+      "v138_name_sorting": "フォルダーを表示すると、現在の表示言語での名前順にリストの先頭へ並び、名前に含まれる数字は自然順で比較されます。未分類のMODはその下で元の相対順を保ちます。名前順の並びは見出しをドラッグして位置を調整する従来の方法を置き換えるため、フォルダーの見出しはドラッグできなくなりましたが、実際の読み込み順は引き続きMODの番号に従います。",
+      "v138_unsubscribe_preview": "「フォルダーを削除して購読解除」は、まず影響範囲を表示します。影響を受けるMOD名、同じワークショップ項目に含まれる他のPack、これらのMODを参照しているプレイセット、そしてスキップされてローカルファイルが削除されないローカルまたは未インストールのメンバー数です。",
+      "v138_unsubscribe_safety": "購読解除には5分間有効で一度しか使えない確認トークンを使用します。実行前にゲーム、プレイセット、メンバー、影響範囲を再確認し、その間に内容が変わっていれば再確認が必要です。ゲームの実行中はこの操作を実行できません。",
+      "v138_unsubscribe_result": "すべての購読解除が成功した後にのみフォルダーを削除し、残りのメンバーを取り出します。一部が失敗した場合はフォルダーを保持し、失敗理由を項目ごとに表示するので、そのまま再試行できます。",
+      "v138_release_members": "「すべてのMODを取り出す」はMODのフォルダー所属だけを消して空のフォルダーを残し、MODの有効状態は変更しません。「フォルダーを削除してMODを取り出す」も購読解除は行いません。",
+      "v138_drag_behavior": "フォルダーを非表示にした状態でMODをドラッグしても従来の並べ替えがそのまま行われ、MODがフォルダーの外へ移動することはありません。",
+      "v138_languages": "追加された画面テキストは、フォルダーメニュー、購読解除の確認、失敗時の案内を含め、6つの内蔵言語すべてに対応しています。",
       "v137_adjusted_title": "調整",
       "v137_voice_compatibility": "改善 - 音声パッチの互換性をさらに高めました。テストでは、新しい音声を含むワークショップの MOD を20以上同時に有効にしても、競合なく正常に動作しました。",
       "v136_adjusted_title": "調整",
@@ -2922,6 +3038,18 @@
       "v010_updates": "更新の自動確認、ダウンロード検証、安全な置換、アプリ内更新履歴に対応しました。"
     },
     "es-ES": {
+      "v138_added_title": "Añadido",
+      "v138_adjusted_title": "Ajustado",
+      "v138_folder_toggle": "Las listas de MODs inactivos y activos tienen ahora su propio botón Mostrar carpetas / Ocultar carpetas, y las carpetas están ocultas de forma predeterminada. Al ocultarlas, la lista vuelve al orden original de MODs y se borra el filtro por carpeta de esa lista.",
+      "v138_create_empty_folder": "Desde la parte superior de la lista de inactivos se puede crear directamente una carpeta vacía sin seleccionar antes ningún MOD, y las carpetas que aún no tienen miembros se muestran encima de los MODs sin carpeta.",
+      "v138_folder_context_menu": "Al hacer clic derecho en el encabezado de una carpeta se abre el menú de carpeta, con cuatro acciones: cambiar el nombre, sacar todos los MODs, eliminar la carpeta y sacar sus MODs, y eliminar la carpeta y cancelar las suscripciones.",
+      "v138_name_sorting": "Cuando se muestran las carpetas, se ordenan por nombre en el idioma actual de la interfaz en la parte superior de la lista y los números de los nombres se comparan en orden natural; los MODs sin carpeta mantienen su orden relativo anterior debajo. La ordenación por nombre sustituye a la antigua forma de colocar los encabezados arrastrándolos, por lo que los encabezados de carpeta ya no se pueden arrastrar, aunque el orden de carga real sigue dependiendo de los números de los MODs.",
+      "v138_unsubscribe_preview": "Eliminar la carpeta y cancelar suscripciones muestra primero el alcance: los nombres de los MODs afectados, otros packs del mismo artículo del Workshop y los conjuntos que hacen referencia a estos MODs, además de cuántos miembros locales o no disponibles se omiten y conservarán sus archivos locales.",
+      "v138_unsubscribe_safety": "La cancelación de suscripciones usa un testigo de confirmación de un solo uso válido durante cinco minutos. Antes de ejecutar se vuelven a comprobar el juego, el conjunto, los miembros y el alcance, y si algo cambió mientras tanto se pide confirmar de nuevo. La acción se bloquea mientras el juego está en ejecución.",
+      "v138_unsubscribe_result": "La carpeta se elimina y se sacan los miembros restantes solo después de que todas las suscripciones se hayan cancelado correctamente. Si algún artículo falla, la carpeta se conserva y se muestra el motivo de cada fallo para poder reintentarlo directamente.",
+      "v138_release_members": "Sacar todos los MODs solo borra la pertenencia de los MODs a la carpeta y conserva la carpeta vacía, sin cambiar si los MODs están activados. Eliminar la carpeta y sacar sus MODs tampoco cancela ninguna suscripción.",
+      "v138_drag_behavior": "Arrastrar MODs con las carpetas ocultas sigue aplicando la reordenación habitual y nunca saca un MOD de su carpeta.",
+      "v138_languages": "Los nuevos textos de la interfaz están disponibles en los seis idiomas integrados, incluidos el menú de carpeta, la confirmación de cancelación de suscripciones y los mensajes de fallo.",
       "v137_adjusted_title": "Ajustado",
       "v137_voice_compatibility": "Mejorado - Se ha incrementado de nuevo la compatibilidad del parche de voces. En las pruebas, más de 20 MODs del Workshop con voces nuevas funcionaron a la vez con normalidad y sin conflictos.",
       "v136_adjusted_title": "Ajustado",
